@@ -8,15 +8,20 @@ public class PokemonMove {
     private String moveType;
     private boolean typeMatched;
 
-    public PokemonMove(String i, int[] real) {
-        this.moveName = "サンダープリズン";
+    public PokemonMove(String name, int[] real) {
+        this.moveName = name;
         this.moveClass = 1;
         this.real = real;
-        this.moveDamage = 80;
-        if (i == "0002") {
-            moveDamage *= 1.5;
+        if (name == "サンダープリズン") {
+            this.moveDamage = 80;
+            this.moveDamage *= 1.5;
+            this.moveType = "でんき";
         }
-        this.moveType = "でんき";
+        if (name == "ぼうふう") {
+            this.moveDamage = 110;
+            this.moveType = "ひこう";
+        }
+
     }
 
     public String getMoveName() {

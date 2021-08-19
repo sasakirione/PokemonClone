@@ -2,6 +2,7 @@ package com.sasakirione.test.pokemon.clone.object;
 
 import com.sasakirione.main.pokemon.clone.object.Pokemon;
 import com.sasakirione.main.pokemon.clone.object.PokemonMove;
+import com.sasakirione.main.pokemon.clone.object.PokemonStadium;
 import com.sasakirione.main.pokemon.clone.object.value.Effort;
 import com.sasakirione.main.pokemon.clone.object.value.Type;
 import org.junit.jupiter.api.*;
@@ -29,7 +30,7 @@ public class PokemonTest {
         PokemonMove a = regieleki.getDamage("0002");
         zapdos.takeDamage(a);
         System.out.println(zapdos.getCurrentHP2().toString());
-        Assertions.assertTrue(53 < zapdos.getCurrentHP());
+        Assertions.assertTrue(zapdos.getCurrentHP() < 73);
     }
 
     @Test
@@ -74,6 +75,16 @@ public class PokemonTest {
         Type type = new Type("みず");
     }
 
-
+    @Test
+    @DisplayName("バトル場を使う")
+    public void test011() {
+        PokemonStadium stadiume = new PokemonStadium(regieleki, zapdos);
+        PokemonMove a = regieleki.getDamage("サンダープリズン");
+        PokemonMove b = zapdos.getDamage("ぼうふう");
+        System.out.println(stadiume.forwardTurn(a,b));
+        System.out.println(regieleki.getCurrentHP2());
+        System.out.println(zapdos.getCurrentHP2());
+        Assertions.assertTrue(stadiume.forwardTurn(a,b) == "Bの負け");
+    }
 
 }
