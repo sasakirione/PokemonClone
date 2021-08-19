@@ -23,13 +23,12 @@ public class PokemonTest {
         greninja = new Pokemon(658);
     }
 
-    @Test
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
     @RepeatedTest(100)
     public void test005() {
         PokemonMove a = regieleki.getDamage("0002");
         zapdos.takeDamage(a);
-        System.out.println(zapdos.getCurrentHP2().toString());
+        System.out.println(zapdos.getCurrentHP2());
         Assertions.assertTrue(zapdos.getCurrentHP() < 73);
     }
 
@@ -55,15 +54,14 @@ public class PokemonTest {
         Effort effort = new Effort(new int[]{252, 252, 0, 0, 0, 0});
     }
 
-    @Test
     @DisplayName("タイプ相性を実装する、レジエレキでゲッコウガを")
     @RepeatedTest(100)
     public void test009() {
         PokemonMove a = regieleki.getDamage("0002");
         greninja.takeDamage(a);
-        System.out.println(greninja.getCurrentHP2().toString());
+        System.out.println(greninja.getCurrentHP2());
         Assertions.assertTrue(greninja.getCurrentHP() < 12);
-        Assertions.assertTrue(!(greninja.getCurrentHP() < 0));
+        Assertions.assertFalse(greninja.getCurrentHP() < 0);
     }
 
     @Test
@@ -84,7 +82,7 @@ public class PokemonTest {
         System.out.println(stadiume.forwardTurn(a,b));
         System.out.println(regieleki.getCurrentHP2());
         System.out.println(zapdos.getCurrentHP2());
-        Assertions.assertTrue(stadiume.forwardTurn(a,b) == "Bの負け");
+        Assertions.assertEquals("Bの負け", stadiume.forwardTurn(a, b));
     }
 
 }

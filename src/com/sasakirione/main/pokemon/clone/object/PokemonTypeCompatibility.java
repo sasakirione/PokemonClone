@@ -94,6 +94,48 @@ public class PokemonTypeCompatibility {
             }
         }
 
+        if (attack.equals("どく")) {
+            if (defense.equals("くさ") || defense.equals("フェアリー")) {
+                magnification = 2.0;
+                return magnification;
+            }
+            if (defense.equals("どく") || defense.equals("じめん") || defense.equals("いわ") || defense.equals("ゴースト")) {
+                magnification = 0.5;
+                return magnification;
+            }
+            if (defense.equals("はがね")) {
+                magnification = 0.0;
+                return magnification;
+            }
+        }
+
+        if (attack.equals("じめん")) {
+            if (defense.equals("ほのお") || defense.equals("でんき") || defense.equals("どく") || defense.equals("いわ") ||
+                    defense.equals("はがね")) {
+                magnification = 2.0;
+                return magnification;
+            }
+            if (defense.equals("くさ") || defense.equals("むし")) {
+                magnification = 0.5;
+                return magnification;
+            }
+            if (defense.equals("ひこう")) {
+                magnification = 0.0;
+                return magnification;
+            }
+        }
+
+        if (attack.equals("ひこう")) {
+            if (defense.equals("くさ") || defense.equals("かくとう") || defense.equals("むし")) {
+                magnification = 2.0;
+                return magnification;
+            }
+            if (defense.equals("でんき") || defense.equals("いわ") || defense.equals("はがね")) {
+                magnification = 0.5;
+                return magnification;
+            }
+        }
+
         return magnification;
     }
 

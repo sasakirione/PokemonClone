@@ -12,12 +12,12 @@ public class PokemonMove {
         this.moveName = name;
         this.moveClass = 1;
         this.real = real;
-        if (name == "サンダープリズン") {
+        if (name.equals("サンダープリズン")) {
             this.moveDamage = 80;
             this.moveDamage *= 1.5;
             this.moveType = "でんき";
         }
-        if (name == "ぼうふう") {
+        if (name.equals("ぼうふう")) {
             this.moveDamage = 110;
             this.moveType = "ひこう";
         }
