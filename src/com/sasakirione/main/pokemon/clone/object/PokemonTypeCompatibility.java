@@ -136,6 +136,107 @@ public class PokemonTypeCompatibility {
             }
         }
 
+        if (attack.equals("エスパー")) {
+            if (defense.equals("かくとう") || defense.equals("どく")) {
+                magnification = 2.0;
+                return magnification;
+            }
+            if (defense.equals("エスパー") || defense.equals("はがね")) {
+                magnification = 0.5;
+                return magnification;
+            }
+            if (defense.equals("あく")) {
+                magnification = 0.0;
+                return magnification;
+            }
+        }
+
+        if (attack.equals("むし")) {
+            if (defense.equals("くさ") || defense.equals("エスパー") || defense.equals("あく")) {
+                magnification = 2.0;
+                return magnification;
+            }
+            if (defense.equals("ほのお") || defense.equals("かくとう") || defense.equals("どく") || defense.equals("ひこう")
+                    || defense.equals("ゴースト") || defense.equals("はがね") || defense.equals("フェアリー")) {
+                magnification = 0.5;
+                return magnification;
+            }
+        }
+
+        if (attack.equals("いわ")) {
+            if (defense.equals("ほのお") || defense.equals("ひこう") || defense.equals("こおり") || defense.equals("むし")) {
+                magnification = 2.0;
+                return magnification;
+            }
+            if (defense.equals("かくとう") || defense.equals("じめん") || defense.equals("はがね")) {
+                magnification = 0.5;
+                return magnification;
+            }
+        }
+
+        if (attack.equals("ゴースト")) {
+            if (defense.equals("エスパー") || defense.equals("ゴースト")) {
+                magnification = 2.0;
+                return magnification;
+            }
+            if (defense.equals("あく")) {
+                magnification = 0.5;
+                return magnification;
+            }
+            if (defense.equals("ノーマル")) {
+                magnification = 0.0;
+                return magnification;
+            }
+        }
+
+        if (attack.equals("ドラゴン")) {
+            if (defense.equals("ドラゴン")) {
+                magnification = 2.0;
+                return magnification;
+            }
+            if (defense.equals("はがね")) {
+                magnification = 0.5;
+                return magnification;
+            }
+            if (defense.equals("フェアリー")) {
+                magnification = 0.0;
+                return magnification;
+            }
+        }
+
+        if (attack.equals("あく")) {
+            if (defense.equals("エスパー") || defense.equals("ゴースト")) {
+                magnification = 2.0;
+                return magnification;
+            }
+            if (defense.equals("かくとう") || defense.equals("あく") || defense.equals("フェアリー")) {
+                magnification = 0.5;
+                return magnification;
+            }
+        }
+
+        if (attack.equals("はがね")) {
+            if (defense.equals("こおり") || defense.equals("いわ") || defense.equals("フェアリー")) {
+                magnification = 2.0;
+                return magnification;
+            }
+            if (defense.equals("ほのお") || defense.equals("みず") || defense.equals("でんき") || defense.equals("はがね")) {
+                magnification = 0.5;
+                return magnification;
+            }
+        }
+
+        if (attack.equals("フェアリー")) {
+            if (defense.equals("かくとう") || defense.equals("あく") || defense.equals("ドラゴン")) {
+                magnification = 2.0;
+                return magnification;
+            }
+            if (defense.equals("ほのお") || defense.equals("どく") || defense.equals("はがね")) {
+                magnification = 0.5;
+                return magnification;
+            }
+        }
+
         return magnification;
     }
 

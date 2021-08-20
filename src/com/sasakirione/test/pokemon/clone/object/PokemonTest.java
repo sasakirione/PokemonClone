@@ -73,8 +73,8 @@ public class PokemonTest {
         Type type = new Type("みず");
     }
 
-    @Test
     @DisplayName("バトル場を使う")
+    @RepeatedTest(100)
     public void test011() {
         PokemonStadium stadiume = new PokemonStadium(regieleki, zapdos);
         PokemonMove a = regieleki.getDamage("サンダープリズン");
