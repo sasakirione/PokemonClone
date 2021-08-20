@@ -82,7 +82,8 @@ public class PokemonTest {
         System.out.println(stadiume.forwardTurn(a,b));
         System.out.println(regieleki.getCurrentHP2());
         System.out.println(zapdos.getCurrentHP2());
-        Assertions.assertEquals("Bの負け", stadiume.forwardTurn(a, b));
+        stadiume.forwardTurn(a, b);
+        Assertions.assertEquals("おわりだよ", stadiume.forwardTurn(a, b));
     }
 
     @Test
@@ -93,6 +94,6 @@ public class PokemonTest {
         PokemonMove b = greninja.getDamage("ハイドロポンプ");
         System.out.println(stadiume.forwardTurn(a,b));
         stadiume.getLogAll();
-        Assertions.assertEquals("こうかばつぐんだ！", stadiume.getLog(3));
+        Assertions.assertEquals("こうかばつぐんだ！", stadiume.getLog(4));
     }
 }
