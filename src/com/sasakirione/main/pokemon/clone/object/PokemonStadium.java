@@ -1,12 +1,17 @@
 package com.sasakirione.main.pokemon.clone.object;
 
+import java.util.ArrayList;
+
 public class PokemonStadium {
     private Pokemon pokemonInBattleA;
     private Pokemon pokemonInBattleB;
+    private ArrayList<String> battleLog = new ArrayList<>();
 
     public PokemonStadium(Pokemon pokemonA, Pokemon pokemonB) {
         this.pokemonInBattleA = pokemonA;
         this.pokemonInBattleB = pokemonB;
+        battleLog.add("Aは " + pokemonA.getName() + " をくりだした！");
+        battleLog.add("Bは " + pokemonB.getName() + " をくりだした！");
     }
 
     public String forwardTurn(PokemonMove a, PokemonMove b) {
@@ -14,21 +19,33 @@ public class PokemonStadium {
             return "おわりだよ";
         }
         if (rapidityDecision() == 1) {
-            this.pokemonInBattleA.takeDamage(b);
+            String bMagnification = this.pokemonInBattleA.takeDamage(b);
+            battleLog.add(pokemonInBattleB.getName()+" の " + b.getMoveName()+" のこうげきだ！");
+            battleLog.add(bMagnification);
             if (pokemonInBattleA.getCurrentHP() == 0) {
+                battleLog.add(pokemonInBattleA.getName() + " はたおれた");
                 return "Aの負け";
             }
-            this.pokemonInBattleB.takeDamage(a);
+            String aMagnification = this.pokemonInBattleB.takeDamage(a);
+            battleLog.add(pokemonInBattleA.getName()+" の " + a.getMoveName()+" のこうげきだ！");
+            battleLog.add(aMagnification);
             if (pokemonInBattleB.getCurrentHP() == 0) {
+                battleLog.add(pokemonInBattleA.getName() + " はたおれた");
                 return "Bの負け";
             }
         } else {
-            this.pokemonInBattleB.takeDamage(a);
+            String aMagnification = this.pokemonInBattleB.takeDamage(a);
+            battleLog.add(pokemonInBattleA.getName()+" の " + a.getMoveName()+" のこうげきだ！");
+            battleLog.add(aMagnification);
             if (pokemonInBattleB.getCurrentHP() == 0) {
+                battleLog.add(pokemonInBattleB.getName() + " はたおれた");
                 return "Bの負け";
             }
-            this.pokemonInBattleA.takeDamage(b);
+            String bMagnification = this.pokemonInBattleA.takeDamage(b);
+            battleLog.add(pokemonInBattleB.getName()+" の " + b.getMoveName()+" のこうげきだ！");
+            battleLog.add(bMagnification);
             if (pokemonInBattleA.getCurrentHP() == 0) {
+                battleLog.add(pokemonInBattleA.getName() + " はたおれた");
                 return "Aの負け";
             }
         }
@@ -45,5 +62,13 @@ public class PokemonStadium {
 
     private int priorityDecision() {
         return 0;
+    }
+
+    public String getLog(int i) {
+        return battleLog.get(i);
+    }
+
+    public void getLogAll() {
+        this.battleLog.stream().forEach(System.out::println);
     }
 }

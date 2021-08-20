@@ -85,4 +85,14 @@ public class PokemonTest {
         Assertions.assertEquals("Bの負け", stadiume.forwardTurn(a, b));
     }
 
+    @Test
+    @DisplayName("メッセージ機能")
+    public void test012() {
+        PokemonStadium stadiume = new PokemonStadium(regieleki, greninja);
+        PokemonMove a = regieleki.getDamage("サンダープリズン");
+        PokemonMove b = greninja.getDamage("ハイドロポンプ");
+        System.out.println(stadiume.forwardTurn(a,b));
+        stadiume.getLogAll();
+        Assertions.assertEquals("こうかばつぐんだ！", stadiume.getLog(3));
+    }
 }

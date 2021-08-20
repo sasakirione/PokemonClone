@@ -82,12 +82,13 @@ public class Pokemon {
         return (int) Math.floor((((base * 2.0) + 31 + Math.floor(effort / 4.0)) * (50.0 / 100.0) + 50 + 10));
     }
 
-    public void takeDamage(PokemonMove a) {
+    public String takeDamage(PokemonMove a) {
         int damage = a.getMoveDamage();
         int realAttack = a.getRealAttack();
         int realDefense;
         String type = a.getMoveType();
-        double magnification = a.getMagnification() * this.type.getTypeMagnification(type);
+        double typeMagnification = this.type.getTypeMagnification(type);
+        double magnification = a.getMagnification() * typeMagnification;
 
         if (a.getMoveClass() == 0) {
             realDefense = real[2];
@@ -96,6 +97,16 @@ public class Pokemon {
         }
 
         int damage2 = this.currentHP.pruneHP(damageCalculation(realAttack, realDefense, damage, magnification, type));
+        if (typeMagnification == 0.0) {
+            return "こうかがないようだ";
+        }
+        if (typeMagnification < 1.0) {
+            return "こうかいまひとつだ！";
+        }
+        if (1.0 < typeMagnification) {
+            return "こうかばつぐんだ！";
+        }
+        return "";
     }
 
     private int damageCalculation(double realAttack, double realDefense, int damage, double magnification, String type) {

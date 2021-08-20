@@ -21,6 +21,10 @@ public class PokemonMove {
             this.moveDamage = 110;
             this.moveType = "ひこう";
         }
+        if (name.equals("ハイドロポンプ")) {
+            this.moveDamage = 110;
+            this.moveType = "みず";
+        }
 
     }
 
