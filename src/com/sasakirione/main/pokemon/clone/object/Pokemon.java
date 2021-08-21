@@ -17,9 +17,10 @@ public class Pokemon {
     private int enhancement;
     private int weakening;
     private Type type;
+    private String nature;
 
-    public Pokemon(int number) {
-        setPokemon(number);
+    public Pokemon(String name, int[] effort, String good, String nature) {
+        setPokemon(name, effort);
     }
 
     public String getName() {
@@ -31,35 +32,32 @@ public class Pokemon {
     }
 
     public PokemonMove getDamage(String i) {
-        PokemonMove res = new PokemonMove(i, this.real);
-        return res;
+        return new PokemonMove(i, this.real);
     }
 
     public int[] getReal() {
         return real;
     }
 
-    private void setPokemon(int number){
-        if (number == 145) {
-            this.name = "サンダー";
+    private void setPokemon(String name, int[] effort){
+        this.name = name;
+        if (name.equals("サンダー")) {
             this.base = new int[] {90, 90, 85, 125, 90, 100};
-            this.effort = new Effort(new int[] {0, 0, 0, 252, 0, 252});
+            this.effort = new Effort(effort);
             this.type = new Type("でんき","ひこう");
             pokemonRealSet();
         }
 
-        if (number == 658) {
-            this.name = "ゲッコウガ";
+        if (name.equals("ゲッコウガ")) {
             this.base = new int[] {72, 95, 67, 103, 71, 122};
-            this.effort = new Effort(new int[] {252, 0, 0, 0, 252, 0});
+            this.effort = new Effort(effort);
             this.type = new Type("みず","あく");
             pokemonRealSet();
         }
 
-        if (number == 894) {
-            this.name = "レジエレキ";
+        if (name.equals("レジエレキ")) {
             this.base = new int[] {80, 100, 50, 100, 50, 200};
-            this.effort = new Effort(new int[] {0, 0, 0, 252, 0, 252});
+            this.effort = new Effort(effort);
             this.type = new Type("でんき");
             pokemonRealSet();
         }
@@ -75,7 +73,15 @@ public class Pokemon {
         int s = realCalculationEtc(this.base[5],this.effort.getS());
 
         this.real = new int[] {hp, a, b, c, d, s};
+        pokemonNutureCalculation();
         this.currentHP = new HP(this.real[0]);
+    }
+
+    private void pokemonNutureCalculation() {
+        if (this.nature.equals("おくびょう")) {
+            real[1] = (int) Math.floor(real[1] * 0.9);
+            real[5] = (int) Math.floor(real[5] * 1.1);
+        }
     }
 
     private int realCalculationHP(int base, int effort) {
@@ -139,17 +145,12 @@ public class Pokemon {
     private boolean isVitals() {
         Random random = new Random();
         int randomNumber = random.nextInt(16);
-        if (randomNumber == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return randomNumber == 0;
     }
 
     private int fiveOutOverFiveIn(double i) {
         BigDecimal bigDecimal = new BigDecimal(String.valueOf(i));
         BigDecimal resBD = bigDecimal.setScale(0, RoundingMode.HALF_DOWN);
-        int res = (int) resBD.doubleValue();
-        return res;
+        return (int) resBD.doubleValue();
     }
 }

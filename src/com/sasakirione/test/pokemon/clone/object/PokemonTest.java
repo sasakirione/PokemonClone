@@ -13,14 +13,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PokemonTest {
     Pokemon regieleki;
+    Pokemon regieleki_megane;
     Pokemon zapdos;
     Pokemon greninja;
 
     @BeforeEach
     public void before() {
-        regieleki = new Pokemon(894);
-        zapdos = new Pokemon(145);
-        greninja = new Pokemon(658);
+        regieleki = new Pokemon("レジエレキ", new int[]{0, 0, 0, 252, 0 , 252}, "なし" , "おくびょう");
+        regieleki = new Pokemon("レジエレキ", new int[]{0, 0, 0, 252, 0 , 252}, "こだわりメガネ" , "おくびょう");
+        zapdos = new Pokemon("サンダー", new int[]{0, 0, 0, 252, 0 , 252}, "なし" , "おくびょう");
+        greninja = new Pokemon("ゲッコウガ", new int[]{252, 0, 0, 0, 252 , 0}, "なし" , "おくびょう");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
@@ -76,24 +78,34 @@ public class PokemonTest {
     @DisplayName("バトル場を使う")
     @RepeatedTest(100)
     public void test011() {
-        PokemonStadium stadiume = new PokemonStadium(regieleki, zapdos);
+        PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
         PokemonMove a = regieleki.getDamage("サンダープリズン");
         PokemonMove b = zapdos.getDamage("ぼうふう");
-        System.out.println(stadiume.forwardTurn(a,b));
+        System.out.println(stadium.forwardTurn(a,b));
         System.out.println(regieleki.getCurrentHP2());
         System.out.println(zapdos.getCurrentHP2());
-        stadiume.forwardTurn(a, b);
-        Assertions.assertEquals("おわりだよ", stadiume.forwardTurn(a, b));
+        stadium.forwardTurn(a, b);
+        Assertions.assertEquals("おわりだよ", stadium.forwardTurn(a, b));
     }
 
     @Test
     @DisplayName("メッセージ機能")
     public void test012() {
-        PokemonStadium stadiume = new PokemonStadium(regieleki, greninja);
+        PokemonStadium stadium = new PokemonStadium(regieleki, greninja);
         PokemonMove a = regieleki.getDamage("サンダープリズン");
         PokemonMove b = greninja.getDamage("ハイドロポンプ");
-        System.out.println(stadiume.forwardTurn(a,b));
-        stadiume.getLogAll();
-        Assertions.assertEquals("こうかばつぐんだ！", stadiume.getLog(4));
+        System.out.println(stadium.forwardTurn(a,b));
+        stadium.getLogAll();
+        Assertions.assertEquals("こうかばつぐんだ！", stadium.getLog(4));
     }
+
+    @Test
+    @DisplayName("こだわりメガネを実装_ダメージ量を増やす")
+    public void test013() {
+        PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
+        PokemonMove a = regieleki_megane.getDamage("サンダープリズン");
+        PokemonMove b = zapdos.getDamage("ぼうふう");
+        Assertions.assertEquals("おわりだよ", stadium.forwardTurn(a, b));
+    }
+
 }
