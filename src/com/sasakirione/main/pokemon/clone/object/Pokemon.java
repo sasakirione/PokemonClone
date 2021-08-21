@@ -2,6 +2,7 @@ package com.sasakirione.main.pokemon.clone.object;
 
 import com.sasakirione.main.pokemon.clone.object.value.Effort;
 import com.sasakirione.main.pokemon.clone.object.value.HP;
+import com.sasakirione.main.pokemon.clone.object.value.Nature;
 import com.sasakirione.main.pokemon.clone.object.value.Type;
 
 import java.math.BigDecimal;
@@ -17,13 +18,13 @@ public class Pokemon {
     private int enhancement;
     private int weakening;
     private Type type;
-    private String nature;
+    private Nature nature;
     private String good;
     private boolean goodChoice = false;
     private String choiceMove = null;
 
     public Pokemon(String name, int[] effort, String good, String nature) {
-        this.nature = nature;
+        this.nature = new Nature(nature);
         setPokemon(name, effort);
         setGood(good);
     }
@@ -102,10 +103,10 @@ public class Pokemon {
     }
 
     private void pokemonNutureCalculation() {
-        if (this.nature.equals("おくびょう")) {
-            real[1] = (int) Math.floor(real[1] * 0.9);
-            real[5] = (int) Math.floor(real[5] * 1.1);
-        }
+        int plus = this.nature.plusNature();
+        int minus = this.nature.minusNature();
+        real[minus] = (int) Math.floor(real[minus] * 0.9);
+        real[plus] = (int) Math.floor(real[plus] * 1.1);
     }
 
     private int realCalculationHP(int base, int effort) {

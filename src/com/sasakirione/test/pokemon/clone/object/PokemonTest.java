@@ -114,7 +114,7 @@ public class PokemonTest {
     @DisplayName("こだわりメガネを実装_こだわり")
     public void tes014() {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
-        PokemonMove a = regieleki_megane.getDamage("サンダープリズン");
+        PokemonMove a1 = regieleki_megane.getDamage("サンダープリズン");
         assertThrows(IllegalArgumentException.class, () -> {
             PokemonMove a2 = regieleki_megane.getDamage("10まんボルト");
         });
