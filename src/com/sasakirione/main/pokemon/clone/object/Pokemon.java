@@ -57,7 +57,7 @@ public class Pokemon {
                 this.choiceMove = name;
             }
         }
-        return new PokemonMove(name, this.real);
+        return new PokemonMove(name, this.real, this.type);
     }
 
     public int[] getReal() {

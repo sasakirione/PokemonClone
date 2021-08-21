@@ -1,5 +1,7 @@
 package com.sasakirione.main.pokemon.clone.object;
 
+import com.sasakirione.main.pokemon.clone.object.value.Type;
+
 public class PokemonMove {
     private final String moveName;
     private final int moveClass;
@@ -7,11 +9,13 @@ public class PokemonMove {
     private int moveDamage;
     private String moveType;
     private boolean typeMatched;
+    private Type types;
 
-    public PokemonMove(String name, int[] real) {
+    public PokemonMove(String name, int[] real , Type type) {
         this.moveName = name;
         this.moveClass = 1;
         this.real = real;
+        this.types = type;
         if (name.equals("サンダープリズン")) {
             this.moveDamage = 80;
             this.moveDamage *= 1.5;
@@ -24,6 +28,10 @@ public class PokemonMove {
         if (name.equals("ハイドロポンプ")) {
             this.moveDamage = 110;
             this.moveType = "みず";
+        }
+        if (name.equals("げんしのちから")) {
+            this.moveDamage = 60;
+            this.moveType = "いわ";
         }
 
     }
@@ -49,7 +57,10 @@ public class PokemonMove {
     }
 
     public double getMagnification() {
-        return (6144.0/4096.0);
+        if (types.isTypeMatch(moveType)) {
+            return (6144.0/4096.0);
+        }
+        return (1.0);
     }
 
     public String getMoveType() {

@@ -42,7 +42,7 @@ public class Type {
     }
 
     public boolean isTypeCheck(String type) {
-        Boolean typeCheck = false;
+        boolean typeCheck = false;
         int count = (int) Arrays.stream(TYPE).filter(s -> s.equals(type)).count();
         if (count == 1) {
             typeCheck = true;
@@ -56,6 +56,15 @@ public class Type {
             magnification *= PokemonTypeCompatibility.typeCompatibility(attackType, type);
         }
         return magnification;
+    }
+
+    public boolean isTypeMatch(String type) {
+        boolean typeMatch = false;
+        int count = (int) Arrays.stream(types).filter(s -> s.equals(type)).count();
+        if (count == 1) {
+            typeMatch = true;
+        }
+        return typeMatch;
     }
 
 

@@ -112,12 +112,22 @@ public class PokemonTest {
 
     @Test
     @DisplayName("こだわりメガネを実装_こだわり")
-    public void tes014() {
-        PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
+    public void test014() {
         PokemonMove a1 = regieleki_megane.getDamage("サンダープリズン");
         assertThrows(IllegalArgumentException.class, () -> {
             PokemonMove a2 = regieleki_megane.getDamage("10まんボルト");
         });
+    }
+
+    @DisplayName("タイプ不一致技を設定")
+    @RepeatedTest(100)
+    public void test015() {
+        PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
+        PokemonMove a = regieleki.getDamage("げんしのちから");
+        PokemonMove b = zapdos.getDamage("ぼうふう");
+        stadium.forwardTurn(a, b);
+        stadium.getLogAll();
+        Assertions.assertTrue(68 < zapdos.getCurrentHP());
     }
 
 }
