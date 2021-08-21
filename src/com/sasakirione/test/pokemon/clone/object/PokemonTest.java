@@ -2,6 +2,7 @@ package com.sasakirione.test.pokemon.clone.object;
 
 import com.sasakirione.main.pokemon.clone.object.Pokemon;
 import com.sasakirione.main.pokemon.clone.object.PokemonMove;
+import com.sasakirione.main.pokemon.clone.object.PokemonStadium;
 import com.sasakirione.main.pokemon.clone.object.value.Effort;
 import com.sasakirione.main.pokemon.clone.object.value.Type;
 import org.junit.jupiter.api.*;
@@ -22,14 +23,13 @@ public class PokemonTest {
         greninja = new Pokemon(658);
     }
 
-    @Test
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
     @RepeatedTest(100)
     public void test005() {
         PokemonMove a = regieleki.getDamage("0002");
         zapdos.takeDamage(a);
-        System.out.println(zapdos.getCurrentHP2().toString());
-        Assertions.assertTrue(53 < zapdos.getCurrentHP());
+        System.out.println(zapdos.getCurrentHP2());
+        Assertions.assertTrue(zapdos.getCurrentHP() < 73);
     }
 
     @Test
@@ -54,15 +54,14 @@ public class PokemonTest {
         Effort effort = new Effort(new int[]{252, 252, 0, 0, 0, 0});
     }
 
-    @Test
     @DisplayName("タイプ相性を実装する、レジエレキでゲッコウガを")
     @RepeatedTest(100)
     public void test009() {
         PokemonMove a = regieleki.getDamage("0002");
         greninja.takeDamage(a);
-        System.out.println(greninja.getCurrentHP2().toString());
+        System.out.println(greninja.getCurrentHP2());
         Assertions.assertTrue(greninja.getCurrentHP() < 12);
-        Assertions.assertTrue(!(greninja.getCurrentHP() < 0));
+        Assertions.assertFalse(greninja.getCurrentHP() < 0);
     }
 
     @Test
@@ -74,6 +73,27 @@ public class PokemonTest {
         Type type = new Type("みず");
     }
 
+    @DisplayName("バトル場を使う")
+    @RepeatedTest(100)
+    public void test011() {
+        PokemonStadium stadiume = new PokemonStadium(regieleki, zapdos);
+        PokemonMove a = regieleki.getDamage("サンダープリズン");
+        PokemonMove b = zapdos.getDamage("ぼうふう");
+        System.out.println(stadiume.forwardTurn(a,b));
+        System.out.println(regieleki.getCurrentHP2());
+        System.out.println(zapdos.getCurrentHP2());
+        stadiume.forwardTurn(a, b);
+        Assertions.assertEquals("おわりだよ", stadiume.forwardTurn(a, b));
+    }
 
-
+    @Test
+    @DisplayName("メッセージ機能")
+    public void test012() {
+        PokemonStadium stadiume = new PokemonStadium(regieleki, greninja);
+        PokemonMove a = regieleki.getDamage("サンダープリズン");
+        PokemonMove b = greninja.getDamage("ハイドロポンプ");
+        System.out.println(stadiume.forwardTurn(a,b));
+        stadiume.getLogAll();
+        Assertions.assertEquals("こうかばつぐんだ！", stadiume.getLog(4));
+    }
 }
