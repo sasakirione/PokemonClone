@@ -18,9 +18,25 @@ public class Pokemon {
     private int weakening;
     private Type type;
     private String nature;
+    private String good;
+    private boolean goodChoice = false;
+    private String choiceMove = null;
 
     public Pokemon(String name, int[] effort, String good, String nature) {
+        this.nature = nature;
         setPokemon(name, effort);
+        setGood(good);
+    }
+
+    private void setGood(String good) {
+        if (good.equals("なし")) {
+            return;
+        }
+        if (good.equals("こだわりメガネ")) {
+            this.good = "こだわりメガネ";
+            this.goodChoice = true;
+            this.real[3] = (int) Math.round(this.real[3] * 1.5);
+        }
     }
 
     public String getName() {
@@ -31,8 +47,16 @@ public class Pokemon {
         return (int) Math.floor((((base * 2.0) + 31 + Math.floor(effort / 4.0)) * (50.0 / 100.0) + 5));
     }
 
-    public PokemonMove getDamage(String i) {
-        return new PokemonMove(i, this.real);
+    public PokemonMove getDamage(String name) {
+        if (goodChoice) {
+            if (choiceMove != null && !name.equals(this.choiceMove)) {
+                throw new IllegalArgumentException("こだわっています！");
+            }
+            if (choiceMove == null) {
+                this.choiceMove = name;
+            }
+        }
+        return new PokemonMove(name, this.real);
     }
 
     public int[] getReal() {
