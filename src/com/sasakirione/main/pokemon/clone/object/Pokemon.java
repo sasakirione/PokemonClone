@@ -128,10 +128,12 @@ public class Pokemon {
     }
 
     private void pokemonNutureCalculation() {
-        int plus = this.nature.plusNature();
-        int minus = this.nature.minusNature();
-        real[minus] = (int) Math.floor(real[minus] * 0.9);
-        real[plus] = (int) Math.floor(real[plus] * 1.1);
+        if (!nature.isMajime()) {
+            int plus = this.nature.plusNature();
+            int minus = this.nature.minusNature();
+            real[minus] = (int) Math.floor(real[minus] * 0.9);
+            real[plus] = (int) Math.floor(real[plus] * 1.1);
+        }
     }
 
     private int realCalculationHP(int base, int effort) {
