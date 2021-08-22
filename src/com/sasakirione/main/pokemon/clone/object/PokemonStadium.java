@@ -60,7 +60,7 @@ public class PokemonStadium {
             return 0;
         }
     }
-// 03-5320-4592 谷崎循環器内科042-319-0056 おきのぴおおき医院042-354-1277 東府中病院042-364-0151
+
     private int priorityDecision() {
         return 0;
     }
