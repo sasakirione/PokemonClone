@@ -17,6 +17,8 @@ public class PokemonTest {
     Pokemon regieleki_megane;
     Pokemon zapdos;
     Pokemon greninja;
+    Pokemon polteageist;
+
     int[] cs = new int[]{0, 0, 0, 252, 0, 252};
 
     @BeforeEach
@@ -25,6 +27,7 @@ public class PokemonTest {
         regieleki_megane = new Pokemon("レジエレキ", this.cs, "こだわりメガネ" , "おくびょう");
         zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう");
         greninja = new Pokemon("ゲッコウガ", new int[]{252, 0, 0, 0, 252 , 0}, "なし" , "おくびょう");
+        polteageist = new Pokemon("ポットデス", this.cs, "こだわってないスカーフ", "おくびょう");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
@@ -154,5 +157,19 @@ public class PokemonTest {
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
         Assertions.assertEquals("Aは 七尾百合子 をくりだした！", BattleLog.getLog(0));
+    }
+
+    @Test
+    @DisplayName("ポットデス　からをやぶる")
+    public void test018() {
+        PokemonStadium stadium = new PokemonStadium(polteageist, regieleki);
+        PokemonMove a = polteageist.getDamage("からをやぶる");
+        PokemonMove b = regieleki.getDamage("サンダープリズン");
+        PokemonMove a2 = polteageist.getDamage("シャドーボール");
+        stadium.forwardTurn(a, b);
+        stadium.forwardTurn(a2, b);
+        BattleLog.getLogAll();
+        Assertions.assertEquals("ポットデス の からをやぶる のこうげきだ！", BattleLog.getLog(4));
+        Assertions.assertEquals("ポットデス の シャドーボール のこうげきだ！", BattleLog.getLog(5));
     }
 }

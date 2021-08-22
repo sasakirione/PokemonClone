@@ -56,6 +56,9 @@ public class Pokemon {
         if (good.equals("こだわりハチマキ")) {
             setChoiceGood(1);
         }
+        if (good.equals("こだわってないスカーフ")) {
+            this.real[5] = (int) Math.round(this.real[5] * 1.5);
+        }
     }
 
     private void setChoiceGood(int i) {
@@ -99,18 +102,22 @@ public class Pokemon {
             this.type = new Type("でんき","ひこう");
             pokemonRealSet();
         }
-
         if (name.equals("ゲッコウガ")) {
             this.base = new int[] {72, 95, 67, 103, 71, 122};
             this.effort = new Effort(effort);
             this.type = new Type("みず","あく");
             pokemonRealSet();
         }
-
         if (name.equals("レジエレキ")) {
             this.base = new int[] {80, 100, 50, 100, 50, 200};
             this.effort = new Effort(effort);
             this.type = new Type("でんき");
+            pokemonRealSet();
+        }
+        if (name.equals("ポットデス")) {
+            this.base = new int[] {60, 65, 65, 134, 114, 70};
+            this.effort = new Effort(effort);
+            this.type = new Type("ゴースト");
             pokemonRealSet();
         }
     }
@@ -154,9 +161,12 @@ public class Pokemon {
         } else {
             realDefense = real[4];
         }
-
-        int damage2 = this.currentHP.pruneHP(damageCalculation(realAttack, realDefense, damage, magnification, type));
-        BattleLog.typeMagnification(magnification);
+        if (a.getMoveName().equals("ちきゅうなげ")) {
+            this.currentHP.pruneHP(50);
+        } else {
+            this.currentHP.pruneHP(damageCalculation(realAttack, realDefense, damage, magnification, type));
+        }
+        BattleLog.typeMagnification(typeMagnification);
     }
 
     private int damageCalculation(double realAttack, double realDefense, int damage, double magnification, String type) {
@@ -197,5 +207,13 @@ public class Pokemon {
         BigDecimal bigDecimal = new BigDecimal(String.valueOf(i));
         BigDecimal resBD = bigDecimal.setScale(0, RoundingMode.HALF_DOWN);
         return (int) resBD.doubleValue();
+    }
+
+    public void takeChange(PokemonMove a) {
+        if (a.getMoveName().equals("からをやぶる")) {
+            real[5] = Math.round(this.real[5] * 2);
+            real[1] = Math.round(this.real[1] * 2);
+            real[3] = Math.round(this.real[3] * 2);
+        }
     }
 }

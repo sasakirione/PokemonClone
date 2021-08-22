@@ -6,7 +6,7 @@ public class PokemonMove {
     // 技の名前
     private final String moveName;
     // 0:物理技、1:特殊技、2：自分にかかる変化技、3:相手にかかる変化技、4：場にかかる変化技
-    private final int moveClass;
+    private int moveClass;
     // 技を出す側の実数値
     private final int[] real;
     // 技のダメージ
@@ -18,27 +18,44 @@ public class PokemonMove {
 
     public PokemonMove(String name, int[] real , Type type) {
         this.moveName = name;
-        this.moveClass = 1;
         this.real = real;
         this.types = type;
 
         if (name.equals("サンダープリズン")) {
+            this.moveClass = 1;
             this.moveDamage = 80;
             this.moveDamage *= 1.5;
             this.moveType = "でんき";
         }
         if (name.equals("ぼうふう")) {
+            this.moveClass = 1;
             this.moveDamage = 110;
             this.moveType = "ひこう";
         }
         if (name.equals("ハイドロポンプ")) {
+            this.moveClass = 1;
             this.moveDamage = 110;
             this.moveType = "みず";
         }
         if (name.equals("げんしのちから")) {
+            this.moveClass = 1;
             this.moveDamage = 60;
             this.moveType = "いわ";
         }
+        if (name.equals("シャドーボール")) {
+            this.moveClass = 1;
+            this.moveDamage = 80;
+            this.moveType = "ゴースト";
+        }
+        if (name.equals("からをやぶる")) {
+            this.moveClass =2;
+            this.moveType = "ノーマル";
+        }
+        if (name.equals("ちきゅうなげ")) {
+            this.moveClass = 0;
+            this.moveType = "ノーマル";
+        }
+
 
     }
 
