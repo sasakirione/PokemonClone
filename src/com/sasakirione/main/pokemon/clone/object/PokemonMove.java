@@ -3,19 +3,25 @@ package com.sasakirione.main.pokemon.clone.object;
 import com.sasakirione.main.pokemon.clone.object.value.Type;
 
 public class PokemonMove {
+    // 技の名前
     private final String moveName;
+    // 0:物理技、1:特殊技、2：自分にかかる変化技、3:相手にかかる変化技、4：場にかかる変化技
     private final int moveClass;
+    // 技を出す側の実数値
     private final int[] real;
+    // 技のダメージ
     private int moveDamage;
+    // 技のタイプ
     private String moveType;
-    private boolean typeMatched;
-    private Type types;
+    // 技を出す側のタイプ
+    private final Type types;
 
     public PokemonMove(String name, int[] real , Type type) {
         this.moveName = name;
         this.moveClass = 1;
         this.real = real;
         this.types = type;
+
         if (name.equals("サンダープリズン")) {
             this.moveDamage = 80;
             this.moveDamage *= 1.5;

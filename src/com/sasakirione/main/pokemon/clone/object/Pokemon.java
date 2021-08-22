@@ -15,8 +15,6 @@ public class Pokemon {
     private Effort effort;
     private int[] base;
     private HP currentHP;
-    private int enhancement;
-    private int weakening;
     private Type type;
     private Nature nature;
     private String good;
@@ -29,15 +27,39 @@ public class Pokemon {
         setGood(good);
     }
 
+    public Pokemon(String name, int[] effort, int[] base, String good, String nature, String type1, String type2, String ability) {
+        this.nature = new Nature(nature);
+        setPokemon(name,effort,base,type1,type2);
+        setGood(good);
+    }
+
+    private void setPokemon(String name, int[] effort, int[] base, String type1, String type2) {
+        this.name = name;
+        this.base = base;
+        this.effort = new Effort(effort);
+        this.type = new Type(type1,type2);
+        pokemonRealSet();
+    }
+
     private void setGood(String good) {
         if (good.equals("なし")) {
             return;
         }
+        this.good = good;
         if (good.equals("こだわりメガネ")) {
-            this.good = "こだわりメガネ";
-            this.goodChoice = true;
-            this.real[3] = (int) Math.round(this.real[3] * 1.5);
+            setChoiceGood(3);
         }
+        if (good.equals("こだわりスカーフ")) {
+            setChoiceGood(5);
+        }
+        if (good.equals("こだわりハチマキ")) {
+            setChoiceGood(1);
+        }
+    }
+
+    private void setChoiceGood(int i) {
+        this.goodChoice = true;
+        this.real[i] = (int) Math.round(this.real[i] * 1.5);
     }
 
     public String getName() {
@@ -50,14 +72,18 @@ public class Pokemon {
 
     public PokemonMove getDamage(String name) {
         if (goodChoice) {
-            if (choiceMove != null && !name.equals(this.choiceMove)) {
-                throw new IllegalArgumentException("こだわっています！");
-            }
-            if (choiceMove == null) {
-                this.choiceMove = name;
-            }
+            choiceCheck(name);
         }
         return new PokemonMove(name, this.real, this.type);
+    }
+
+    private void choiceCheck(String name) {
+        if (choiceMove != null && !name.equals(this.choiceMove)) {
+            throw new IllegalArgumentException("こだわっています！");
+        }
+        if (choiceMove == null) {
+            this.choiceMove = name;
+        }
     }
 
     public int[] getReal() {
@@ -86,7 +112,6 @@ public class Pokemon {
             this.type = new Type("でんき");
             pokemonRealSet();
         }
-
     }
 
     private void pokemonRealSet() {

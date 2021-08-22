@@ -130,4 +130,27 @@ public class PokemonTest {
         Assertions.assertTrue(68 < zapdos.getCurrentHP());
     }
 
+    @Test
+    @DisplayName("デモ用")
+    public void test016() {
+        PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
+        PokemonMove a = regieleki_megane.getDamage("サンダープリズン");
+        PokemonMove b = zapdos.getDamage("ぼうふう");
+        stadium.forwardTurn(a, b);
+        stadium.forwardTurn(a, b);
+        stadium.getLogAll();
+    }
+
+    @Test
+    @DisplayName("七尾百合子を使う")
+    public void test017() {
+        Pokemon nanao = new Pokemon("七尾百合子", new int[]{0, 0, 0, 252, 0, 252}, new int[]{60,50,70,130,90,95}, "こだわりメガネ" , "おくびょう",
+                "みず", "フェアリー", "うるおいボディ");
+        PokemonStadium stadium = new PokemonStadium(nanao, regieleki);
+        PokemonMove a = nanao.getDamage("ハイドロポンプ");
+        PokemonMove b = regieleki.getDamage("サンダープリズン");
+        stadium.forwardTurn(a, b);
+        stadium.getLogAll();
+        Assertions.assertEquals(stadium.getLog(0),"Aは 七尾百合子 をくりだした！");
+    }
 }

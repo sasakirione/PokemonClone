@@ -5,7 +5,7 @@ import com.sasakirione.main.pokemon.clone.object.PokemonTypeCompatibility;
 import java.util.Arrays;
 
 public class Type {
-    private String[] types;
+    private final String[] types;
     private static final String[] TYPE = {"ノーマル","ほのお","みず","でんき","くさ","こおり","かくとう","どく","じめん",
             "ひこう","エスパー","むし","いわ","ゴースト","ドラゴン","あく","はがね","フェアリー"};
 

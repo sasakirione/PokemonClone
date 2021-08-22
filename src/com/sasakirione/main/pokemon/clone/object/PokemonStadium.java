@@ -3,8 +3,8 @@ package com.sasakirione.main.pokemon.clone.object;
 import java.util.ArrayList;
 
 public class PokemonStadium {
-    private Pokemon pokemonInBattleA;
-    private Pokemon pokemonInBattleB;
+    private final Pokemon pokemonInBattleA;
+    private final Pokemon pokemonInBattleB;
     private ArrayList<String> battleLog = new ArrayList<>();
     private boolean matchEndFlag = false;
 
