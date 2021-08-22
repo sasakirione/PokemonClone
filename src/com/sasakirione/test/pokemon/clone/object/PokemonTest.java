@@ -1,5 +1,6 @@
 package com.sasakirione.test.pokemon.clone.object;
 
+import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 import com.sasakirione.main.pokemon.clone.object.Pokemon;
 import com.sasakirione.main.pokemon.clone.object.PokemonMove;
 import com.sasakirione.main.pokemon.clone.object.PokemonStadium;
@@ -16,12 +17,13 @@ public class PokemonTest {
     Pokemon regieleki_megane;
     Pokemon zapdos;
     Pokemon greninja;
+    int[] cs = new int[]{0, 0, 0, 252, 0, 252};
 
     @BeforeEach
     public void before() {
-        regieleki = new Pokemon("レジエレキ", new int[]{0, 0, 0, 252, 0 , 252}, "なし" , "おくびょう");
-        regieleki_megane = new Pokemon("レジエレキ", new int[]{0, 0, 0, 252, 0 , 252}, "こだわりメガネ" , "おくびょう");
-        zapdos = new Pokemon("サンダー", new int[]{0, 0, 0, 252, 0 , 252}, "なし" , "おくびょう");
+        regieleki = new Pokemon("レジエレキ", this.cs, "なし" , "おくびょう");
+        regieleki_megane = new Pokemon("レジエレキ", this.cs, "こだわりメガネ" , "おくびょう");
+        zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう");
         greninja = new Pokemon("ゲッコウガ", new int[]{252, 0, 0, 0, 252 , 0}, "なし" , "おくびょう");
     }
 
@@ -95,8 +97,8 @@ public class PokemonTest {
         PokemonMove a = regieleki.getDamage("サンダープリズン");
         PokemonMove b = greninja.getDamage("ハイドロポンプ");
         System.out.println(stadium.forwardTurn(a,b));
-        stadium.getLogAll();
-        Assertions.assertEquals("こうかばつぐんだ！", stadium.getLog(4));
+        BattleLog.getLogAll();
+        Assertions.assertEquals("こうかばつぐんだ！", BattleLog.getLog(3));
     }
 
     @DisplayName("こだわりメガネを実装_ダメージ量を増やす")
@@ -106,7 +108,7 @@ public class PokemonTest {
         PokemonMove a = regieleki_megane.getDamage("サンダープリズン");
         PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a, b);
-        stadium.getLogAll();
+        BattleLog.getLogAll();
         Assertions.assertTrue(zapdos.getCurrentHP() < 25);
     }
 
@@ -126,7 +128,7 @@ public class PokemonTest {
         PokemonMove a = regieleki.getDamage("げんしのちから");
         PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a, b);
-        stadium.getLogAll();
+        BattleLog.getLogAll();
         Assertions.assertTrue(68 < zapdos.getCurrentHP());
     }
 
@@ -138,19 +140,19 @@ public class PokemonTest {
         PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a, b);
         stadium.forwardTurn(a, b);
-        stadium.getLogAll();
+        BattleLog.getLogAll();
     }
 
     @Test
     @DisplayName("七尾百合子を使う")
     public void test017() {
-        Pokemon nanao = new Pokemon("七尾百合子", new int[]{0, 0, 0, 252, 0, 252}, new int[]{60,50,70,130,90,95}, "こだわりメガネ" , "おくびょう",
+        Pokemon nanao = new Pokemon("七尾百合子", this.cs, new int[]{60,50,70,130,90,95}, "こだわりメガネ" , "おくびょう",
                 "みず", "フェアリー", "うるおいボディ");
         PokemonStadium stadium = new PokemonStadium(nanao, regieleki);
         PokemonMove a = nanao.getDamage("ハイドロポンプ");
         PokemonMove b = regieleki.getDamage("サンダープリズン");
         stadium.forwardTurn(a, b);
-        stadium.getLogAll();
-        Assertions.assertEquals(stadium.getLog(0),"Aは 七尾百合子 をくりだした！");
+        BattleLog.getLogAll();
+        Assertions.assertEquals("Aは 七尾百合子 をくりだした！", BattleLog.getLog(0));
     }
 }

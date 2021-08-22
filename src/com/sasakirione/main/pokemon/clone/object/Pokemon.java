@@ -1,5 +1,6 @@
 package com.sasakirione.main.pokemon.clone.object;
 
+import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 import com.sasakirione.main.pokemon.clone.object.value.Effort;
 import com.sasakirione.main.pokemon.clone.object.value.HP;
 import com.sasakirione.main.pokemon.clone.object.value.Nature;
@@ -140,7 +141,7 @@ public class Pokemon {
         return (int) Math.floor((((base * 2.0) + 31 + Math.floor(effort / 4.0)) * (50.0 / 100.0) + 50 + 10));
     }
 
-    public String takeDamage(PokemonMove a) {
+    public void takeDamage(PokemonMove a) {
         int damage = a.getMoveDamage();
         int realAttack = a.getRealAttack();
         int realDefense;
@@ -155,16 +156,7 @@ public class Pokemon {
         }
 
         int damage2 = this.currentHP.pruneHP(damageCalculation(realAttack, realDefense, damage, magnification, type));
-        if (typeMagnification == 0.0) {
-            return "こうかがないようだ";
-        }
-        if (typeMagnification < 1.0) {
-            return "こうかいまひとつだ！";
-        }
-        if (1.0 < typeMagnification) {
-            return "こうかばつぐんだ！";
-        }
-        return "";
+        BattleLog.typeMagnification(magnification);
     }
 
     private int damageCalculation(double realAttack, double realDefense, int damage, double magnification, String type) {
@@ -174,6 +166,7 @@ public class Pokemon {
         int d ;
         if (isVitals()) {
             d = fiveOutOverFiveIn(c * (6144.0 / 4096.0));
+            BattleLog.vitals();
         } else {
             d = (int) c;
         }
