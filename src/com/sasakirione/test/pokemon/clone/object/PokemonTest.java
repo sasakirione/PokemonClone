@@ -26,7 +26,7 @@ public class PokemonTest {
         regieleki = new Pokemon("レジエレキ", this.cs, "なし" , "おくびょう");
         regieleki_megane = new Pokemon("レジエレキ", this.cs, "こだわりメガネ" , "おくびょう");
         zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう");
-        greninja = new Pokemon("ゲッコウガ", new int[]{252, 0, 0, 0, 252 , 0}, "なし" , "おくびょう");
+        greninja = new Pokemon("ゲッコウガ", new int[]{252, 0, 0, 0, 252 , 0}, "こだわりスカーフ" , "おくびょう");
         polteageist = new Pokemon("ポットデス", this.cs, "こだわってないスカーフ", "おくびょう");
     }
 
@@ -171,5 +171,18 @@ public class PokemonTest {
         BattleLog.getLogAll();
         Assertions.assertEquals("ポットデス の からをやぶる のこうげきだ！", BattleLog.getLog(4));
         Assertions.assertEquals("ポットデス の シャドーボール のこうげきだ！", BattleLog.getLog(5));
+    }
+
+    @Test
+    @DisplayName("状態異常を実装する、マヒ、素早さだけ")
+    public void test019() {
+        PokemonStadium stadium = new PokemonStadium(zapdos, greninja);
+        PokemonMove a = zapdos.getDamage("でんじは");
+        PokemonMove b = greninja.getDamage("ハイドロポンプ");
+        stadium.forwardTurn(a, b);
+        PokemonMove a2 = zapdos.getDamage("ぼうふう");
+        stadium.forwardTurn(a2, b);
+        BattleLog.getLogAll();
+        Assertions.assertEquals("サンダー の ぼうふう のこうげきだ！", BattleLog.getLog(7));
     }
 }

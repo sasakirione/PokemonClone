@@ -67,5 +67,14 @@ public class Type {
         return typeMatch;
     }
 
+    public boolean isPARCheck() {
+        boolean typeCheck = false;
+        int count = (int) Arrays.stream(types).filter(s -> s.equals("でんき")).count();
+        if (count == 1) {
+            typeCheck = true;
+        }
+        return typeCheck;
+    }
+
 
 }

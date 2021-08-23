@@ -51,4 +51,17 @@ public class BattleLog {
     public static void vitals() {
         battleLog.add("きゅうしょにあたった！");
     }
+
+    public static void statusAilmentError() {
+        battleLog.add("すでに状態異常にかかっています");
+    }
+
+    public static void parError() {
+        battleLog.add("効果がないようだ");
+    }
+
+    public static void par(String name) {
+        battleLog.add(name+" は麻痺して技が出にくくなった！");
+    }
+
 }

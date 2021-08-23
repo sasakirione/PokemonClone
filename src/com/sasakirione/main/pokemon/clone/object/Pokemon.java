@@ -21,6 +21,8 @@ public class Pokemon {
     private String good;
     private boolean goodChoice = false;
     private String choiceMove = null;
+    private String statusAilment;
+    private boolean isStatusAilment = false;
 
     public Pokemon(String name, int[] effort, String good, String nature) {
         this.nature = new Nature(nature);
@@ -149,6 +151,14 @@ public class Pokemon {
     }
 
     public void takeDamage(PokemonMove a) {
+        if (a.getMoveClass() == 3) {
+            takeChange(a);
+            return;
+        }
+        if (a.getMoveName().equals("ちきゅうなげ")) {
+            this.currentHP.pruneHP(50);
+            return;
+        }
         int damage = a.getMoveDamage();
         int realAttack = a.getRealAttack();
         int realDefense;
@@ -161,11 +171,8 @@ public class Pokemon {
         } else {
             realDefense = real[4];
         }
-        if (a.getMoveName().equals("ちきゅうなげ")) {
-            this.currentHP.pruneHP(50);
-        } else {
-            this.currentHP.pruneHP(damageCalculation(realAttack, realDefense, damage, magnification, type));
-        }
+        this.currentHP.pruneHP(damageCalculation(realAttack, realDefense, damage, magnification, type));
+
         BattleLog.typeMagnification(typeMagnification);
     }
 
@@ -215,5 +222,26 @@ public class Pokemon {
             real[1] = Math.round(this.real[1] * 2);
             real[3] = Math.round(this.real[3] * 2);
         }
+        if (a.getMoveName().equals("かいでんぱ")) {
+            real[3] = (int) Math.round(this.real[3] * 0.5);
+        }
+        if (a.getMoveName().equals("でんじは")) {
+            getPAR();
+        }
+    }
+
+    private void getPAR() {
+        if (isStatusAilment) {
+            BattleLog.statusAilmentError();
+            return;
+        }
+        if (this.type.isPARCheck()) {
+            BattleLog.parError();
+            return;
+        }
+        isStatusAilment = true;
+        statusAilment = "まひ";
+        real[5] = (int) Math.round(this.real[5] * 0.5);
+        BattleLog.par(this.name);
     }
 }

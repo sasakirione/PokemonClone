@@ -55,6 +55,14 @@ public class PokemonMove {
             this.moveClass = 0;
             this.moveType = "ノーマル";
         }
+        if (name.equals("かいでんぱ")) {
+            this.moveClass =3;
+            this.moveType = "でんき";
+        }
+        if (name.equals("でんじは")) {
+            this.moveClass = 3;
+            this.moveType = "でんき";
+        }
 
 
     }

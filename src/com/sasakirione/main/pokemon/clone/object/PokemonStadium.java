@@ -49,8 +49,12 @@ public class PokemonStadium {
     }
     private void attackSideB(PokemonMove b) {
         BattleLog.attack(pokemonInBattleB, b);
-        this.pokemonInBattleA.takeDamage(b);
-        BattleLog.hp(pokemonInBattleA);
+        if (b.getMoveClass() == 2) {
+            this.pokemonInBattleB.takeChange(b);
+        } else {
+            this.pokemonInBattleA.takeDamage(b);
+            BattleLog.hp(pokemonInBattleA);
+        }
         if (pokemonInBattleA.getCurrentHP() == 0) {
             BattleLog.death(pokemonInBattleA);
             this.matchEndFlag = true;
