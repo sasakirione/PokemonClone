@@ -42,12 +42,7 @@ public class Type {
     }
 
     public boolean isTypeCheck(String type) {
-        boolean typeCheck = false;
-        int count = (int) Arrays.stream(TYPE).filter(s -> s.equals(type)).count();
-        if (count == 1) {
-            typeCheck = true;
-        }
-        return typeCheck;
+        return isContemporaryTypeCheck(TYPE, type);
     }
 
     public double getTypeMagnification(String attackType) {
@@ -59,17 +54,16 @@ public class Type {
     }
 
     public boolean isTypeMatch(String type) {
-        boolean typeMatch = false;
-        int count = (int) Arrays.stream(types).filter(s -> s.equals(type)).count();
-        if (count == 1) {
-            typeMatch = true;
-        }
-        return typeMatch;
+        return isContemporaryTypeCheck(this.types, type);
     }
 
     public boolean isPARCheck() {
+        return isContemporaryTypeCheck(this.types, "でんき");
+    }
+
+    private boolean isContemporaryTypeCheck(String[] type1, String type2) {
         boolean typeCheck = false;
-        int count = (int) Arrays.stream(types).filter(s -> s.equals("でんき")).count();
+        int count = (int) Arrays.stream(type1).filter(s -> s.equals(type2)).count();
         if (count == 1) {
             typeCheck = true;
         }

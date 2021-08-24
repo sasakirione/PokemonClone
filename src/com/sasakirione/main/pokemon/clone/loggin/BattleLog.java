@@ -13,7 +13,7 @@ public class BattleLog {
     }
 
     public static void startBattle(String tn, Pokemon pokemon) {
-        battleLog.add(tn + "は " + pokemon.getName() + " をくりだした！");
+        battleLog.add(tn + "は " + pokemon.getName() + " を繰り出した！");
     }
 
     public static void attack(Pokemon pokemon, PokemonMove move) {

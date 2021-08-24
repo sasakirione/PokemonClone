@@ -127,6 +127,7 @@ public class PokemonTest {
     @DisplayName("タイプ不一致技を設定")
     @RepeatedTest(100)
     public void test015() {
+        zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう");
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
         PokemonMove a = regieleki.getDamage("げんしのちから");
         PokemonMove b = zapdos.getDamage("ぼうふう");
@@ -156,7 +157,7 @@ public class PokemonTest {
         PokemonMove b = regieleki.getDamage("サンダープリズン");
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
-        Assertions.assertEquals("Aは 七尾百合子 をくりだした！", BattleLog.getLog(0));
+        Assertions.assertEquals("Aは 七尾百合子 を繰り出した！", BattleLog.getLog(0));
     }
 
     @Test

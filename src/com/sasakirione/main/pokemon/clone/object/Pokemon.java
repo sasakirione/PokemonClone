@@ -17,12 +17,11 @@ public class Pokemon {
     private int[] base;
     private HP currentHP;
     private Type type;
-    private Nature nature;
+    private final Nature nature;
     private String good;
     private boolean goodChoice = false;
     private String choiceMove = null;
-    private String statusAilment;
-    private boolean isStatusAilment = false;
+    private String statusAilment = "";
 
     public Pokemon(String name, int[] effort, String good, String nature) {
         this.nature = new Nature(nature);
@@ -231,7 +230,7 @@ public class Pokemon {
     }
 
     private void getPAR() {
-        if (isStatusAilment) {
+        if (!statusAilment.equals("")) {
             BattleLog.statusAilmentError();
             return;
         }
@@ -239,7 +238,6 @@ public class Pokemon {
             BattleLog.parError();
             return;
         }
-        isStatusAilment = true;
         statusAilment = "まひ";
         real[5] = (int) Math.round(this.real[5] * 0.5);
         BattleLog.par(this.name);
