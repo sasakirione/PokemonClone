@@ -1,18 +1,18 @@
 package com.sasakirione.main.pokemon.clone.object;
 
-import java.util.ArrayList;
+import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 
 public class PokemonStadium {
-    private Pokemon pokemonInBattleA;
-    private Pokemon pokemonInBattleB;
-    private ArrayList<String> battleLog = new ArrayList<>();
+    private final Pokemon pokemonInBattleA;
+    private final Pokemon pokemonInBattleB;
     private boolean matchEndFlag = false;
 
     public PokemonStadium(Pokemon pokemonA, Pokemon pokemonB) {
         this.pokemonInBattleA = pokemonA;
         this.pokemonInBattleB = pokemonB;
-        battleLog.add("Aは " + pokemonA.getName() + " をくりだした！");
-        battleLog.add("Bは " + pokemonB.getName() + " をくりだした！");
+        BattleLog.start();
+        BattleLog.startBattle("A",pokemonA);
+        BattleLog.startBattle("B",pokemonB);
     }
 
     public String forwardTurn(PokemonMove a, PokemonMove b) {
@@ -20,7 +20,7 @@ public class PokemonStadium {
             return "おわりだよ";
         }
         if (rapidityDecision() == 1) {
-            attckSideB(b);
+            attackSideB(b);
             if (matchEndFlag) {
                 return "おわりだよ";
             }
@@ -30,34 +30,39 @@ public class PokemonStadium {
             if (matchEndFlag) {
                 return "おわりだよ";
             }
-            attckSideB(b);
+            attackSideB(b);
         }
         return "何もなし";
     }
     private void attackSideA (PokemonMove a) {
-        String aMagnification = this.pokemonInBattleB.takeDamage(a);
-        battleLog.add(pokemonInBattleA.getName()+" の " + a.getMoveName()+" のこうげきだ！");
-        battleLog.add(pokemonInBattleB.getCurrentHP2());
-        battleLog.add(aMagnification);
+        BattleLog.attack(pokemonInBattleA, a);
+        if (a.getMoveClass() == 2) {
+           this.pokemonInBattleA.takeChange(a);
+        } else {
+            this.pokemonInBattleB.takeDamage(a);
+            BattleLog.hp(pokemonInBattleB);
+        }
         if (pokemonInBattleB.getCurrentHP() == 0) {
-            battleLog.add(pokemonInBattleB.getName() + " はたおれた");
+            BattleLog.death(pokemonInBattleB);
             this.matchEndFlag = true;
         }
     }
-
-    private void attckSideB (PokemonMove b) {
-        String bMagnification = this.pokemonInBattleA.takeDamage(b);
-        battleLog.add(pokemonInBattleB.getName()+" の " + b.getMoveName()+" のこうげきだ！");
-        battleLog.add(pokemonInBattleA.getCurrentHP2());
-        battleLog.add(bMagnification);
+    private void attackSideB(PokemonMove b) {
+        BattleLog.attack(pokemonInBattleB, b);
+        if (b.getMoveClass() == 2) {
+            this.pokemonInBattleB.takeChange(b);
+        } else {
+            this.pokemonInBattleA.takeDamage(b);
+            BattleLog.hp(pokemonInBattleA);
+        }
         if (pokemonInBattleA.getCurrentHP() == 0) {
-            battleLog.add(pokemonInBattleA.getName() + " はたおれた");
+            BattleLog.death(pokemonInBattleA);
             this.matchEndFlag = true;
         }
     }
 
     private int rapidityDecision() {
-        if (pokemonInBattleA.getReal()[5] < pokemonInBattleB.getReal()[5]) {
+        if (pokemonInBattleA.getStatus().getS() < pokemonInBattleB.getStatus().getS()) {
             return 1;
         } else {
             return 0;
@@ -66,13 +71,5 @@ public class PokemonStadium {
 
     private int priorityDecision() {
         return 0;
-    }
-
-    public String getLog(int i) {
-        return battleLog.get(i);
-    }
-
-    public void getLogAll() {
-        this.battleLog.forEach(System.out::println);
     }
 }

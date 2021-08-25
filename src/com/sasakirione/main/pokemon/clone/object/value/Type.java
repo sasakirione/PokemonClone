@@ -5,7 +5,7 @@ import com.sasakirione.main.pokemon.clone.object.PokemonTypeCompatibility;
 import java.util.Arrays;
 
 public class Type {
-    private String[] types;
+    private final String[] types;
     private static final String[] TYPE = {"ノーマル","ほのお","みず","でんき","くさ","こおり","かくとう","どく","じめん",
             "ひこう","エスパー","むし","いわ","ゴースト","ドラゴン","あく","はがね","フェアリー"};
 
@@ -42,12 +42,7 @@ public class Type {
     }
 
     public boolean isTypeCheck(String type) {
-        Boolean typeCheck = false;
-        int count = (int) Arrays.stream(TYPE).filter(s -> s.equals(type)).count();
-        if (count == 1) {
-            typeCheck = true;
-        }
-        return typeCheck;
+        return isContemporaryTypeCheck(TYPE, type);
     }
 
     public double getTypeMagnification(String attackType) {
@@ -56,6 +51,23 @@ public class Type {
             magnification *= PokemonTypeCompatibility.typeCompatibility(attackType, type);
         }
         return magnification;
+    }
+
+    public boolean isTypeMatch(String type) {
+        return isContemporaryTypeCheck(this.types, type);
+    }
+
+    public boolean isPARCheck() {
+        return isContemporaryTypeCheck(this.types, "でんき");
+    }
+
+    private boolean isContemporaryTypeCheck(String[] type1, String type2) {
+        boolean typeCheck = false;
+        int count = (int) Arrays.stream(type1).filter(s -> s.equals(type2)).count();
+        if (count == 1) {
+            typeCheck = true;
+        }
+        return typeCheck;
     }
 
 
