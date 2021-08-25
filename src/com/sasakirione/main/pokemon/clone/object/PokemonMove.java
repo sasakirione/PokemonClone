@@ -1,5 +1,6 @@
 package com.sasakirione.main.pokemon.clone.object;
 
+import com.sasakirione.main.pokemon.clone.object.value.Status;
 import com.sasakirione.main.pokemon.clone.object.value.Type;
 
 public class PokemonMove {
@@ -16,9 +17,9 @@ public class PokemonMove {
     // 技を出す側のタイプ
     private final Type types;
 
-    public PokemonMove(String name, int[] real , Type type) {
+    public PokemonMove(String name, Status status , Type type) {
         this.moveName = name;
-        this.real = real;
+        this.real = new int[]{status.getA(), status.getC()};
         this.types = type;
 
         if (name.equals("サンダープリズン")) {
@@ -81,9 +82,9 @@ public class PokemonMove {
 
     public int getRealAttack() {
         if (moveClass == 0) {
-            return real[1];
+            return real[0];
         } else {
-            return real[3];
+            return real[1];
         }
     }
 

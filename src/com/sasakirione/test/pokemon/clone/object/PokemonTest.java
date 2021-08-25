@@ -35,7 +35,6 @@ public class PokemonTest {
     public void test005() {
         PokemonMove a = regieleki.getDamage("サンダープリズン");
         zapdos.takeDamage(a);
-        System.out.println(zapdos.getCurrentHP2());
         Assertions.assertTrue(zapdos.getCurrentHP() < 73);
     }
 
@@ -66,7 +65,6 @@ public class PokemonTest {
     public void test009() {
         PokemonMove a = regieleki.getDamage("サンダープリズン");
         greninja.takeDamage(a);
-        System.out.println(greninja.getCurrentHP2());
         Assertions.assertTrue(greninja.getCurrentHP() < 12);
         Assertions.assertFalse(greninja.getCurrentHP() < 0);
     }
@@ -87,8 +85,6 @@ public class PokemonTest {
         PokemonMove a = regieleki.getDamage("サンダープリズン");
         PokemonMove b = zapdos.getDamage("ぼうふう");
         System.out.println(stadium.forwardTurn(a,b));
-        System.out.println(regieleki.getCurrentHP2());
-        System.out.println(zapdos.getCurrentHP2());
         stadium.forwardTurn(a, b);
         Assertions.assertEquals("おわりだよ", stadium.forwardTurn(a, b));
     }
