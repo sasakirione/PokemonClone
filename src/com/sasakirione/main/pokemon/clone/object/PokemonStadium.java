@@ -62,7 +62,7 @@ public class PokemonStadium {
     }
 
     private int rapidityDecision() {
-        if (pokemonInBattleA.getStatus().getS() < pokemonInBattleB.getStatus().getS()) {
+        if (pokemonInBattleA.getS() < pokemonInBattleB.getS()) {
             return 1;
         } else {
             return 0;

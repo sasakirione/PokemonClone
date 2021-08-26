@@ -3,21 +3,31 @@ package com.sasakirione.main.pokemon.clone.object;
 import com.sasakirione.main.pokemon.clone.object.value.Status;
 import com.sasakirione.main.pokemon.clone.object.value.Type;
 
+/**
+ * ポケモンのわざを担当するクラス
+ */
 public class PokemonMove {
-    // 技の名前
+    /** 技の名前 */
     private final String moveName;
-    // 0:物理技、1:特殊技、2：自分にかかる変化技、3:相手にかかる変化技、4：場にかかる変化技
+    /** 0:物理技、1:特殊技、2：自分にかかる変化技、3:相手にかかる変化技、4：場にかかる変化技　*/
     private int moveClass;
-    // 技を出す側の実数値
+    /** 攻撃・特攻の実数値 */
     private final int[] real;
-    // 技のダメージ
+    /** 技の威力 */
     private int moveDamage;
-    // 技のタイプ
+    /** 技のタイプ */
     private String moveType;
-    // 技を出す側のタイプ
+    /** 技を出すポケモンのタイプ */
     private final Type types;
 
-    public PokemonMove(String name, Status status , Type type) {
+    /**
+     * コンストラクタ
+     * 技クラスのコンストラクタです。
+     * @param name わざの名前
+     * @param status 攻撃側のステータス
+     * @param type 攻撃側のタイプ
+     */
+    public PokemonMove(String name, Status status, Type type) {
         this.moveName = name;
         this.real = new int[]{status.getA(), status.getC()};
         this.types = type;
@@ -65,21 +75,40 @@ public class PokemonMove {
             this.moveType = "でんき";
         }
 
-
     }
 
+    /**
+     * わざの名前を返す
+     * わざの名前を返します。
+     * @return わざの名前
+     */
     public String getMoveName() {
         return moveName;
     }
 
+    /**
+     * わざの種類を返す
+     * わざの種類を返します。
+     * @return わざの種類(0:物理技、1:特殊技、2：自分にかかる変化技、3:相手にかかる変化技、4：場にかかる変化技)
+     */
     public int getMoveClass() {
         return moveClass;
     }
 
+    /**
+     * わざの威力を返す
+     * わざの威力を返します。
+     * @return わざの威力
+     */
     public int getMoveDamage() {
         return moveDamage;
     }
 
+    /**
+     * 攻撃実数値を返す
+     * 攻撃または特防の実数値を返します
+     * @return 物理技の場合は攻撃実数値、特殊技の場合は特攻実数値
+     */
     public int getRealAttack() {
         if (moveClass == 0) {
             return real[0];
@@ -88,6 +117,11 @@ public class PokemonMove {
         }
     }
 
+    /**
+     * タイプ一致倍率を返す
+     * タイプ一致わざの場合にタイプ一致の倍率を返します
+     * @return タイプ一致わざの場合は1.5
+     */
     public double getMagnification() {
         if (types.isTypeMatch(moveType)) {
             return (6144.0/4096.0);
@@ -95,6 +129,11 @@ public class PokemonMove {
         return (1.0);
     }
 
+    /**
+     * わざのタイプを返す
+     * わざのタイプを返します。
+     * @return わざのタイプ
+     */
     public String getMoveType() {
         return this.moveType;
     }
