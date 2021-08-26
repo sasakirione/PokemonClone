@@ -62,11 +62,7 @@ public class Type {
     }
 
     private boolean isContemporaryTypeCheck(String[] type1, String type2) {
-        boolean typeCheck = false;
-        int count = (int) Arrays.stream(type1).filter(s -> s.equals(type2)).count();
-        if (count == 1) {
-            typeCheck = true;
-        }
+        boolean typeCheck = Arrays.asList(type1).contains(type2);
         return typeCheck;
     }
 

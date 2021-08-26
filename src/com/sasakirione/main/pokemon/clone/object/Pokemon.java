@@ -95,12 +95,12 @@ public class Pokemon {
 
     public void takeChange(PokemonMove a) {
         if (a.getMoveName().equals("からをやぶる")) {
-            status.rankUp(1,2);
-            status.rankUp(3,2);
-            status.rankUp(5,2);
+            rankUp(1,2);
+            rankUp(3,2);
+            rankUp(5,2);
         }
         if (a.getMoveName().equals("かいでんぱ")) {
-            status.rankUp(3,-2);
+            rankUp(3,-2);
         }
         if (a.getMoveName().equals("でんじは")) {
             getPAR();
@@ -131,5 +131,10 @@ public class Pokemon {
 
     public Status getStatus() {
         return this.status;
+    }
+
+    public void rankUp(int item, int i) {
+        status.rankUp(item,i);
+        BattleLog.rankUp(this.name, item, i);
     }
 }

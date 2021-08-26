@@ -64,4 +64,28 @@ public class BattleLog {
         battleLog.add(name+" は麻痺して技が出にくくなった！");
     }
 
+    public static void rankUp(String name, int item, int i) {
+        if (item == 1 && i == 12) {
+            battleLog.add(name + " は体力を 削って パワーぜんかいになった");
+            return;
+        }
+        String message2 = switch (item) {
+            case 1 -> "攻撃";
+            case 2 -> "防御";
+            case 3 -> "特攻";
+            case 4 -> "特防";
+            case 5 -> "素早さ";
+            default -> "error";
+        };
+        String message3 = switch (i) {
+            case 3,4,5,6 -> "が　ぐぐーんとあがった";
+            case 2 -> "が ぐーんとあがった";
+            case 1 -> "が あがった";
+            case -1 -> "が さがった";
+            case -2 -> "が がくっとさがった";
+            case -3,-4,-5,-6 -> "が がくーんとさがった";
+            default -> "error";
+        };
+        battleLog.add(name + "の "+ message2 + message3 + "!");
+    }
 }

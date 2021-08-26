@@ -14,7 +14,7 @@ public class Status {
     private int[] base;
     private final Effort effort;
     private String good;
-    private Nature nature;
+    private final Nature nature;
     private boolean parCheck = false;
     private boolean brnCheck = false;
 
@@ -122,7 +122,7 @@ public class Status {
         if (this.good.equals("こだわりハチマキ") && i==1) {
             this.real[1] = (int) Math.round(real[1] * 1.5);
         }
-        if (this.good.equals("こだわらないスカーフ") && i == 5) {
+        if (this.good.equals("こだわってないスカーフ") && i == 5) {
             this.real[5] = (int) Math.round(real[5] * 1.5);
         }
     }
