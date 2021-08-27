@@ -1,6 +1,16 @@
 package com.sasakirione.main.pokemon.clone.object;
 
+/**
+ * ポケモンのタイプ相性を担当するクラス
+ */
 public class PokemonTypeCompatibility {
+    /**
+     * タイプ相性を判定する
+     * 攻撃側のタイプと防御側のタイプをいれた時にタイプ相性の倍率を返します。
+     * @param attack 攻撃側のタイプ
+     * @param defense 防御側のタイプ
+     * @return タイプ倍率
+     */
     public static double typeCompatibility(String attack, String defense) {
         double magnification = 1.0;
 
