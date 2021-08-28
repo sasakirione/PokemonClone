@@ -1,0 +1,34 @@
+package com.sasakirione.main.pokemon.clone.object.value;
+
+import java.util.Arrays;
+
+public class Field {
+    private static final String[] fieldList = {"エレキフィールド", "グラスフィールド", "サイコフィールド", "ミストフィールド"};
+    private String field;
+    private int remainingTurn;
+
+    public Field(String fieldName) {
+        fieldCheck(fieldName);
+        this.field = fieldName;
+        remainingTurn = 5;
+    }
+
+    private void fieldCheck(String fieldName) {
+        if (!Arrays.asList(fieldList).contains(fieldName)) {
+            throw new IllegalArgumentException("存在しないフィールドです");
+        }
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public int getRemainingTurn() {
+        return remainingTurn;
+    }
+
+    public void forwardTurn() {
+        remainingTurn = remainingTurn -1;
+    }
+
+}

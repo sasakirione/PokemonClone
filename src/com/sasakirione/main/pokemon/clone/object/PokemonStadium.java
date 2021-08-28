@@ -1,6 +1,7 @@
 package com.sasakirione.main.pokemon.clone.object;
 
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
+import com.sasakirione.main.pokemon.clone.object.value.Field;
 
 /**
  * ポケモンのバトル場を担当するクラス
@@ -12,6 +13,8 @@ public class PokemonStadium {
     private final Pokemon pokemonInBattleB;
     /** 試合が終了してるかの判定 */
     private boolean matchEndFlag = false;
+    /** フィールド */
+    private Field field;
 
     /**
      * バトル場クラスのコンストラクタ
@@ -25,6 +28,35 @@ public class PokemonStadium {
         BattleLog.start();
         BattleLog.startBattle("A",pokemonA);
         BattleLog.startBattle("B",pokemonB);
+        setField(true,true);
+    }
+
+    /**
+     * メーカーでフィールドの展開
+     * サイコメーカー、ミストメーカー、エレキメーカー、グラスメーカーの特性がある場合にフィールドを展開する。
+     * @param a a側のフィールドを展開するか
+     * @param b b側のフィールドを展開するか
+     */
+    private void setField(Boolean a, Boolean b) {
+        if (a) {
+            makeField(pokemonInBattleA);
+        }
+        if (b) {
+            makeField(pokemonInBattleB);
+        }
+    }
+
+    /**
+     * メーカーでフィールドの展開
+     * サイコメーカー、ミストメーカー、エレキメーカー、グラスメーカーの特性がある場合にフィールドを展開する。
+     * @param pokemon ポケモンのインスタンス
+     */
+    private void makeField(Pokemon pokemon) {
+        String ability = pokemon.getAbility();
+        if (ability.equals("サイコメーカー")) {
+            this.field = new Field("サイコフィールド");
+            BattleLog.expandPsychoMaker(pokemon.getName());
+        }
     }
 
     /**
@@ -83,6 +115,10 @@ public class PokemonStadium {
      */
     private void attackSideA (PokemonMove a) {
         BattleLog.attack(pokemonInBattleA, a);
+        if (psychofieldCheck(a)) {
+            BattleLog.psychofieldPriority(pokemonInBattleB.getName());
+            return;
+        }
         if (a.getMoveClass() == 2) {
            this.pokemonInBattleA.takeChange(a);
         } else {
@@ -95,6 +131,10 @@ public class PokemonStadium {
         }
     }
 
+    private boolean psychofieldCheck(PokemonMove move) {
+        return (0 < move.getPriority());
+    }
+
     /**
      * 攻撃を行う(Bサイド)
      * Bサイドのポケモンの攻撃処理を行います。
@@ -102,6 +142,10 @@ public class PokemonStadium {
      */
     private void attackSideB(PokemonMove b) {
         BattleLog.attack(pokemonInBattleB, b);
+        if (psychofieldCheck(b)) {
+            BattleLog.psychofieldPriority(pokemonInBattleA.getName());
+            return;
+        }
         if (b.getMoveClass() == 2) {
             this.pokemonInBattleB.takeChange(b);
         } else {

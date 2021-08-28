@@ -88,4 +88,13 @@ public class BattleLog {
         };
         battleLog.add(name + "の "+ message2 + message3 + "!");
     }
+
+    public static void psychofieldPriority(String name) {
+        battleLog.add(name + "は サイコフィールドに 守られている！");
+    }
+
+    public static void expandPsychoMaker(String name) {
+        battleLog.add(name + "の サイコメイカー");
+        battleLog.add("あしもとが ふしぎな かんじに なった！");
+    }
 }

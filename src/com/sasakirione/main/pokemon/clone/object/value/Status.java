@@ -15,15 +15,17 @@ public class Status {
     private final Effort effort;
     private String good;
     private final Nature nature;
+    private final String ability;
     private boolean parCheck = false;
     private boolean brnCheck = false;
 
-    public Status(int[] base, Effort effort, String good, Nature nature) {
+    public Status(int[] base, Effort effort, String good, Nature nature, String ability) {
         this.rank = new int[] {0, 0, 0, 0, 0, 0};
         this.good = good;
         this.base = base;
         this.effort = effort;
         this.nature = nature;
+        this.ability = ability;
         pokemonRealSet();
         this.realSource = real;
         setGood();

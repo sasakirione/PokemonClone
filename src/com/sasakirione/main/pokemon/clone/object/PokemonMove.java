@@ -83,6 +83,11 @@ public class PokemonMove {
             this.moveType = "ゴースト";
             this.priority = 1;
         }
+        if (name.equals("サイコキネシス")) {
+            this.moveClass = 1;
+            this.moveDamage = 90;
+            this.moveType = "エスパー";
+        }
 
     }
 

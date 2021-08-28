@@ -13,6 +13,8 @@ public class Pokemon {
     private Status status;
     /** ポケモンのタイプ */
     private Type type;
+    /** ポケモンの特性 */
+    private String ability;
     /** ポケモンが道具でこだわってるか */
     private boolean goodChoice = false;
     /** ポケモンがこだわってる場合のわざ */
@@ -27,9 +29,10 @@ public class Pokemon {
      * @param effort ポケモンの努力値
      * @param good ポケモンの道具
      * @param nature ポケモンの性格
+     * @param ability ポケモンの特性
      */
-    public Pokemon(String name, int[] effort, String good, String nature) {
-        setPokemon(name, effort, new Nature(nature), good);
+    public Pokemon(String name, int[] effort, String good, String nature, String ability) {
+        setPokemon(name, effort, new Nature(nature), good, ability);
     }
 
     /**
@@ -47,7 +50,7 @@ public class Pokemon {
     public Pokemon(String name, int[] effort, int[] base, String good, String nature, String type1, String type2, String ability) {
         this.name = name;
         this.type = new Type(type1, type2);
-        this.status = new Status(base, new Effort(effort), good, new Nature(nature));
+        this.status = new Status(base, new Effort(effort), good, new Nature(nature), ability);
     }
 
     /**
@@ -94,11 +97,13 @@ public class Pokemon {
      * @param effortInt ポケモンの努力値
      * @param nature ポケモンの性格
      * @param good ポケモンの道具
+     * @param ability ポケモンの特性
      */
-    private void setPokemon(String name, int[] effortInt, Nature nature, String good){
+    private void setPokemon(String name, int[] effortInt, Nature nature, String good, String ability){
         this.name = name;
         int[] base = null;
         Effort effort = null;
+        this.ability = ability;
         if (name.equals("サンダー")) {
             base = new int[] {90, 90, 85, 125, 90, 100};
             effort = new Effort(effortInt);
@@ -124,7 +129,12 @@ public class Pokemon {
             effort = new Effort(effortInt);
             this.type = new Type("くさ", "ゴースト");
         }
-        this.status = new Status(base, effort, good, nature);
+        if (name.equals("カプ・テテフ")) {
+            base = new int[] {70, 85, 75, 130, 115, 95};
+            effort = new Effort(effortInt);
+            this.type = new Type("エスパー", "フェアリー");
+        }
+        this.status = new Status(base, effort, good, nature, ability);
     }
 
     /**
@@ -230,5 +240,14 @@ public class Pokemon {
      */
     public int getS() {
         return this.status.getS();
+    }
+
+    /**
+     * 特性を返す
+     * ポケモンの特性を返します。
+     * @return ポケモンの特性
+     */
+    public String getAbility() {
+        return ability;
     }
 }

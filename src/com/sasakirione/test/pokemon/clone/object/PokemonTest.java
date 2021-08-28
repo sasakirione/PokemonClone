@@ -19,17 +19,19 @@ public class PokemonTest {
     Pokemon greninja;
     Pokemon polteageist;
     Pokemon decidueye;
+    Pokemon tapuLele;
 
     int[] cs = new int[]{0, 0, 0, 252, 0, 252};
 
     @BeforeEach
     public void before() {
-        regieleki = new Pokemon("レジエレキ", this.cs, "なし" , "おくびょう");
-        regieleki_megane = new Pokemon("レジエレキ", this.cs, "こだわりメガネ" , "おくびょう");
-        zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう");
-        greninja = new Pokemon("ゲッコウガ", new int[]{252, 0, 0, 0, 252 , 0}, "こだわりスカーフ" , "おくびょう");
-        polteageist = new Pokemon("ポットデス", this.cs, "こだわってないスカーフ", "おくびょう");
-        decidueye = new Pokemon("ジュナイパー", new int[]{0, 252, 0, 0, 0, 252}, "なし", "ようき");
+        regieleki = new Pokemon("レジエレキ", this.cs, "なし" , "おくびょう", "トランジスタ");
+        regieleki_megane = new Pokemon("レジエレキ", this.cs, "こだわりメガネ" , "おくびょう", "トランジスタ");
+        zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう", "せいでんき");
+        greninja = new Pokemon("ゲッコウガ", new int[]{252, 0, 0, 0, 252 , 0}, "こだわりスカーフ" , "おくびょう", "へんげんじざい");
+        polteageist = new Pokemon("ポットデス", this.cs, "こだわってないスカーフ", "おくびょう", "のろわれボディ");
+        decidueye = new Pokemon("ジュナイパー", new int[]{0, 252, 0, 0, 0, 252}, "なし", "ようき", "しんりょく");
+        tapuLele = new Pokemon("カプ・テテフ", this.cs, "なし", "おくびょう", "サイコメーカー");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
@@ -125,7 +127,7 @@ public class PokemonTest {
     @DisplayName("タイプ不一致技を設定")
     @RepeatedTest(100)
     public void test015() {
-        zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう");
+        zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう", "せいでんき");
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
         PokemonMove a = regieleki.getDamage("げんしのちから");
         PokemonMove b = zapdos.getDamage("ぼうふう");
@@ -199,6 +201,11 @@ public class PokemonTest {
     @Test
     @DisplayName("テテフちゃんと特性とフィールドを実装")
     public void test021() {
-
+        PokemonStadium stadium = new PokemonStadium(decidueye, tapuLele);
+        PokemonMove a = decidueye.getDamage("かげうち");
+        PokemonMove b = tapuLele.getDamage("サイコキネシス");
+        stadium.forwardTurn(a,b);
+        BattleLog.getLogAll();
+        Assertions.assertEquals("カプ・テテフは サイコフィールドに 守られている！", BattleLog.getLog(5));
     }
 }
