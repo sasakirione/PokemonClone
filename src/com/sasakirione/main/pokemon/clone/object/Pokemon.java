@@ -76,7 +76,7 @@ public class Pokemon {
      * こだわりチェック
      * こだわりアイテムを持ってる場合にこだわっているわざ以外のわざを使えないようにチェックします
      * @param name わざの名前
-     * @throws IllegalAccessException こだわってるわざ以外を使おうとすると投げます
+     * @throws IllegalArgumentException こだわってるわざ以外を使おうとすると投げます
      */
     private void choiceCheck(String name) {
         if (choiceMove != null && !name.equals(this.choiceMove)) {
@@ -118,6 +118,11 @@ public class Pokemon {
             base = new int[] {60, 65, 65, 134, 114, 70};
             effort = new Effort(effortInt);
             this.type = new Type("ゴースト");
+        }
+        if (name.equals("ジュナイパー")) {
+            base = new int[] {78, 107, 75, 100, 100, 70};
+            effort = new Effort(effortInt);
+            this.type = new Type("くさ", "ゴースト");
         }
         this.status = new Status(base, effort, good, nature);
     }

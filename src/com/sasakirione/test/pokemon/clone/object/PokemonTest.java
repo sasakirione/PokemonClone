@@ -18,6 +18,7 @@ public class PokemonTest {
     Pokemon zapdos;
     Pokemon greninja;
     Pokemon polteageist;
+    Pokemon decidueye;
 
     int[] cs = new int[]{0, 0, 0, 252, 0, 252};
 
@@ -28,6 +29,7 @@ public class PokemonTest {
         zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう");
         greninja = new Pokemon("ゲッコウガ", new int[]{252, 0, 0, 0, 252 , 0}, "こだわりスカーフ" , "おくびょう");
         polteageist = new Pokemon("ポットデス", this.cs, "こだわってないスカーフ", "おくびょう");
+        decidueye = new Pokemon("ジュナイパー", new int[]{0, 252, 0, 0, 0, 252}, "なし", "ようき");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
@@ -181,5 +183,22 @@ public class PokemonTest {
         stadium.forwardTurn(a2, b);
         BattleLog.getLogAll();
         Assertions.assertEquals("サンダー の ぼうふう のこうげきだ！", BattleLog.getLog(7));
+    }
+
+    @Test
+    @DisplayName("先制技を実装")
+    public void test020() {
+        PokemonStadium stadium = new PokemonStadium(decidueye, zapdos);
+        PokemonMove a = decidueye.getDamage("かげうち");
+        PokemonMove b = zapdos.getDamage("ぼうふう");
+        stadium.forwardTurn(a, b);
+        BattleLog.getLogAll();
+        Assertions.assertEquals("ジュナイパー の かげうち のこうげきだ！", BattleLog.getLog(2));
+    }
+
+    @Test
+    @DisplayName("テテフちゃんと特性とフィールドを実装")
+    public void test021() {
+
     }
 }

@@ -19,6 +19,8 @@ public class PokemonMove {
     private String moveType;
     /** 技を出すポケモンのタイプ */
     private final Type types;
+    /** 技を出すポケモンのタイプ */
+    private int priority;
 
     /**
      * コンストラクタ
@@ -31,6 +33,7 @@ public class PokemonMove {
         this.moveName = name;
         this.real = new int[]{status.getA(), status.getC()};
         this.types = type;
+        this.priority = 0;
 
         if (name.equals("サンダープリズン")) {
             this.moveClass = 1;
@@ -73,6 +76,12 @@ public class PokemonMove {
         if (name.equals("でんじは")) {
             this.moveClass = 3;
             this.moveType = "でんき";
+        }
+        if (name.equals("かげうち")) {
+            this.moveClass = 0;
+            this.moveDamage = 40;
+            this.moveType = "ゴースト";
+            this.priority = 1;
         }
 
     }
@@ -136,5 +145,14 @@ public class PokemonMove {
      */
     public String getMoveType() {
         return this.moveType;
+    }
+
+    /**
+     * わざの優先度を返す
+     * わざの優先度を返します。
+     * @return わざの優先度
+     */
+    public int getPriority() {
+        return this.priority;
     }
 }

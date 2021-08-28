@@ -38,8 +38,9 @@ public class Nature {
 
     /**
      * 性格上昇補正を返す
-     * 与えられた性格で上昇するステータスを返します。
+     * 設定された性格で上昇するステータスを返します。
      * @return 攻撃が上昇する場合は1、防御が上昇する場合は2、特攻が上昇する場合は3、特防が上昇する場合は4、素早さが上昇する場合は5を返す
+     * @throws IllegalArgumentException おまもり
      */
     public int plusNature() {
         if (nature.equals("さみしがり") || nature.equals("いじっぱり") || nature.equals("やんちゃ") || nature.equals("ゆうかん")) {
@@ -62,8 +63,9 @@ public class Nature {
 
     /**
      * 性格下降補正を返す
-     * 与えられた性格で下降するステータスを返します。
+     * 設定された性格で下降するステータスを返します。
      * @return 攻撃が下降する場合は1、防御が下降する場合は2、特攻が下降する場合は3、特防が下降する場合は4、素早さが下降する場合は5を返す
+     * @throws IllegalArgumentException おまもり
      */
     public int minusNature() {
         if (nature.equals("おくびょう") || nature.equals("ひかえめ") || nature.equals("ずぶとい") || nature.equals("おだやか")) {

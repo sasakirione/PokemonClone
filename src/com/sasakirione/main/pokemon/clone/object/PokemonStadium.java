@@ -38,6 +38,28 @@ public class PokemonStadium {
         if (this.pokemonInBattleA.getCurrentHP() == 0 || this.pokemonInBattleB.getCurrentHP() == 0) {
             return "おわりだよ";
         }
+        if (priorityDecision(a, b) == 1) {
+            attackSideA(a);
+            if (matchEndFlag) {
+                return "おわりだよ";
+            }
+            attackSideB(b);
+            if (matchEndFlag) {
+                return "おわりだよ";
+            }
+            return "なにもなし";
+        }
+        if (priorityDecision(a, b) == 2) {
+            attackSideB(b);
+            if (matchEndFlag) {
+                return "おわりだよ";
+            }
+            attackSideA(a);
+            if (matchEndFlag) {
+                return "おわりだよ";
+            }
+            return "なにもなし";
+        }
         if (rapidityDecision() == 1) {
             attackSideB(b);
             if (matchEndFlag) {
@@ -113,6 +135,12 @@ public class PokemonStadium {
      * @return Aサイドの優先度が高い場合は1、Bサイドの優先度が高い場合は2、優先度が同じ場合は0
      */
     private int priorityDecision(PokemonMove a, PokemonMove b) {
+        if (b.getPriority() < a.getPriority()) {
+            return 1;
+        }
+        if (a.getPriority() < b.getPriority()) {
+            return 2;
+        }
         return 0;
     }
 }
