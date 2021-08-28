@@ -33,6 +33,9 @@ public class Pokemon {
      */
     public Pokemon(String name, int[] effort, String good, String nature, String ability) {
         setPokemon(name, effort, new Nature(nature), good, ability);
+        if (good.equals("こだわりメガネ") || good.equals("こだわりハチマキ") || good.equals("こだわりスカーフ")) {
+            goodChoice = true;
+        }
     }
 
     /**
