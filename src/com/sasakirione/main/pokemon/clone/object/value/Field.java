@@ -28,7 +28,15 @@ public class Field {
     }
 
     public void forwardTurn() {
-        remainingTurn = remainingTurn -1;
+        remainingTurn = remainingTurn - 1;
     }
+
+    public boolean isDisablingPriority() {
+        return this.field.equals("サイコフィールド");
+    }
+
+
+
+
 
 }

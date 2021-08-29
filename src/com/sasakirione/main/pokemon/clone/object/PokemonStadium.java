@@ -105,7 +105,18 @@ public class PokemonStadium {
             }
             attackSideB(b);
         }
+        turnEndFieldDisposal();
         return "何もなし";
+    }
+
+    private void turnEndFieldDisposal() {
+        if (this.field != null) {
+            field.forwardTurn();
+            if (this.field.getRemainingTurn() == 0) {
+                BattleLog.endField(this.field);
+                this.field = null;
+            }
+        }
     }
 
     /**
@@ -132,7 +143,7 @@ public class PokemonStadium {
     }
 
     private boolean psychofieldCheck(PokemonMove move) {
-        return (0 < move.getPriority());
+        return ((0 < move.getPriority()) && (this.field != null )&& (this.field.getField().equals("サイコフィールド")));
     }
 
     /**

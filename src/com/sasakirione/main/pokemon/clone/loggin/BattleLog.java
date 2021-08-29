@@ -2,6 +2,7 @@ package com.sasakirione.main.pokemon.clone.loggin;
 
 import com.sasakirione.main.pokemon.clone.object.Pokemon;
 import com.sasakirione.main.pokemon.clone.object.PokemonMove;
+import com.sasakirione.main.pokemon.clone.object.value.Field;
 
 import java.util.ArrayList;
 
@@ -95,6 +96,12 @@ public class BattleLog {
 
     public static void expandPsychoMaker(String name) {
         battleLog.add(name + "の サイコメイカー");
-        battleLog.add("あしもとが ふしぎな かんじに なった！");
+        battleLog.add("足下が 不思議な 感じに なった！");
+    }
+
+    public static void endField(Field field) {
+        if (field.getField().equals("サイコフィールド")) {
+            battleLog.add("足下の 不思議感が 消え去った！");
+        }
     }
 }
