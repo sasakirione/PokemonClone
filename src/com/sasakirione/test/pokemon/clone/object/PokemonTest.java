@@ -204,8 +204,25 @@ public class PokemonTest {
         PokemonStadium stadium = new PokemonStadium(decidueye, tapuLele);
         PokemonMove a = decidueye.getDamage("かげうち");
         PokemonMove b = tapuLele.getDamage("サイコキネシス");
+        PokemonMove c = tapuLele.getDamage("めいそう");
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
         Assertions.assertEquals("カプ・テテフは サイコフィールドに 守られている！", BattleLog.getLog(5));
+    }
+
+    @Test
+    @DisplayName("フィールドおわり")
+    public void test022() {
+        PokemonStadium stadium = new PokemonStadium(decidueye, tapuLele);
+        PokemonMove a = decidueye.getDamage("かげうち");
+        PokemonMove c = tapuLele.getDamage("めいそう");
+        PokemonMove b = tapuLele.getDamage("サイコキネシス");
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,b);
+        BattleLog.getLogAll();
     }
 }

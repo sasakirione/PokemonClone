@@ -222,4 +222,8 @@ public class Status {
     public String getCurrentHP2() {
         return currentHP.toString();
     }
+
+    public boolean isDead() {
+        return currentHP.getCurrentHP() == 0;
+    }
 }

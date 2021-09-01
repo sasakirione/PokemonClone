@@ -35,8 +35,12 @@ public class Field {
         return this.field.equals("サイコフィールド");
     }
 
+    public boolean isEndField() {
+        return remainingTurn == 0;
+    }
 
-
-
+    public boolean isPsychofield() {
+        return this.field.equals("サイコフィールド");
+    }
 
 }

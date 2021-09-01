@@ -176,16 +176,20 @@ public class Pokemon {
      * @param a 自分に向けられた変化技のインスタンス
      */
     public void takeChange(PokemonMove a) {
-        if (a.getMoveName().equals("からをやぶる")) {
+        if (a.isMoveNameCheck("からをやぶる")) {
             rankUp(1,2);
             rankUp(3,2);
             rankUp(5,2);
         }
-        if (a.getMoveName().equals("かいでんぱ")) {
+        if (a.isMoveNameCheck("かいでんぱ")) {
             rankUp(3,-2);
         }
-        if (a.getMoveName().equals("でんじは")) {
+        if (a.isMoveNameCheck("でんじは")) {
             getPAR();
+        }
+        if (a.isMoveNameCheck("めいそう")) {
+            rankUp(3, 1);
+            rankUp(4, 1);
         }
     }
 
@@ -205,6 +209,10 @@ public class Pokemon {
         statusAilment = "まひ";
         status.getPAR();
         BattleLog.par(this.name);
+    }
+
+    public boolean isDead() {
+        return status.isDead();
     }
 
     /**

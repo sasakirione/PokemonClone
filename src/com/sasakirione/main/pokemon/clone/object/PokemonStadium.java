@@ -67,9 +67,10 @@ public class PokemonStadium {
      * @return どちらかのポケモンが瀕死状態になるか最初から瀕死状態の時に「おわりだよ」と返します。
      */
     public String forwardTurn(PokemonMove a, PokemonMove b) {
-        if (this.pokemonInBattleA.getCurrentHP() == 0 || this.pokemonInBattleB.getCurrentHP() == 0) {
+        if (this.pokemonInBattleA.isDead() || this.pokemonInBattleB.isDead()) {
             return "おわりだよ";
         }
+        fieldWeatherBoost(a,b);
         if (priorityDecision(a, b) == 1) {
             attackSideA(a);
             if (matchEndFlag) {
@@ -79,6 +80,7 @@ public class PokemonStadium {
             if (matchEndFlag) {
                 return "おわりだよ";
             }
+            turnEndFieldDisposal();
             return "なにもなし";
         }
         if (priorityDecision(a, b) == 2) {
@@ -90,6 +92,7 @@ public class PokemonStadium {
             if (matchEndFlag) {
                 return "おわりだよ";
             }
+            turnEndFieldDisposal();
             return "なにもなし";
         }
         if (rapidityDecision() == 1) {
@@ -109,10 +112,19 @@ public class PokemonStadium {
         return "何もなし";
     }
 
+    private void fieldWeatherBoost(PokemonMove a, PokemonMove b) {
+        if (this.field != null) {
+            if (this.field.isPsychofield()) {
+                a.psychoBoost();
+                b.psychoBoost();
+            }
+        }
+    }
+
     private void turnEndFieldDisposal() {
         if (this.field != null) {
             field.forwardTurn();
-            if (this.field.getRemainingTurn() == 0) {
+            if (this.field.isEndField()) {
                 BattleLog.endField(this.field);
                 this.field = null;
             }
@@ -130,20 +142,20 @@ public class PokemonStadium {
             BattleLog.psychofieldPriority(pokemonInBattleB.getName());
             return;
         }
-        if (a.getMoveClass() == 2) {
+        if (a.isSelfChangeMove()) {
            this.pokemonInBattleA.takeChange(a);
         } else {
             this.pokemonInBattleB.takeDamage(a);
             BattleLog.hp(pokemonInBattleB);
         }
-        if (pokemonInBattleB.getCurrentHP() == 0) {
+        if (pokemonInBattleB.isDead()) {
             BattleLog.death(pokemonInBattleB);
             this.matchEndFlag = true;
         }
     }
 
     private boolean psychofieldCheck(PokemonMove move) {
-        return ((0 < move.getPriority()) && (this.field != null )&& (this.field.getField().equals("サイコフィールド")));
+        return ((0 < move.getPriority()) && (this.field != null) && (this.field.isPsychofield()));
     }
 
     /**
@@ -157,13 +169,13 @@ public class PokemonStadium {
             BattleLog.psychofieldPriority(pokemonInBattleA.getName());
             return;
         }
-        if (b.getMoveClass() == 2) {
+        if (b.isSelfChangeMove()) {
             this.pokemonInBattleB.takeChange(b);
         } else {
             this.pokemonInBattleA.takeDamage(b);
             BattleLog.hp(pokemonInBattleA);
         }
-        if (pokemonInBattleA.getCurrentHP() == 0) {
+        if (pokemonInBattleA.isDead()) {
             BattleLog.death(pokemonInBattleA);
             this.matchEndFlag = true;
         }

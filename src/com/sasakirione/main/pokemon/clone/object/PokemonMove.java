@@ -88,6 +88,10 @@ public class PokemonMove {
             this.moveDamage = 90;
             this.moveType = "エスパー";
         }
+        if (name.equals("めいそう")) {
+            this.moveClass = 2;
+            this.moveType = "エスパー";
+        }
 
     }
 
@@ -159,5 +163,31 @@ public class PokemonMove {
      */
     public int getPriority() {
         return this.priority;
+    }
+
+    public boolean isSelfChangeMove() {
+        return this.moveClass == 2;
+    }
+
+    public boolean isMoveNameCheck(String name) {
+        return this.moveName.equals(name);
+    }
+
+    public void psychoBoost() {
+        if (this.moveType.equals("エスパー")) {
+            fieldBoost();
+        }
+    }
+
+    public void electricBoost() {
+        if (this.moveType.equals("でんき")) {
+            fieldBoost();
+        }
+    }
+
+    private void fieldBoost() {
+        if (this.moveClass == 0 || this.moveClass == 1) {
+            this.moveDamage = (int) Math.round(this.moveDamage * (5325.0 / 4096.0));
+        }
     }
 }
