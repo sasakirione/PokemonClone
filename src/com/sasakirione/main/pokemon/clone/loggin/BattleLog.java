@@ -9,6 +9,8 @@ import java.util.ArrayList;
 public class BattleLog {
     private static ArrayList<String> battleLog = new ArrayList<>();
 
+    private BattleLog() {}
+
     public static void start() {
         battleLog = new ArrayList<>();
     }

@@ -10,7 +10,15 @@ public class PokemonMove {
     /** 技の名前 */
     private final String moveName;
     /** 0:物理技、1:特殊技、2：自分にかかる変化技、3:相手にかかる変化技、4：場にかかる変化技　*/
-    private int moveClass;
+    private enum MoveClass{
+        PHYSICS,
+        SPECIAL,
+        SELF_CHANGE,
+        ENEMY_CHANGE,
+        STADIUM_CHANGE
+    }
+
+    private MoveClass moveClass;
     /** 攻撃・特攻の実数値 */
     private final int[] real;
     /** 技の威力 */
@@ -36,60 +44,60 @@ public class PokemonMove {
         this.priority = 0;
 
         if (name.equals("サンダープリズン")) {
-            this.moveClass = 1;
+            this.moveClass = MoveClass.SPECIAL;
             this.moveDamage = 80;
             this.moveDamage *= 1.5;
             this.moveType = "でんき";
         }
         if (name.equals("ぼうふう")) {
-            this.moveClass = 1;
+            this.moveClass = MoveClass.SPECIAL;
             this.moveDamage = 110;
             this.moveType = "ひこう";
         }
         if (name.equals("ハイドロポンプ")) {
-            this.moveClass = 1;
+            this.moveClass = MoveClass.SPECIAL;
             this.moveDamage = 110;
             this.moveType = "みず";
         }
         if (name.equals("げんしのちから")) {
-            this.moveClass = 1;
+            this.moveClass = MoveClass.SPECIAL;
             this.moveDamage = 60;
             this.moveType = "いわ";
         }
         if (name.equals("シャドーボール")) {
-            this.moveClass = 1;
+            this.moveClass = MoveClass.SPECIAL;
             this.moveDamage = 80;
             this.moveType = "ゴースト";
         }
         if (name.equals("からをやぶる")) {
-            this.moveClass =2;
+            this.moveClass = MoveClass.SELF_CHANGE;
             this.moveType = "ノーマル";
         }
         if (name.equals("ちきゅうなげ")) {
-            this.moveClass = 0;
+            this.moveClass = MoveClass.PHYSICS;
             this.moveType = "ノーマル";
         }
         if (name.equals("かいでんぱ")) {
-            this.moveClass =3;
+            this.moveClass = MoveClass.ENEMY_CHANGE;
             this.moveType = "でんき";
         }
         if (name.equals("でんじは")) {
-            this.moveClass = 3;
+            this.moveClass = MoveClass.ENEMY_CHANGE;
             this.moveType = "でんき";
         }
         if (name.equals("かげうち")) {
-            this.moveClass = 0;
+            this.moveClass = MoveClass.PHYSICS;
             this.moveDamage = 40;
             this.moveType = "ゴースト";
             this.priority = 1;
         }
         if (name.equals("サイコキネシス")) {
-            this.moveClass = 1;
+            this.moveClass = MoveClass.SPECIAL;
             this.moveDamage = 90;
             this.moveType = "エスパー";
         }
         if (name.equals("めいそう")) {
-            this.moveClass = 2;
+            this.moveClass = MoveClass.SELF_CHANGE;
             this.moveType = "エスパー";
         }
 
@@ -109,7 +117,7 @@ public class PokemonMove {
      * わざの種類を返します。
      * @return わざの種類(0:物理技、1:特殊技、2：自分にかかる変化技、3:相手にかかる変化技、4：場にかかる変化技)
      */
-    public int getMoveClass() {
+    public MoveClass getMoveClass() {
         return moveClass;
     }
 
@@ -128,7 +136,7 @@ public class PokemonMove {
      * @return 物理技の場合は攻撃実数値、特殊技の場合は特攻実数値
      */
     public int getRealAttack() {
-        if (moveClass == 0) {
+        if (moveClass.equals(MoveClass.PHYSICS)) {
             return real[0];
         } else {
             return real[1];
@@ -166,8 +174,12 @@ public class PokemonMove {
     }
 
     public boolean isSelfChangeMove() {
-        return this.moveClass == 2;
+        return this.moveClass.equals(MoveClass.SELF_CHANGE);
     }
+
+    public boolean isEnemyChangeMove() { return this.moveClass.equals(MoveClass.ENEMY_CHANGE); }
+
+    public boolean isPhysicsMove() {return this.moveClass.equals(MoveClass.PHYSICS); }
 
     public boolean isMoveNameCheck(String name) {
         return this.moveName.equals(name);
@@ -186,7 +198,7 @@ public class PokemonMove {
     }
 
     private void fieldBoost() {
-        if (this.moveClass == 0 || this.moveClass == 1) {
+        if (this.moveClass.equals(MoveClass.PHYSICS) || this.moveClass.equals(MoveClass.SPECIAL)) {
             this.moveDamage = (int) Math.round(this.moveDamage * (5325.0 / 4096.0));
         }
     }

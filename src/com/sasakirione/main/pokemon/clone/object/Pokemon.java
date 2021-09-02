@@ -146,7 +146,7 @@ public class Pokemon {
      * @param a 受ける技のインスタンス
      */
     public void takeDamage(PokemonMove a) {
-        if (a.getMoveClass() == 3) {
+        if (a.isEnemyChangeMove()) {
             takeChange(a);
             return;
         }
@@ -161,7 +161,7 @@ public class Pokemon {
         double typeMagnification = this.type.getTypeMagnification(type);
         double magnification = a.getMagnification() * typeMagnification;
 
-        if (a.getMoveClass() == 0) {
+        if (a.isPhysicsMove()) {
             defenseChoice = 2;
         } else {
             defenseChoice = 4;
