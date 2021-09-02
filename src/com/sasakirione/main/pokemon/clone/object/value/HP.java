@@ -1,7 +1,7 @@
 package com.sasakirione.main.pokemon.clone.object.value;
 
 public class HP {
-    private int maxHP;
+    private final int maxHP;
     private int currentHP;
 
     public HP (int hp) {
@@ -9,23 +9,13 @@ public class HP {
         this.currentHP = hp;
     }
 
-    public int pruneHP(int damage) {
+    public void pruneHP(int damage) {
         int hp = currentHP - damage;
-        if (hp < 0) {
-            this.currentHP = 0;
-            return 0;
-        } else {
-            this.currentHP = hp;
-            return hp;
-        }
+        this.currentHP = Math.max(hp, 0);
     }
 
     public boolean isDeath() {
-        if (this.currentHP == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.currentHP == 0;
     }
 
     public String toString() {

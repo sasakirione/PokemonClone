@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Field {
     private static final String[] fieldList = {"エレキフィールド", "グラスフィールド", "サイコフィールド", "ミストフィールド"};
-    private String field;
+    private final String field;
     private int remainingTurn;
 
     public Field(String fieldName) {

@@ -1,5 +1,6 @@
 package com.sasakirione.test.pokemon.clone.object;
 
+import com.sasakirione.main.pokemon.clone.exception.EvArgumentException;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 import com.sasakirione.main.pokemon.clone.object.Pokemon;
 import com.sasakirione.main.pokemon.clone.object.PokemonMove;
@@ -45,7 +46,7 @@ public class PokemonTest {
     @Test
     @DisplayName("努力値クラスのテスト、252以上ふる")
     public void test006() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(EvArgumentException.class, () -> {
             Effort effort = new Effort(new int[]{200, 300, 0, 0, 0, 0});
         });
     }
@@ -53,7 +54,7 @@ public class PokemonTest {
     @Test
     @DisplayName("努力値を合計510以上ふる")
     public void test007() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(EvArgumentException.class, () -> {
             Effort effort = new Effort(new int[]{252, 252, 0, 0, 0, 252});
         });
     }

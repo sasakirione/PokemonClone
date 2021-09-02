@@ -1,5 +1,6 @@
 package com.sasakirione.main.pokemon.clone.object;
 
+import com.sasakirione.main.pokemon.clone.object.value.MoveClass;
 import com.sasakirione.main.pokemon.clone.object.value.Status;
 import com.sasakirione.main.pokemon.clone.object.value.Type;
 
@@ -9,15 +10,7 @@ import com.sasakirione.main.pokemon.clone.object.value.Type;
 public class PokemonMove {
     /** 技の名前 */
     private final String moveName;
-    /** 0:物理技、1:特殊技、2：自分にかかる変化技、3:相手にかかる変化技、4：場にかかる変化技　*/
-    private enum MoveClass{
-        PHYSICS,
-        SPECIAL,
-        SELF_CHANGE,
-        ENEMY_CHANGE,
-        STADIUM_CHANGE
-    }
-
+    /** 技の種類 */
     private MoveClass moveClass;
     /** 攻撃・特攻の実数値 */
     private final int[] real;
@@ -27,7 +20,7 @@ public class PokemonMove {
     private String moveType;
     /** 技を出すポケモンのタイプ */
     private final Type types;
-    /** 技を出すポケモンのタイプ */
+    /** 技の優先度 */
     private int priority;
 
     /**
@@ -113,7 +106,7 @@ public class PokemonMove {
     }
 
     /**
-     * わざの種類を返す
+     * わざの種類を返す(テスト用)
      * わざの種類を返します。
      * @return わざの種類(0:物理技、1:特殊技、2：自分にかかる変化技、3:相手にかかる変化技、4：場にかかる変化技)
      */
@@ -173,30 +166,63 @@ public class PokemonMove {
         return this.priority;
     }
 
+    /**
+     * 自分にかかる変化技判定
+     * 自分にかかる変化技かを判定します
+     * @return 自分にかかる変化技だった場合はtrue
+     */
     public boolean isSelfChangeMove() {
         return this.moveClass.equals(MoveClass.SELF_CHANGE);
     }
 
+    /**
+     * 相手にかかる変化技判定
+     * 相手にかかる変化技かを判定します
+     * @return 相手にかかる変化技だった場合はtrue
+     */
     public boolean isEnemyChangeMove() { return this.moveClass.equals(MoveClass.ENEMY_CHANGE); }
 
+    /**
+     * 物理技判定
+     * 物理技かを判定します
+     * @return 物理技だった場合はtrue
+     */
     public boolean isPhysicsMove() {return this.moveClass.equals(MoveClass.PHYSICS); }
 
+    /**
+     * 技の名前判定
+     * 入力された技の名前か判定します
+     * @param name わざの名前
+     * @return 入力された技の名前と同じ技だった場合はtrue
+     */
     public boolean isMoveNameCheck(String name) {
         return this.moveName.equals(name);
     }
 
+    /**
+     * サイコフィールド処理
+     * 対象の技に倍率をかけます
+     */
     public void psychoBoost() {
         if (this.moveType.equals("エスパー")) {
             fieldBoost();
         }
     }
 
+    /**
+     * エレキフィールド処理
+     * 対象の技に倍率をかけます
+     */
     public void electricBoost() {
         if (this.moveType.equals("でんき")) {
             fieldBoost();
         }
     }
 
+    /**
+     * フィールドバフ処理
+     * フィールドにより技の威力にバフをかけます
+     */
     private void fieldBoost() {
         if (this.moveClass.equals(MoveClass.PHYSICS) || this.moveClass.equals(MoveClass.SPECIAL)) {
             this.moveDamage = (int) Math.round(this.moveDamage * (5325.0 / 4096.0));

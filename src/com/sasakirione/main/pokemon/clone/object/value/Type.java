@@ -18,10 +18,10 @@ public class Type {
      * コンストラクタ(複合タイプ)
      */
     public Type(String type1, String type2) {
-        if (!isTypeCheck(type1)) {
+        if (isTypeErrorCheck(type1)) {
             throw new IllegalArgumentException("存在しないタイプが含まれています");
         }
-        if (!isTypeCheck(type2)) {
+        if (isTypeErrorCheck(type2)) {
             throw new IllegalArgumentException("存在しないタイプが含まれています");
         }
         types = new String[]{type1, type2};
@@ -31,7 +31,7 @@ public class Type {
      * コンストラクタ(単一タイプ)
      */
     public Type(String type1) {
-        if (!isTypeCheck(type1)) {
+        if (isTypeErrorCheck(type1)) {
             throw new IllegalArgumentException("存在しないタイプが含まれています");
         }
         types = new String[]{type1};
@@ -41,13 +41,13 @@ public class Type {
      * コンストラクタ(ハロウィンorもりののろい+複合タイプ)
      */
     public Type(String type1, String type2, String type3) {
-        if (!isTypeCheck(type1)) {
+        if (isTypeErrorCheck(type1)) {
             throw new IllegalArgumentException("存在しないタイプが含まれています");
         }
-        if (!isTypeCheck(type2)) {
+        if (isTypeErrorCheck(type2)) {
             throw new IllegalArgumentException("存在しないタイプが含まれています");
         }
-        if (!isTypeCheck(type3)) {
+        if (isTypeErrorCheck(type3)) {
             throw new IllegalArgumentException("存在しないタイプが含まれています");
         }
         types = new String[]{type1, type2, type3};
@@ -59,8 +59,8 @@ public class Type {
      * @param type タイプの文字列
      * @return タイプが存在するならtrue
      */
-    public boolean isTypeCheck(String type) {
-        return isContemporaryTypeCheck(TYPE, type);
+    public boolean isTypeErrorCheck(String type) {
+        return !isContemporaryTypeCheck(TYPE, type);
     }
 
     /**
@@ -104,8 +104,7 @@ public class Type {
      * @return type1の中にtype2が含まれていたらtrue
      */
     private boolean isContemporaryTypeCheck(String[] type1, String type2) {
-        boolean typeCheck = Arrays.asList(type1).contains(type2);
-        return typeCheck;
+        return Arrays.asList(type1).contains(type2);
     }
 
 

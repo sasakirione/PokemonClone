@@ -1,5 +1,7 @@
 package com.sasakirione.main.pokemon.clone.object.value;
 
+import com.sasakirione.main.pokemon.clone.exception.EvArgumentException;
+
 import java.util.Arrays;
 
 /**
@@ -26,10 +28,10 @@ public class Effort {
      * @throws IllegalArgumentException 努力値の値が不正な時に投げられます
      */
     public Effort(int[] effort) {
-        Arrays.stream(effort).filter(i -> i > 252).forEach(i -> {throw new IllegalArgumentException("努力値が不正です");});
+        Arrays.stream(effort).filter(i -> i > 252).forEach(i -> {throw new EvArgumentException("努力値が不正です");});
         int sum = Arrays.stream(effort).sum();
         if (sum > 510) {
-            throw new IllegalArgumentException("努力値の合計が510を超えています");
+            throw new EvArgumentException("努力値の合計が510を超えています");
         }
         this.h = effort[0];
         this.a = effort[1];
