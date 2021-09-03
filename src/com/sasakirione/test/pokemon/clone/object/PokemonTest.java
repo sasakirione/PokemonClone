@@ -26,6 +26,7 @@ public class PokemonTest {
     Pokemon tapuLele;
 
     int[] cs = new int[]{0, 0, 0, 252, 0, 252};
+    int[] as = new int[]{0, 252, 0, 0, 0, 252};
 
     @BeforeEach
     public void before() {
@@ -238,5 +239,13 @@ public class PokemonTest {
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    @DisplayName("ポケモンのデータを取得してポケモンインスタンスを作る")
+    public void test024() {
+        Pokemon katana;
+        katana = PokemonDataGet.getObjectByID(798, as, 1, "こだわりハチマキ", "いじっぱり");
+        Assertions.assertEquals("カミツルギ", katana.getName());
     }
 }
