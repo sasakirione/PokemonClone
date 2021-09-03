@@ -1,6 +1,7 @@
 package com.sasakirione.main.pokemon.clone.object.value;
 
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
+import com.sasakirione.main.pokemon.clone.utility.CalculationUtility;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -183,7 +184,7 @@ public class Status {
         double a = Math.floor(50 * 0.4 + 2);
         double b = Math.floor(a * damage * realAttack / realDefense);
         double c = Math.floor((b / 50.0) + 2);
-        double d = fiveOutOverFiveIn(c * vitals);
+        double d = CalculationUtility.fiveOutOverFiveIn(c * vitals);
         int finalDamage = (int) Math.floor(d * randomNumber() * magnification);
         this.currentHP.pruneHP(finalDamage);
     }
@@ -198,12 +199,6 @@ public class Status {
         Random random = new Random();
         int randomNumber = random.nextInt(16);
         return randomNumber == 0;
-    }
-
-    private int fiveOutOverFiveIn(double i) {
-        BigDecimal bigDecimal = new BigDecimal(String.valueOf(i));
-        BigDecimal resBD = bigDecimal.setScale(0, RoundingMode.HALF_DOWN);
-        return (int) resBD.doubleValue();
     }
 
     public void constantDamage(int i) {

@@ -228,4 +228,8 @@ public class PokemonMove {
             this.moveDamage = (int) Math.round(this.moveDamage * (5325.0 / 4096.0));
         }
     }
+
+    private int getAttacksAndDamage() {
+        return 0;
+    }
 }

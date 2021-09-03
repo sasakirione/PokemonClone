@@ -102,7 +102,7 @@ public class BattleLog {
     }
 
     public static void endField(Field field) {
-        if (field.getField().equals("サイコフィールド")) {
+        if (field.isPsychofield()) {
             battleLog.add("足下の 不思議感が 消え去った！");
         }
     }
