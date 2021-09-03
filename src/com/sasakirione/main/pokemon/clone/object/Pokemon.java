@@ -54,6 +54,7 @@ public class Pokemon {
         this.name = name;
         this.type = new Type(type1, type2);
         this.status = new Status(base, new Effort(effort), good, new Nature(nature), ability);
+        this.ability = ability;
     }
 
     /**

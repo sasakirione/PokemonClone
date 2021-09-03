@@ -1,5 +1,6 @@
 package com.sasakirione.test.pokemon.clone.object;
 
+import com.sasakirione.main.pokemon.clone.data.PokemonDataGet;
 import com.sasakirione.main.pokemon.clone.exception.EvArgumentException;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 import com.sasakirione.main.pokemon.clone.object.Pokemon;
@@ -9,6 +10,8 @@ import com.sasakirione.main.pokemon.clone.object.value.Effort;
 import com.sasakirione.main.pokemon.clone.object.value.Type;
 import org.junit.jupiter.api.*;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -225,5 +228,15 @@ public class PokemonTest {
         stadium.forwardTurn(a,c);
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
+    }
+
+    @Test
+    @DisplayName("ポケモンのデータを取得する")
+    public void test023() {
+        try {
+            Assertions.assertEquals("マーシャドー", PokemonDataGet.getNameByID(802));
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 }
