@@ -1,5 +1,7 @@
 package com.sasakirione.test.pokemon.clone.object;
 
+import com.sasakirione.main.pokemon.clone.data.PokemonDataGet;
+import com.sasakirione.main.pokemon.clone.exception.EvArgumentException;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 import com.sasakirione.main.pokemon.clone.object.Pokemon;
 import com.sasakirione.main.pokemon.clone.object.PokemonMove;
@@ -8,6 +10,8 @@ import com.sasakirione.main.pokemon.clone.object.value.Effort;
 import com.sasakirione.main.pokemon.clone.object.value.Type;
 import org.junit.jupiter.api.*;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -18,16 +22,21 @@ public class PokemonTest {
     Pokemon zapdos;
     Pokemon greninja;
     Pokemon polteageist;
+    Pokemon decidueye;
+    Pokemon tapuLele;
 
     int[] cs = new int[]{0, 0, 0, 252, 0, 252};
+    int[] as = new int[]{0, 252, 0, 0, 0, 252};
 
     @BeforeEach
     public void before() {
-        regieleki = new Pokemon("レジエレキ", this.cs, "なし" , "おくびょう");
-        regieleki_megane = new Pokemon("レジエレキ", this.cs, "こだわりメガネ" , "おくびょう");
-        zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう");
-        greninja = new Pokemon("ゲッコウガ", new int[]{252, 0, 0, 0, 252 , 0}, "こだわりスカーフ" , "おくびょう");
-        polteageist = new Pokemon("ポットデス", this.cs, "こだわってないスカーフ", "おくびょう");
+        regieleki = new Pokemon("レジエレキ", this.cs, "なし" , "おくびょう", "トランジスタ");
+        regieleki_megane = new Pokemon("レジエレキ", this.cs, "こだわりメガネ" , "おくびょう", "トランジスタ");
+        zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう", "せいでんき");
+        greninja = new Pokemon("ゲッコウガ", new int[]{252, 0, 0, 0, 252 , 0}, "こだわりスカーフ" , "おくびょう", "へんげんじざい");
+        polteageist = new Pokemon("ポットデス", this.cs, "こだわってないスカーフ", "おくびょう", "のろわれボディ");
+        decidueye = new Pokemon("ジュナイパー", new int[]{0, 252, 0, 0, 0, 252}, "なし", "ようき", "しんりょく");
+        tapuLele = new Pokemon("カプ・テテフ", this.cs, "なし", "おくびょう", "サイコメーカー");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
@@ -41,7 +50,7 @@ public class PokemonTest {
     @Test
     @DisplayName("努力値クラスのテスト、252以上ふる")
     public void test006() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(EvArgumentException.class, () -> {
             Effort effort = new Effort(new int[]{200, 300, 0, 0, 0, 0});
         });
     }
@@ -49,7 +58,7 @@ public class PokemonTest {
     @Test
     @DisplayName("努力値を合計510以上ふる")
     public void test007() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(EvArgumentException.class, () -> {
             Effort effort = new Effort(new int[]{252, 252, 0, 0, 0, 252});
         });
     }
@@ -123,7 +132,7 @@ public class PokemonTest {
     @DisplayName("タイプ不一致技を設定")
     @RepeatedTest(100)
     public void test015() {
-        zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう");
+        zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう", "せいでんき");
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
         PokemonMove a = regieleki.getDamage("げんしのちから");
         PokemonMove b = zapdos.getDamage("ぼうふう");
@@ -167,7 +176,7 @@ public class PokemonTest {
         stadium.forwardTurn(a2, b);
         BattleLog.getLogAll();
         Assertions.assertEquals("ポットデス の からをやぶる のこうげきだ！", BattleLog.getLog(4));
-        Assertions.assertEquals("ポットデス の シャドーボール のこうげきだ！", BattleLog.getLog(5));
+        Assertions.assertEquals("ポットデス の シャドーボール のこうげきだ！", BattleLog.getLog(8));
     }
 
     @Test
@@ -181,5 +190,62 @@ public class PokemonTest {
         stadium.forwardTurn(a2, b);
         BattleLog.getLogAll();
         Assertions.assertEquals("サンダー の ぼうふう のこうげきだ！", BattleLog.getLog(7));
+    }
+
+    @Test
+    @DisplayName("先制技を実装")
+    public void test020() {
+        PokemonStadium stadium = new PokemonStadium(decidueye, zapdos);
+        PokemonMove a = decidueye.getDamage("かげうち");
+        PokemonMove b = zapdos.getDamage("ぼうふう");
+        stadium.forwardTurn(a, b);
+        BattleLog.getLogAll();
+        Assertions.assertEquals("ジュナイパー の かげうち のこうげきだ！", BattleLog.getLog(2));
+    }
+
+    @Test
+    @DisplayName("テテフちゃんと特性とフィールドを実装")
+    public void test021() {
+        PokemonStadium stadium = new PokemonStadium(decidueye, tapuLele);
+        PokemonMove a = decidueye.getDamage("かげうち");
+        PokemonMove b = tapuLele.getDamage("サイコキネシス");
+        PokemonMove c = tapuLele.getDamage("めいそう");
+        stadium.forwardTurn(a,b);
+        BattleLog.getLogAll();
+        Assertions.assertEquals("カプ・テテフは サイコフィールドに 守られている！", BattleLog.getLog(5));
+    }
+
+    @Test
+    @DisplayName("フィールドおわり")
+    public void test022() {
+        PokemonStadium stadium = new PokemonStadium(decidueye, tapuLele);
+        PokemonMove a = decidueye.getDamage("かげうち");
+        PokemonMove c = tapuLele.getDamage("めいそう");
+        PokemonMove b = tapuLele.getDamage("サイコキネシス");
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,b);
+        BattleLog.getLogAll();
+    }
+
+    @Test
+    @DisplayName("ポケモンのデータを取得する")
+    public void test023() {
+        try {
+            Assertions.assertEquals("マーシャドー", PokemonDataGet.getNameByID(802));
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    @DisplayName("ポケモンのデータを取得してポケモンインスタンスを作る")
+    public void test024() {
+        Pokemon katana;
+        katana = PokemonDataGet.getObjectByID(798, as, 1, "こだわりハチマキ", "いじっぱり");
+        Assertions.assertEquals("カミツルギ", katana.getName());
     }
 }

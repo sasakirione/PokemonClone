@@ -14,16 +14,18 @@ public class Status {
     private int[] base;
     private final Effort effort;
     private String good;
-    private Nature nature;
+    private final Nature nature;
+    private final String ability;
     private boolean parCheck = false;
     private boolean brnCheck = false;
 
-    public Status(int[] base, Effort effort, String good, Nature nature) {
+    public Status(int[] base, Effort effort, String good, Nature nature, String ability) {
         this.rank = new int[] {0, 0, 0, 0, 0, 0};
         this.good = good;
         this.base = base;
         this.effort = effort;
         this.nature = nature;
+        this.ability = ability;
         pokemonRealSet();
         this.realSource = real;
         setGood();
@@ -122,7 +124,7 @@ public class Status {
         if (this.good.equals("こだわりハチマキ") && i==1) {
             this.real[1] = (int) Math.round(real[1] * 1.5);
         }
-        if (this.good.equals("こだわらないスカーフ") && i == 5) {
+        if (this.good.equals("こだわってないスカーフ") && i == 5) {
             this.real[5] = (int) Math.round(real[5] * 1.5);
         }
     }
@@ -219,5 +221,9 @@ public class Status {
 
     public String getCurrentHP2() {
         return currentHP.toString();
+    }
+
+    public boolean isDead() {
+        return currentHP.getCurrentHP() == 0;
     }
 }
