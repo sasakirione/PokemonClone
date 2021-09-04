@@ -93,9 +93,10 @@ public class PokemonTest {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
         PokemonMove a = regieleki.getDamage("サンダープリズン");
         PokemonMove b = zapdos.getDamage("ぼうふう");
-        System.out.println(stadium.forwardTurn(a,b));
+        stadium.forwardTurn(a,b);
         stadium.forwardTurn(a, b);
-        Assertions.assertEquals("おわりだよ", stadium.forwardTurn(a, b));
+        stadium.forwardTurn(a, b);
+        Assertions.assertTrue(stadium.getEndFlag());
     }
 
     @Test
@@ -104,7 +105,7 @@ public class PokemonTest {
         PokemonStadium stadium = new PokemonStadium(regieleki, greninja);
         PokemonMove a = regieleki.getDamage("サンダープリズン");
         PokemonMove b = greninja.getDamage("ハイドロポンプ");
-        System.out.println(stadium.forwardTurn(a,b));
+        stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
         Assertions.assertEquals("こうかばつぐんだ！", BattleLog.getLog(3));
     }
