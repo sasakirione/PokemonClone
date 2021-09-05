@@ -222,12 +222,12 @@ public class PokemonTest {
         PokemonStadium stadium = new PokemonStadium(decidueye, tapuLele);
         PokemonMove a = decidueye.getDamage("かげうち");
         PokemonMove c = tapuLele.getDamage("めいそう");
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
         PokemonMove b = tapuLele.getDamage("サイコキネシス");
-        stadium.forwardTurn(a,c);
-        stadium.forwardTurn(a,c);
-        stadium.forwardTurn(a,c);
-        stadium.forwardTurn(a,c);
-        stadium.forwardTurn(a,c);
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
     }

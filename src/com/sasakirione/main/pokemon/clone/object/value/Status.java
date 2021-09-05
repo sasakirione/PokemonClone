@@ -28,7 +28,7 @@ public class Status {
         this.nature = nature;
         this.ability = ability;
         pokemonRealSet();
-        this.realSource = real;
+        this.realSource = real.clone();
         setGood();
     }
 
@@ -139,7 +139,8 @@ public class Status {
         if (0 < rank) {
             magnification = (rank + 2.0) / 2.0;
         }
-        this.real[i] = (int) Math.round(this.realSource[i] * magnification);
+        int realSourceValue = this.realSource[i];
+        this.real[i] = (int) Math.round(realSourceValue * magnification);
     }
 
     private int realCalculationHP(int base, int effort) {
