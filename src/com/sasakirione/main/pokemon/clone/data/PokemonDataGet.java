@@ -1,12 +1,17 @@
 package com.sasakirione.main.pokemon.clone.data;
 
 import com.sasakirione.main.pokemon.clone.object.Pokemon;
+import com.sasakirione.main.pokemon.clone.object.PokemonMove;
+import com.sasakirione.main.pokemon.clone.object.value.MoveClass;
+import com.sasakirione.main.pokemon.clone.object.value.Status;
+import com.sasakirione.main.pokemon.clone.object.value.Type;
 
 import java.io.*;
 import java.util.List;
 
 public class PokemonDataGet {
     private static final File filePokemon = new File("C:\\Users\\Yuki Yamada\\IdeaProjects\\PokemonClone\\data\\pokemon_status.csv");
+    private static final File fileMove = new File("C:\\Users\\Yuki Yamada\\IdeaProjects\\PokemonClone\\data\\moves.csv");
     
     private PokemonDataGet() {
         throw new AssertionError("これはインスタンス化しないで！");
@@ -51,5 +56,69 @@ public class PokemonDataGet {
         String type2 = pokemon[3];
         String ability = pokemon[i+3];
         return new Pokemon(pokemon[1], effort, base, good, nature, type1, type2, ability);
+    }
+
+    private static String[] pokemonMoveFileGet(String name) {
+        String[] res = new String[0];
+        String name2 = "\"" + name + "\"";
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileMove))) {
+            while(true) {
+                String row = reader.readLine();
+                if (row == null) {
+                    throw new AssertionError("技が見つかりません！");
+                }
+                String[] rowList = row.split(",");
+                if (rowList[3].equals(name2)) {
+                    res = rowList;
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    public static PokemonMove getMoveByName(String name, Type type, Status status) {
+        String[] move = pokemonMoveFileGet(name);
+        int damage = Integer.parseInt(move[7]);
+        MoveClass moveClass = getMoveClass(move[11],move[12]);
+        int priority = Integer.parseInt(move[10]);
+        String moveType = getMoveType(move[6]);
+        return new PokemonMove(name, status, type, moveClass, damage, moveType, priority);
+    }
+
+    private static String getMoveType(String type) {
+        int typeID = Integer.parseInt(type);
+        return switch (typeID) {
+            case 1 -> "ノーマル";
+            case 2 -> "かくとう";
+            case 3 -> "ひこう";
+            case 4 -> "どく";
+            case 5 -> "じめん";
+            case 6 -> "いわ";
+            case 7 -> "むし";
+            case 8 -> "ゴースト";
+            case 9 -> "はがね";
+            case 10 -> "ほのお";
+            case 11 -> "みず";
+            case 12 -> "くさ";
+            case 13 -> "でんき";
+            case 14 -> "エスパー";
+            case 15 -> "こおり";
+            case 16 -> "ドラゴン";
+            case 17 -> "あく";
+            default -> throw new IllegalArgumentException("技データベースの不正値です");
+        };
+    }
+
+    private static MoveClass getMoveClass(String s, String s1) {
+        if (s1.equals("2")) {
+            return MoveClass.PHYSICS;
+        }
+        if (s1.equals("3")) {
+            return MoveClass.SPECIAL;
+        }
+        throw new IllegalArgumentException("現在対応してない技です");
     }
 }

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.*;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -42,7 +41,7 @@ public class PokemonTest {
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
     @RepeatedTest(100)
     public void test005() {
-        PokemonMove a = regieleki.getDamage("サンダープリズン");
+        PokemonMove a = regieleki.getDamage2("サンダープリズン");
         zapdos.takeDamage(a);
         Assertions.assertTrue(zapdos.getCurrentHP() < 73);
     }
@@ -72,7 +71,7 @@ public class PokemonTest {
     @DisplayName("タイプ相性を実装する、レジエレキでゲッコウガを")
     @RepeatedTest(100)
     public void test009() {
-        PokemonMove a = regieleki.getDamage("サンダープリズン");
+        PokemonMove a = regieleki.getDamage2("サンダープリズン");
         greninja.takeDamage(a);
         Assertions.assertTrue(greninja.getCurrentHP() < 12);
         Assertions.assertFalse(greninja.getCurrentHP() < 0);
@@ -91,8 +90,8 @@ public class PokemonTest {
     @RepeatedTest(100)
     public void test011() {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
-        PokemonMove a = regieleki.getDamage("サンダープリズン");
-        PokemonMove b = zapdos.getDamage("ぼうふう");
+        PokemonMove a = regieleki.getDamage2("サンダープリズン");
+        PokemonMove b = zapdos.getDamage2("ぼうふう");
         stadium.forwardTurn(a,b);
         stadium.forwardTurn(a, b);
         stadium.forwardTurn(a, b);
@@ -103,8 +102,8 @@ public class PokemonTest {
     @DisplayName("メッセージ機能")
     public void test012() {
         PokemonStadium stadium = new PokemonStadium(regieleki, greninja);
-        PokemonMove a = regieleki.getDamage("サンダープリズン");
-        PokemonMove b = greninja.getDamage("ハイドロポンプ");
+        PokemonMove a = regieleki.getDamage2("サンダープリズン");
+        PokemonMove b = greninja.getDamage2("ハイドロポンプ");
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
         Assertions.assertEquals("こうかばつぐんだ！", BattleLog.getLog(3));
@@ -114,8 +113,8 @@ public class PokemonTest {
     @RepeatedTest(100)
     public void test013() {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
-        PokemonMove a = regieleki_megane.getDamage("サンダープリズン");
-        PokemonMove b = zapdos.getDamage("ぼうふう");
+        PokemonMove a = regieleki_megane.getDamage2("サンダープリズン");
+        PokemonMove b = zapdos.getDamage2("ぼうふう");
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
         Assertions.assertTrue(zapdos.getCurrentHP() < 25);
@@ -124,9 +123,9 @@ public class PokemonTest {
     @Test
     @DisplayName("こだわりメガネを実装_こだわり")
     public void test014() {
-        PokemonMove a1 = regieleki_megane.getDamage("サンダープリズン");
+        PokemonMove a1 = regieleki_megane.getDamage2("サンダープリズン");
         assertThrows(IllegalArgumentException.class, () -> {
-            PokemonMove a2 = regieleki_megane.getDamage("10まんボルト");
+            PokemonMove a2 = regieleki_megane.getDamage2("10まんボルト");
         });
     }
 
@@ -135,8 +134,8 @@ public class PokemonTest {
     public void test015() {
         zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう", "せいでんき");
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
-        PokemonMove a = regieleki.getDamage("げんしのちから");
-        PokemonMove b = zapdos.getDamage("ぼうふう");
+        PokemonMove a = regieleki.getDamage2("げんしのちから");
+        PokemonMove b = zapdos.getDamage2("ぼうふう");
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
         Assertions.assertTrue(68 < zapdos.getCurrentHP());
@@ -146,8 +145,8 @@ public class PokemonTest {
     @DisplayName("デモ用")
     public void test016() {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
-        PokemonMove a = regieleki_megane.getDamage("サンダープリズン");
-        PokemonMove b = zapdos.getDamage("ぼうふう");
+        PokemonMove a = regieleki_megane.getDamage2("サンダープリズン");
+        PokemonMove b = zapdos.getDamage2("ぼうふう");
         stadium.forwardTurn(a, b);
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
@@ -159,8 +158,8 @@ public class PokemonTest {
         Pokemon nanao = new Pokemon("七尾百合子", this.cs, new int[]{60,50,70,130,90,95}, "こだわりメガネ" , "おくびょう",
                 "みず", "フェアリー", "うるおいボディ");
         PokemonStadium stadium = new PokemonStadium(nanao, regieleki);
-        PokemonMove a = nanao.getDamage("ハイドロポンプ");
-        PokemonMove b = regieleki.getDamage("サンダープリズン");
+        PokemonMove a = nanao.getDamage2("ハイドロポンプ");
+        PokemonMove b = regieleki.getDamage2("サンダープリズン");
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
         Assertions.assertEquals("Aは 七尾百合子 を繰り出した！", BattleLog.getLog(0));
@@ -170,9 +169,9 @@ public class PokemonTest {
     @DisplayName("ポットデス　からをやぶる")
     public void test018() {
         PokemonStadium stadium = new PokemonStadium(polteageist, regieleki);
-        PokemonMove a = polteageist.getDamage("からをやぶる");
-        PokemonMove b = regieleki.getDamage("サンダープリズン");
-        PokemonMove a2 = polteageist.getDamage("シャドーボール");
+        PokemonMove a = polteageist.getDamage2("からをやぶる");
+        PokemonMove b = regieleki.getDamage2("サンダープリズン");
+        PokemonMove a2 = polteageist.getDamage2("シャドーボール");
         stadium.forwardTurn(a, b);
         stadium.forwardTurn(a2, b);
         BattleLog.getLogAll();
@@ -184,10 +183,10 @@ public class PokemonTest {
     @DisplayName("状態異常を実装する、マヒ、素早さだけ")
     public void test019() {
         PokemonStadium stadium = new PokemonStadium(zapdos, greninja);
-        PokemonMove a = zapdos.getDamage("でんじは");
-        PokemonMove b = greninja.getDamage("ハイドロポンプ");
+        PokemonMove a = zapdos.getDamage2("でんじは");
+        PokemonMove b = greninja.getDamage2("ハイドロポンプ");
         stadium.forwardTurn(a, b);
-        PokemonMove a2 = zapdos.getDamage("ぼうふう");
+        PokemonMove a2 = zapdos.getDamage2("ぼうふう");
         stadium.forwardTurn(a2, b);
         BattleLog.getLogAll();
         Assertions.assertEquals("サンダー の ぼうふう のこうげきだ！", BattleLog.getLog(7));
@@ -197,8 +196,8 @@ public class PokemonTest {
     @DisplayName("先制技を実装")
     public void test020() {
         PokemonStadium stadium = new PokemonStadium(decidueye, zapdos);
-        PokemonMove a = decidueye.getDamage("かげうち");
-        PokemonMove b = zapdos.getDamage("ぼうふう");
+        PokemonMove a = decidueye.getDamage2("かげうち");
+        PokemonMove b = zapdos.getDamage2("ぼうふう");
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
         Assertions.assertEquals("ジュナイパー の かげうち のこうげきだ！", BattleLog.getLog(2));
@@ -208,9 +207,9 @@ public class PokemonTest {
     @DisplayName("テテフちゃんと特性とフィールドを実装")
     public void test021() {
         PokemonStadium stadium = new PokemonStadium(decidueye, tapuLele);
-        PokemonMove a = decidueye.getDamage("かげうち");
-        PokemonMove b = tapuLele.getDamage("サイコキネシス");
-        PokemonMove c = tapuLele.getDamage("めいそう");
+        PokemonMove a = decidueye.getDamage2("かげうち");
+        PokemonMove b = tapuLele.getDamage2("サイコキネシス");
+        PokemonMove c = tapuLele.getDamage2("めいそう");
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
         Assertions.assertEquals("カプ・テテフは サイコフィールドに 守られている！", BattleLog.getLog(5));
@@ -220,14 +219,14 @@ public class PokemonTest {
     @DisplayName("フィールドおわり")
     public void test022() {
         PokemonStadium stadium = new PokemonStadium(decidueye, tapuLele);
-        PokemonMove a = decidueye.getDamage("かげうち");
-        PokemonMove c = tapuLele.getDamage("めいそう");
+        PokemonMove a = decidueye.getDamage2("かげうち");
+        PokemonMove c = tapuLele.getDamage2("めいそう");
         stadium.forwardTurn(a,c);
         stadium.forwardTurn(a,c);
         stadium.forwardTurn(a,c);
         stadium.forwardTurn(a,c);
         stadium.forwardTurn(a,c);
-        PokemonMove b = tapuLele.getDamage("サイコキネシス");
+        PokemonMove b = tapuLele.getDamage2("サイコキネシス");
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
     }
@@ -249,4 +248,14 @@ public class PokemonTest {
         katana = PokemonDataGet.getObjectByID(798, as, 1, "こだわりハチマキ", "いじっぱり");
         Assertions.assertEquals("カミツルギ", katana.getName());
     }
+
+    @Test
+    @DisplayName("技データを取得して技を出す")
+    public void test025() {
+        Pokemon katana = PokemonDataGet.getObjectByID(798, as, 1, "こだわりハチマキ", "いじっぱり");
+        PokemonMove sword = katana.getDamage("せいなるつるぎ");
+        Assertions.assertEquals("かくとう", sword.getMoveType());
+    }
+
+
 }

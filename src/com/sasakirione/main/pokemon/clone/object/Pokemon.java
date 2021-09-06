@@ -1,5 +1,6 @@
 package com.sasakirione.main.pokemon.clone.object;
 
+import com.sasakirione.main.pokemon.clone.data.PokemonDataGet;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 import com.sasakirione.main.pokemon.clone.object.value.*;
 
@@ -72,11 +73,18 @@ public class Pokemon {
      * @param name わざの名前
      * @return ポケモンのわざクラスのインスタンス
      */
-    public PokemonMove getDamage(String name) {
+    public PokemonMove getDamage2(String name) {
         if (goodChoice) {
             choiceCheck(name);
         }
         return new PokemonMove(name, this.status, this.type);
+    }
+
+    public PokemonMove getDamage(String name) {
+        if (goodChoice) {
+            choiceCheck(name);
+        }
+        return PokemonDataGet.getMoveByName(name,type,status);
     }
 
     /**

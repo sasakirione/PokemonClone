@@ -23,6 +23,16 @@ public class PokemonMove {
     /** 技の優先度 */
     private int priority;
 
+    public PokemonMove(String name, Status status, Type type, MoveClass moveClass, int moveDamage, String moveType, int priority) {
+        this.moveName = name;
+        this.moveClass = moveClass;
+        this.real = new int[]{status.getA(), status.getC()};
+        this.types = type;
+        this.priority = priority;
+        this.moveDamage = moveDamage;
+        this.moveType = moveType;
+    }
+
     /**
      * コンストラクタ
      * 技クラスのコンストラクタです。
