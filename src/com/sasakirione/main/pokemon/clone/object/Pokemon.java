@@ -116,16 +116,6 @@ public class Pokemon {
         int[] base = null;
         Effort effort = null;
         this.ability = ability;
-        if (name.equals("サンダー")) {
-            base = new int[] {90, 90, 85, 125, 90, 100};
-            effort = new Effort(effortInt);
-            this.type = new Type("でんき","ひこう");
-        }
-        if (name.equals("ゲッコウガ")) {
-            base = new int[] {72, 95, 67, 103, 71, 122};
-            effort = new Effort(effortInt);
-            this.type = new Type("みず","あく");
-        }
         if (name.equals("レジエレキ")) {
             base = new int[] {80, 100, 50, 100, 50, 200};
             effort = new Effort(effortInt);
@@ -135,16 +125,6 @@ public class Pokemon {
             base = new int[] {60, 65, 65, 134, 114, 70};
             effort = new Effort(effortInt);
             this.type = new Type("ゴースト");
-        }
-        if (name.equals("ジュナイパー")) {
-            base = new int[] {78, 107, 75, 100, 100, 70};
-            effort = new Effort(effortInt);
-            this.type = new Type("くさ", "ゴースト");
-        }
-        if (name.equals("カプ・テテフ")) {
-            base = new int[] {70, 85, 75, 130, 115, 95};
-            effort = new Effort(effortInt);
-            this.type = new Type("エスパー", "フェアリー");
         }
         this.status = new Status(base, effort, good, nature, ability);
     }

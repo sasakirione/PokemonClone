@@ -16,31 +16,31 @@ public class BattleLog {
     }
 
     public static void startBattle(String tn, Pokemon pokemon) {
-        battleLog.add(tn + "は " + pokemon.getName() + " を繰り出した！");
+        add(tn + "は " + pokemon.getName() + " を繰り出した！");
     }
 
     public static void attack(Pokemon pokemon, PokemonMove move) {
-        battleLog.add(pokemon.getName()+" の " + move.getMoveName()+" のこうげきだ！");
+        add(pokemon.getName()+" の " + move.getMoveName()+" のこうげきだ！");
     }
 
     public static void death(Pokemon pokemon) {
-        battleLog.add(pokemon.getName() + " はたおれた");
+        add(pokemon.getName() + " はたおれた");
     }
 
     public static void typeMagnification(double typeMagnification) {
         if (typeMagnification == 0.0) {
-            battleLog.add("こうかがないようだ");
+            add("こうかがないようだ");
         }
         if (typeMagnification < 1.0) {
-            battleLog.add("こうかいまひとつだ！");
+            add("こうかいまひとつだ！");
         }
         if (1.0 < typeMagnification) {
-            battleLog.add("こうかばつぐんだ！");
+            add("こうかばつぐんだ！");
         }
     }
 
     public static void hp(Pokemon pokemon) {
-        battleLog.add(pokemon.getCurrentHP2());
+        add(pokemon.getCurrentHP2());
     }
 
     public static void getLogAll() {
@@ -52,24 +52,24 @@ public class BattleLog {
     }
 
     public static void vitals() {
-        battleLog.add("きゅうしょにあたった！");
+        add("きゅうしょにあたった！");
     }
 
     public static void statusAilmentError() {
-        battleLog.add("すでに状態異常にかかっています");
+        add("すでに状態異常にかかっています");
     }
 
     public static void parError() {
-        battleLog.add("効果がないようだ");
+        add("効果がないようだ");
     }
 
     public static void par(String name) {
-        battleLog.add(name+" は麻痺して技が出にくくなった！");
+        add(name+" は麻痺して技が出にくくなった！");
     }
 
     public static void rankUp(String name, int item, int i) {
         if (item == 1 && i == 12) {
-            battleLog.add(name + " は体力を 削って パワーぜんかいになった");
+            add(name + " は体力を 削って パワーぜんかいになった");
             return;
         }
         String message2 = switch (item) {
@@ -89,21 +89,25 @@ public class BattleLog {
             case -3,-4,-5,-6 -> "が がくーんとさがった";
             default -> "error";
         };
-        battleLog.add(name + "の "+ message2 + message3 + "!");
+        add(name + "の "+ message2 + message3 + "!");
     }
 
     public static void psychofieldPriority(String name) {
-        battleLog.add(name + "は サイコフィールドに 守られている！");
+        add(name + "は サイコフィールドに 守られている！");
     }
 
     public static void expandPsychoMaker(String name) {
-        battleLog.add(name + "の サイコメイカー");
-        battleLog.add("足下が 不思議な 感じに なった！");
+        add(name + "の サイコメイカー");
+        add("足下が 不思議な 感じに なった！");
     }
 
     public static void endField(Field field) {
         if (field.isPsychofield()) {
-            battleLog.add("足下の 不思議感が 消え去った！");
+            add("足下の 不思議感が 消え去った！");
         }
+    }
+
+    private static void add(String message) {
+        battleLog.add(message);
     }
 }

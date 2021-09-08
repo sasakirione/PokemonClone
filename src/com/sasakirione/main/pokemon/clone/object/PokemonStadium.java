@@ -53,7 +53,7 @@ public class PokemonStadium {
      */
     private void makeField(Pokemon pokemon) {
         String ability = pokemon.getAbility();
-        if (ability.equals("サイコメーカー")) {
+        if (ability.equals("サイコメイカー")) {
             this.field = new Field("サイコフィールド");
             BattleLog.expandPsychoMaker(pokemon.getName());
         }

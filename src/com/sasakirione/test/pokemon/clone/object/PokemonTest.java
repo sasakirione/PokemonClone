@@ -31,11 +31,11 @@ public class PokemonTest {
     public void before() {
         regieleki = new Pokemon("レジエレキ", this.cs, "なし" , "おくびょう", "トランジスタ");
         regieleki_megane = new Pokemon("レジエレキ", this.cs, "こだわりメガネ" , "おくびょう", "トランジスタ");
-        zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう", "せいでんき");
-        greninja = new Pokemon("ゲッコウガ", new int[]{252, 0, 0, 0, 252 , 0}, "こだわりスカーフ" , "おくびょう", "へんげんじざい");
         polteageist = new Pokemon("ポットデス", this.cs, "こだわってないスカーフ", "おくびょう", "のろわれボディ");
-        decidueye = new Pokemon("ジュナイパー", new int[]{0, 252, 0, 0, 0, 252}, "なし", "ようき", "しんりょく");
-        tapuLele = new Pokemon("カプ・テテフ", this.cs, "なし", "おくびょう", "サイコメーカー");
+        zapdos = PokemonDataGet.getObjectByID(145, this.cs, 1, "なし", "おくびょう");
+        greninja = PokemonDataGet.getObjectByID(658, new int[]{252, 0, 0, 0, 252 , 0}, 3, "こだわりスカーフ", "おくびょう");
+        decidueye = PokemonDataGet.getObjectByID(724, this.as, 1, "なし", "ようき");
+        tapuLele = PokemonDataGet.getObjectByID(786, this.cs, 1, "なし", "おくびょう");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
@@ -91,7 +91,7 @@ public class PokemonTest {
     public void test011() {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
         PokemonMove a = regieleki.getDamage2("サンダープリズン");
-        PokemonMove b = zapdos.getDamage2("ぼうふう");
+        PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a,b);
         stadium.forwardTurn(a, b);
         stadium.forwardTurn(a, b);
@@ -103,7 +103,7 @@ public class PokemonTest {
     public void test012() {
         PokemonStadium stadium = new PokemonStadium(regieleki, greninja);
         PokemonMove a = regieleki.getDamage2("サンダープリズン");
-        PokemonMove b = greninja.getDamage2("ハイドロポンプ");
+        PokemonMove b = greninja.getDamage("ハイドロポンプ");
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
         Assertions.assertEquals("こうかばつぐんだ！", BattleLog.getLog(3));
@@ -114,7 +114,7 @@ public class PokemonTest {
     public void test013() {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
         PokemonMove a = regieleki_megane.getDamage2("サンダープリズン");
-        PokemonMove b = zapdos.getDamage2("ぼうふう");
+        PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
         Assertions.assertTrue(zapdos.getCurrentHP() < 25);
@@ -125,17 +125,16 @@ public class PokemonTest {
     public void test014() {
         PokemonMove a1 = regieleki_megane.getDamage2("サンダープリズン");
         assertThrows(IllegalArgumentException.class, () -> {
-            PokemonMove a2 = regieleki_megane.getDamage2("10まんボルト");
+            PokemonMove a2 = regieleki_megane.getDamage("10まんボルト");
         });
     }
 
     @DisplayName("タイプ不一致技を設定")
     @RepeatedTest(100)
     public void test015() {
-        zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう", "せいでんき");
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
         PokemonMove a = regieleki.getDamage2("げんしのちから");
-        PokemonMove b = zapdos.getDamage2("ぼうふう");
+        PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
         Assertions.assertTrue(68 < zapdos.getCurrentHP());
@@ -146,7 +145,7 @@ public class PokemonTest {
     public void test016() {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
         PokemonMove a = regieleki_megane.getDamage2("サンダープリズン");
-        PokemonMove b = zapdos.getDamage2("ぼうふう");
+        PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a, b);
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
@@ -158,7 +157,7 @@ public class PokemonTest {
         Pokemon nanao = new Pokemon("七尾百合子", this.cs, new int[]{60,50,70,130,90,95}, "こだわりメガネ" , "おくびょう",
                 "みず", "フェアリー", "うるおいボディ");
         PokemonStadium stadium = new PokemonStadium(nanao, regieleki);
-        PokemonMove a = nanao.getDamage2("ハイドロポンプ");
+        PokemonMove a = nanao.getDamage("ハイドロポンプ");
         PokemonMove b = regieleki.getDamage2("サンダープリズン");
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
@@ -171,7 +170,7 @@ public class PokemonTest {
         PokemonStadium stadium = new PokemonStadium(polteageist, regieleki);
         PokemonMove a = polteageist.getDamage2("からをやぶる");
         PokemonMove b = regieleki.getDamage2("サンダープリズン");
-        PokemonMove a2 = polteageist.getDamage2("シャドーボール");
+        PokemonMove a2 = polteageist.getDamage("シャドーボール");
         stadium.forwardTurn(a, b);
         stadium.forwardTurn(a2, b);
         BattleLog.getLogAll();
@@ -184,9 +183,9 @@ public class PokemonTest {
     public void test019() {
         PokemonStadium stadium = new PokemonStadium(zapdos, greninja);
         PokemonMove a = zapdos.getDamage2("でんじは");
-        PokemonMove b = greninja.getDamage2("ハイドロポンプ");
+        PokemonMove b = greninja.getDamage("ハイドロポンプ");
         stadium.forwardTurn(a, b);
-        PokemonMove a2 = zapdos.getDamage2("ぼうふう");
+        PokemonMove a2 = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a2, b);
         BattleLog.getLogAll();
         Assertions.assertEquals("サンダー の ぼうふう のこうげきだ！", BattleLog.getLog(7));
@@ -207,8 +206,8 @@ public class PokemonTest {
     @DisplayName("テテフちゃんと特性とフィールドを実装")
     public void test021() {
         PokemonStadium stadium = new PokemonStadium(decidueye, tapuLele);
-        PokemonMove a = decidueye.getDamage2("かげうち");
-        PokemonMove b = tapuLele.getDamage2("サイコキネシス");
+        PokemonMove a = decidueye.getDamage("かげうち");
+        PokemonMove b = tapuLele.getDamage("サイコキネシス");
         PokemonMove c = tapuLele.getDamage2("めいそう");
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
@@ -219,14 +218,14 @@ public class PokemonTest {
     @DisplayName("フィールドおわり")
     public void test022() {
         PokemonStadium stadium = new PokemonStadium(decidueye, tapuLele);
-        PokemonMove a = decidueye.getDamage2("かげうち");
+        PokemonMove a = decidueye.getDamage("かげうち");
         PokemonMove c = tapuLele.getDamage2("めいそう");
         stadium.forwardTurn(a,c);
         stadium.forwardTurn(a,c);
         stadium.forwardTurn(a,c);
         stadium.forwardTurn(a,c);
         stadium.forwardTurn(a,c);
-        PokemonMove b = tapuLele.getDamage2("サイコキネシス");
+        PokemonMove b = tapuLele.getDamage("サイコキネシス");
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
     }
