@@ -94,4 +94,23 @@ public class Effort {
     public int getS() {
         return s;
     }
+
+    public int[] realCalculation(int[] base) {
+        int hp = realCalculationHP(base[0],this.h);
+        int a = realCalculationEtc(base[1],this.a);
+        int b = realCalculationEtc(base[2],this.b);
+        int c = realCalculationEtc(base[3],this.c);
+        int d = realCalculationEtc(base[4],this.d);
+        int s = realCalculationEtc(base[5],this.s);
+
+        return  new int[] {hp, a, b, c, d, s};
+    }
+
+    private int realCalculationHP(int base, int effort) {
+        return (int) Math.floor((((base * 2.0) + 31 + Math.floor(effort / 4.0)) * (50.0 / 100.0) + 50 + 10));
+    }
+
+    private int realCalculationEtc(int base,int effort){
+        return (int) Math.floor((((base * 2.0) + 31 + Math.floor(effort / 4.0)) * (50.0 / 100.0) + 5));
+    }
 }

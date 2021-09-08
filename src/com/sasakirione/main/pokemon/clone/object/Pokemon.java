@@ -34,9 +34,7 @@ public class Pokemon {
      */
     public Pokemon(String name, int[] effort, String good, String nature, String ability) {
         setPokemon(name, effort, new Nature(nature), good, ability);
-        if (good.equals("こだわりメガネ") || good.equals("こだわりハチマキ") || good.equals("こだわりスカーフ")) {
-            goodChoice = true;
-        }
+        setChoiceItem(good);
     }
 
     /**
@@ -56,6 +54,13 @@ public class Pokemon {
         this.type = new Type(type1, type2);
         this.status = new Status(base, new Effort(effort), good, new Nature(nature), ability);
         this.ability = ability;
+        setChoiceItem(good);
+    }
+
+    private void setChoiceItem(String good) {
+        if (good.equals("こだわりメガネ") || good.equals("こだわりハチマキ") || good.equals("こだわりスカーフ")) {
+            goodChoice = true;
+        }
     }
 
     /**
@@ -143,8 +148,7 @@ public class Pokemon {
             this.status.constantDamage(50);
             return;
         }
-        int damage = a.getMoveDamage();
-        int realAttack = a.getRealAttack();
+        double power = a.getPower();
         int defenseChoice;
         String type = a.getMoveType();
         double typeMagnification = this.type.getTypeMagnification(type);
@@ -155,7 +159,7 @@ public class Pokemon {
         } else {
             defenseChoice = 4;
         }
-        this.status.damageCalculation(realAttack, defenseChoice, damage, magnification, type);
+        this.status.damageCalculation(power, defenseChoice, magnification, type);
         BattleLog.typeMagnification(typeMagnification);
     }
 

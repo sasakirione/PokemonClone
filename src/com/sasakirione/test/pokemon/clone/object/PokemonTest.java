@@ -133,7 +133,7 @@ public class PokemonTest {
     @RepeatedTest(100)
     public void test015() {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
-        PokemonMove a = regieleki.getDamage2("げんしのちから");
+        PokemonMove a = regieleki.getDamage("げんしのちから");
         PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
@@ -195,8 +195,8 @@ public class PokemonTest {
     @DisplayName("先制技を実装")
     public void test020() {
         PokemonStadium stadium = new PokemonStadium(decidueye, zapdos);
-        PokemonMove a = decidueye.getDamage2("かげうち");
-        PokemonMove b = zapdos.getDamage2("ぼうふう");
+        PokemonMove a = decidueye.getDamage("かげうち");
+        PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
         Assertions.assertEquals("ジュナイパー の かげうち のこうげきだ！", BattleLog.getLog(2));

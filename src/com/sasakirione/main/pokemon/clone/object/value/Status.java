@@ -152,17 +152,10 @@ public class Status {
     }
 
     private void pokemonRealSet() {
-        int hp = realCalculationHP(this.base[0],this.effort.getH());
-        int a = realCalculationEtc(this.base[1],this.effort.getA());
-        int b = realCalculationEtc(this.base[2],this.effort.getB());
-        int c = realCalculationEtc(this.base[3],this.effort.getC());
-        int d = realCalculationEtc(this.base[4],this.effort.getD());
-        int s = realCalculationEtc(this.base[5],this.effort.getS());
-
-        int[] tempReal = new int[] {hp, a, b, c, d, s};
-        this.real = tempReal;
-        pokemonNatureCalculation(tempReal);
-        this.currentHP = new HP(hp);
+        int[] realTemp = effort.realCalculation(this.base);
+        this.real = realTemp;
+        pokemonNatureCalculation(realTemp);
+        this.currentHP = new HP(this.real[0]);
     }
 
     private void pokemonNatureCalculation(int[] tempReal) {
@@ -174,7 +167,7 @@ public class Status {
         }
     }
 
-    public void damageCalculation(double realAttack, int defense, int damage, double magnification, String type) {
+    public void damageCalculation(double power, int defense, double magnification, String type) {
         int realDefense = real[defense];
         double vitals = 1.0;
         if (isVitals()) {
@@ -182,9 +175,8 @@ public class Status {
             realDefense = realSource[defense];
             BattleLog.vitals();
         }
-        double a = Math.floor(50 * 0.4 + 2);
-        double b = Math.floor(a * damage * realAttack / realDefense);
-        double c = Math.floor((b / 50.0) + 2);
+        double a = Math.floor(power / realDefense);
+        double c = Math.floor((a / 50.0) + 2);
         double d = CalculationUtility.fiveOutOverFiveIn(c * vitals);
         int finalDamage = (int) Math.floor(d * randomNumber() * magnification);
         this.currentHP.pruneHP(finalDamage);
