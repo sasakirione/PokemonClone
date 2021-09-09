@@ -1,6 +1,7 @@
 package com.sasakirione.test.pokemon.clone.object;
 
 import com.sasakirione.main.pokemon.clone.data.PokemonDataGet;
+import com.sasakirione.main.pokemon.clone.data.PokemonDataGetInterface;
 import com.sasakirione.main.pokemon.clone.exception.EvArgumentException;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 import com.sasakirione.main.pokemon.clone.object.Pokemon;
@@ -23,6 +24,7 @@ public class PokemonTest {
     Pokemon polteageist;
     Pokemon decidueye;
     Pokemon tapuLele;
+    PokemonDataGetInterface pokemonDataGet;
 
     int[] cs = new int[]{0, 0, 0, 252, 0, 252};
     int[] as = new int[]{0, 252, 0, 0, 0, 252};
@@ -32,10 +34,11 @@ public class PokemonTest {
         regieleki = new Pokemon("レジエレキ", this.cs, "なし" , "おくびょう", "トランジスタ");
         regieleki_megane = new Pokemon("レジエレキ", this.cs, "こだわりメガネ" , "おくびょう", "トランジスタ");
         polteageist = new Pokemon("ポットデス", this.cs, "こだわってないスカーフ", "おくびょう", "のろわれボディ");
-        zapdos = PokemonDataGet.getObjectByID(145, this.cs, 1, "なし", "おくびょう");
-        greninja = PokemonDataGet.getObjectByID(658, new int[]{252, 0, 0, 0, 252 , 0}, 3, "こだわりスカーフ", "おくびょう");
-        decidueye = PokemonDataGet.getObjectByID(724, this.as, 1, "なし", "ようき");
-        tapuLele = PokemonDataGet.getObjectByID(786, this.cs, 1, "なし", "おくびょう");
+        pokemonDataGet = new PokemonDataGet();
+        zapdos = pokemonDataGet.getObjectByID(145, this.cs, 1, "なし", "おくびょう");
+        greninja = pokemonDataGet.getObjectByID(658, new int[]{252, 0, 0, 0, 252 , 0}, 3, "こだわりスカーフ", "おくびょう");
+        decidueye = pokemonDataGet.getObjectByID(724, this.as, 1, "なし", "ようき");
+        tapuLele = pokemonDataGet.getObjectByID(786, this.cs, 1, "なし", "おくびょう");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
@@ -231,27 +234,17 @@ public class PokemonTest {
     }
 
     @Test
-    @DisplayName("ポケモンのデータを取得する")
-    public void test023() {
-        try {
-            Assertions.assertEquals("マーシャドー", PokemonDataGet.getNameByID(802));
-        } catch (FileNotFoundException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
     @DisplayName("ポケモンのデータを取得してポケモンインスタンスを作る")
     public void test024() {
         Pokemon katana;
-        katana = PokemonDataGet.getObjectByID(798, as, 1, "こだわりハチマキ", "いじっぱり");
+        katana = pokemonDataGet.getObjectByID(798, as, 1, "こだわりハチマキ", "いじっぱり");
         Assertions.assertEquals("カミツルギ", katana.getName());
     }
 
     @Test
     @DisplayName("技データを取得して技を出す")
     public void test025() {
-        Pokemon katana = PokemonDataGet.getObjectByID(798, as, 1, "こだわりハチマキ", "いじっぱり");
+        Pokemon katana = pokemonDataGet.getObjectByID(798, as, 1, "こだわりハチマキ", "いじっぱり");
         PokemonMove sword = katana.getDamage("せいなるつるぎ");
         Assertions.assertEquals("かくとう", sword.getMoveType());
     }

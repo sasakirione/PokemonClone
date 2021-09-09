@@ -1,6 +1,7 @@
 package com.sasakirione.main.pokemon.clone.object;
 
 import com.sasakirione.main.pokemon.clone.data.PokemonDataGet;
+import com.sasakirione.main.pokemon.clone.data.PokemonDataGetInterface;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 import com.sasakirione.main.pokemon.clone.object.value.*;
 
@@ -16,12 +17,14 @@ public class Pokemon {
     private Type type;
     /** ポケモンの特性 */
     private String ability;
-    /** ポケモンが道具でこだわってるか */
-    private boolean goodChoice = false;
     /** ポケモンがこだわってる場合のわざ */
     private String choiceMove = null;
     /** ポケモンの状態異常(状態異常がなしの場合は空文字) */
     private String statusAilment = "";
+    /** ポケモンの道具 */
+    private Good good;
+    /** データ取得用インスタンス */
+    PokemonDataGetInterface pokemonDataGet;
 
     /**
      * コンストラクタ(登録されてるポケモン用)
@@ -34,7 +37,8 @@ public class Pokemon {
      */
     public Pokemon(String name, int[] effort, String good, String nature, String ability) {
         setPokemon(name, effort, new Nature(nature), good, ability);
-        setChoiceItem(good);
+        this.good = new Good(good);
+        pokemonDataGet = new PokemonDataGet();
     }
 
     /**
@@ -52,15 +56,10 @@ public class Pokemon {
     public Pokemon(String name, int[] effort, int[] base, String good, String nature, String type1, String type2, String ability) {
         this.name = name;
         this.type = new Type(type1, type2);
-        this.status = new Status(base, new Effort(effort), good, new Nature(nature), ability);
+        this.status = new Status(base, new Effort(effort), good, new Nature(nature));
         this.ability = ability;
-        setChoiceItem(good);
-    }
-
-    private void setChoiceItem(String good) {
-        if (good.equals("こだわりメガネ") || good.equals("こだわりハチマキ") || good.equals("こだわりスカーフ")) {
-            goodChoice = true;
-        }
+        this.good = new Good(good);
+        pokemonDataGet = new PokemonDataGet();
     }
 
     /**
@@ -79,17 +78,17 @@ public class Pokemon {
      * @return ポケモンのわざクラスのインスタンス
      */
     public PokemonMove getDamage2(String name) {
-        if (goodChoice) {
+        if (good.isChoice()) {
             choiceCheck(name);
         }
         return new PokemonMove(name, this.status, this.type);
     }
 
     public PokemonMove getDamage(String name) {
-        if (goodChoice) {
+        if (good.isChoice()) {
             choiceCheck(name);
         }
-        return PokemonDataGet.getMoveByName(name,type,status);
+        return pokemonDataGet.getMoveByName(name,type,status);
     }
 
     /**
@@ -131,7 +130,7 @@ public class Pokemon {
             effort = new Effort(effortInt);
             this.type = new Type("ゴースト");
         }
-        this.status = new Status(base, effort, good, nature, ability);
+        this.status = new Status(base, effort, good, nature);
     }
 
     /**
@@ -243,7 +242,11 @@ public class Pokemon {
      * @return ポケモンの素早さ実数値
      */
     public int getS() {
-        return this.status.getS();
+        int realSpeed = this.status.getS();
+        if (good.isSpeedBoost()) {
+            return Math.toIntExact(Math.round(realSpeed * 1.5));
+        }
+        return realSpeed;
     }
 
     /**

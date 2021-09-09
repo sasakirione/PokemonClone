@@ -16,17 +16,15 @@ public class Status {
     private final Effort effort;
     private String good;
     private final Nature nature;
-    private final String ability;
     private boolean parCheck = false;
     private boolean brnCheck = false;
 
-    public Status(int[] base, Effort effort, String good, Nature nature, String ability) {
+    public Status(int[] base, Effort effort, String good, Nature nature) {
         this.rank = new int[] {0, 0, 0, 0, 0, 0};
         this.good = good;
         this.base = base;
         this.effort = effort;
         this.nature = nature;
-        this.ability = ability;
         pokemonRealSet();
         this.realSource = real.clone();
         setGood();
@@ -116,17 +114,11 @@ public class Status {
     }
 
     private void goodCalculation(int i) {
-        if (this.good.equals("こだわりスカーフ") && i == 5) {
-            this.real[5] = (int) Math.round(real[5] * 1.5);
-        }
         if (this.good.equals("こだわりメガネ") && i == 3) {
             this.real[3] = (int) Math.round(real[3] * 1.5);
         }
         if (this.good.equals("こだわりハチマキ") && i==1) {
             this.real[1] = (int) Math.round(real[1] * 1.5);
-        }
-        if (this.good.equals("こだわってないスカーフ") && i == 5) {
-            this.real[5] = (int) Math.round(real[5] * 1.5);
         }
     }
 

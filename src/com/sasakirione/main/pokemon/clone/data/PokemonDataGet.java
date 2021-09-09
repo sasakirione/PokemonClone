@@ -9,20 +9,11 @@ import com.sasakirione.main.pokemon.clone.object.value.Type;
 import java.io.*;
 import java.util.List;
 
-public class PokemonDataGet {
+public class PokemonDataGet implements PokemonDataGetInterface {
     private static final File filePokemon = new File("C:\\Users\\Yuki Yamada\\IdeaProjects\\PokemonClone\\data\\pokemon_status.csv");
     private static final File fileMove = new File("C:\\Users\\Yuki Yamada\\IdeaProjects\\PokemonClone\\data\\moves.csv");
-    
-    private PokemonDataGet() {
-        throw new AssertionError("これはインスタンス化しないで！");
-    }
 
-    public static String getNameByID(int i) throws FileNotFoundException, UnsupportedEncodingException {
-        String[] rowList = pokemonFileGet(i);
-        return rowList[1];
-    }
-
-    private static String[] pokemonFileGet(int i) {
+    private String[] pokemonFileGet(int i) {
         String[] res = new String[0];
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filePokemon), "windows-31j"))) {
             while(true) {
@@ -42,7 +33,8 @@ public class PokemonDataGet {
         return res;
     }
 
-    public static Pokemon getObjectByID(int dexNo, int[] effort, int i, String good, String nature) {
+    @Override
+    public Pokemon getObjectByID(int dexNo, int[] effort, int i, String good, String nature) {
         String[] pokemon = pokemonFileGet(dexNo);
         int[] base = new int[] {
                 Integer.parseInt(pokemon[7]),
@@ -58,7 +50,7 @@ public class PokemonDataGet {
         return new Pokemon(pokemon[1], effort, base, good, nature, type1, type2, ability);
     }
 
-    private static String[] pokemonMoveFileGet(String name) {
+    private String[] pokemonMoveFileGet(String name) {
         String[] res = new String[0];
         String name2 = "\"" + name + "\"";
         try (BufferedReader reader = new BufferedReader(new FileReader(fileMove))) {
@@ -79,7 +71,8 @@ public class PokemonDataGet {
         return res;
     }
 
-    public static PokemonMove getMoveByName(String name, Type type, Status status) {
+    @Override
+    public PokemonMove getMoveByName(String name, Type type, Status status) {
         String[] move = pokemonMoveFileGet(name);
         int damage = Integer.parseInt(move[7]);
         MoveClass moveClass = getMoveClass(move[11],move[12]);
@@ -88,7 +81,7 @@ public class PokemonDataGet {
         return new PokemonMove(name, status, type, moveClass, damage, moveType, priority);
     }
 
-    private static String getMoveType(String type) {
+    private String getMoveType(String type) {
         int typeID = Integer.parseInt(type);
         return switch (typeID) {
             case 1 -> "ノーマル";
@@ -112,7 +105,7 @@ public class PokemonDataGet {
         };
     }
 
-    private static MoveClass getMoveClass(String s, String s1) {
+    private MoveClass getMoveClass(String s, String s1) {
         if (s1.equals("2")) {
             return MoveClass.PHYSICS;
         }
