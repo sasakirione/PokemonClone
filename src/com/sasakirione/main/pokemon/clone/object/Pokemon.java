@@ -1,5 +1,6 @@
 package com.sasakirione.main.pokemon.clone.object;
 
+import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
 import com.sasakirione.main.pokemon.clone.data.PokemonDataGet;
 import com.sasakirione.main.pokemon.clone.data.PokemonDataGetInterface;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
@@ -242,11 +243,14 @@ public class Pokemon {
      * @return ポケモンの素早さ実数値
      */
     public int getS() {
-        int realSpeed = this.status.getS();
+        double realSpeed = this.status.getS();
         if (good.isSpeedBoost()) {
-            return Math.toIntExact(Math.round(realSpeed * 1.5));
+            realSpeed = realSpeed * CalculationConst.onePointFive;
         }
-        return realSpeed;
+        if (status.isParCheck()) {
+            realSpeed = realSpeed * CalculationConst.half;
+        }
+        return (int) Math.round(realSpeed);
     }
 
     /**
@@ -256,5 +260,13 @@ public class Pokemon {
      */
     public String getAbility() {
         return ability;
+    }
+
+    private boolean hasGood() {
+        return this.good != null;
+    }
+
+    private void lostGood() {
+        this.good = null;
     }
 }

@@ -105,9 +105,6 @@ public class Status {
     }
 
     private void ailmentCalculation(int item) {
-        if (item == 5 && parCheck) {
-            real[5] = (int) Math.round(this.real[5] * 0.5);
-        }
         if (item == 1 && brnCheck) {
             real[1] = (int) Math.round(this.real[1] * 0.5);
         }
@@ -193,6 +190,10 @@ public class Status {
     public void getPAR() {
         parCheck = true;
         real[5] = (int) Math.round(this.real[5] * 0.5);
+    }
+
+    public boolean isParCheck() {
+        return parCheck;
     }
 
     public int getCurrentHP() {

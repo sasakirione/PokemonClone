@@ -1,5 +1,6 @@
 package com.sasakirione.main.pokemon.clone.object;
 
+import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
 import com.sasakirione.main.pokemon.clone.object.value.MoveClass;
 import com.sasakirione.main.pokemon.clone.object.value.Status;
 import com.sasakirione.main.pokemon.clone.object.value.Type;
@@ -91,15 +92,6 @@ public class PokemonMove {
      */
     public MoveClass getMoveClass() {
         return moveClass;
-    }
-
-    /**
-     * わざの威力を返す
-     * わざの威力を返します。
-     * @return わざの威力
-     */
-    public int getMoveDamage() {
-        return moveDamage;
     }
 
     /**
@@ -204,7 +196,7 @@ public class PokemonMove {
      */
     private void fieldBoost() {
         if (this.moveClass.equals(MoveClass.PHYSICS) || this.moveClass.equals(MoveClass.SPECIAL)) {
-            this.moveDamage = (int) Math.round(this.moveDamage * (5325.0 / 4096.0));
+            this.moveDamage = (int) Math.round(this.moveDamage * CalculationConst.onePointThree);
         }
     }
 
@@ -216,7 +208,7 @@ public class PokemonMove {
 
     private double getAbilityMagnification() {
         if (this.moveName.equals("サンダープリズン")) {
-            return (6144.0/4096.0);
+            return (CalculationConst.onePointFive);
         }
         return 1;
     }

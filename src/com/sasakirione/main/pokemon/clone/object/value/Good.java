@@ -1,5 +1,7 @@
 package com.sasakirione.main.pokemon.clone.object.value;
 
+import com.sasakirione.main.pokemon.clone.constant.GoodConst;
+
 public class Good {
     private final String goodName;
 
@@ -8,11 +10,11 @@ public class Good {
     }
 
     public boolean isChoice() {
-        return (this.goodName.equals("こだわりメガネ") || this.goodName.equals("こだわりハチマキ") || this.goodName.equals("こだわりスカーフ"));
+        return (this.goodName.equals(GoodConst.choiceSpecs) || this.goodName.equals(GoodConst.choiceBand) || this.goodName.equals(GoodConst.choiceScarf));
     }
 
     public boolean isSpeedBoost() {
-        return (this.goodName.equals("こだわりスカーフ") || this.goodName.equals("こだわってないスカーフ"));
+        return (this.goodName.equals(GoodConst.choiceScarf) || this.goodName.equals(GoodConst.notChoiceScarf));
     }
 
 }

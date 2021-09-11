@@ -36,7 +36,7 @@ public class PokemonTest {
         polteageist = new Pokemon("ポットデス", this.cs, "こだわってないスカーフ", "おくびょう", "のろわれボディ");
         pokemonDataGet = new PokemonDataGet();
         zapdos = pokemonDataGet.getObjectByID(145, this.cs, 1, "なし", "おくびょう");
-        greninja = pokemonDataGet.getObjectByID(658, new int[]{252, 0, 0, 0, 252 , 0}, 3, "こだわりスカーフ", "おくびょう");
+        greninja = pokemonDataGet.getObjectByID(658, new int[]{252, 0, 0, 0, 252 , 0}, 3, "なし", "おくびょう");
         decidueye = pokemonDataGet.getObjectByID(724, this.as, 1, "なし", "ようき");
         tapuLele = pokemonDataGet.getObjectByID(786, this.cs, 1, "なし", "おくびょう");
     }
@@ -248,6 +248,9 @@ public class PokemonTest {
         PokemonMove sword = katana.getDamage("せいなるつるぎ");
         Assertions.assertEquals("かくとう", sword.getMoveType());
     }
+
+
+
 
 
 }
