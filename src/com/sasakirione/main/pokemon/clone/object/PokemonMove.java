@@ -1,6 +1,7 @@
 package com.sasakirione.main.pokemon.clone.object;
 
 import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
+import com.sasakirione.main.pokemon.clone.object.value.Ability;
 import com.sasakirione.main.pokemon.clone.object.value.MoveClass;
 import com.sasakirione.main.pokemon.clone.object.value.Status;
 import com.sasakirione.main.pokemon.clone.object.value.Type;
@@ -25,7 +26,9 @@ public class PokemonMove {
     /** 技の優先度 */
     private final int priority;
 
-    public PokemonMove(String name, Status status, Type type, MoveClass moveClass, int moveDamage, String moveType, int priority) {
+    private final Ability ability;
+
+    public PokemonMove(String name, Status status, Type type, MoveClass moveClass, int moveDamage, String moveType, int priority, Ability ability) {
         this.moveName = name;
         this.moveClass = moveClass;
         this.real = new int[]{status.getA(), status.getC()};
@@ -33,6 +36,7 @@ public class PokemonMove {
         this.priority = priority;
         this.moveDamage = moveDamage;
         this.moveType = moveType;
+        this.ability = ability;
     }
 
     /**
@@ -42,11 +46,12 @@ public class PokemonMove {
      * @param status 攻撃側のステータス
      * @param type 攻撃側のタイプ
      */
-    public PokemonMove(String name, Status status, Type type) {
+    public PokemonMove(String name, Status status, Type type, Ability ability) {
         this.moveName = name;
         this.real = new int[]{status.getA(), status.getC()};
         this.types = type;
         this.priority = 0;
+        this.ability = ability;
 
         if (name.equals("サンダープリズン")) {
             this.moveClass = MoveClass.SPECIAL;
@@ -196,20 +201,13 @@ public class PokemonMove {
      */
     private void fieldBoost() {
         if (this.moveClass.equals(MoveClass.PHYSICS) || this.moveClass.equals(MoveClass.SPECIAL)) {
-            this.moveDamage = (int) Math.round(this.moveDamage * CalculationConst.onePointThree);
+            this.moveDamage = (int) Math.round(this.moveDamage * CalculationConst.ONE_POINT_THREE);
         }
     }
 
-    public double getPower() {
+    public double getPower(Ability ability) {
         double a = Math.floor(50 * 0.4 + 2);
         double b = a * moveDamage * getRealAttack();
-        return CalculationUtility.fiveOutOverFiveIn(b * getAbilityMagnification());
-    }
-
-    private double getAbilityMagnification() {
-        if (this.moveName.equals("サンダープリズン")) {
-            return (CalculationConst.onePointFive);
-        }
-        return 1;
+        return CalculationUtility.fiveOutOverFiveIn(b * this.ability.powerBoost(this));
     }
 }

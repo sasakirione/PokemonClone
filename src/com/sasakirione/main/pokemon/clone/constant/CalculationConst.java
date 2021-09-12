@@ -3,13 +3,14 @@ package com.sasakirione.main.pokemon.clone.constant;
 public class CalculationConst {
     private CalculationConst() {throw new AssertionError("これはインスタンス化しないで！");}
 
-    public static final double onePointFive = 6144.0 / 4096.0;
-    public static final double two = 8192.0 / 4096.0;
-    public static final double onePointTwo = 4915.0 / 4096.0;
-    public static final double half = 2048.0 / 4096.0;
-    public static final double onePointThree = 5325.0 / 4096.0;
-    public static final double onePointThreeAura = 5448.0 / 4096.0;
-    public static final double onePointThreeOrb = 5324.0 / 4096.0;
-    public static final double threeQuarter = 3072.0 / 4096.0;
+    public static final double ONE_POINT_FIVE = 6144.0 / 4096.0;
+    public static final double TWO = 8192.0 / 4096.0;
+    public static final double ONE_POINT_TWO = 4915.0 / 4096.0;
+    public static final double HALF = 2048.0 / 4096.0;
+    public static final double ONE_POINT_THREE = 5325.0 / 4096.0;
+    public static final double ONE_POINT_THREE_AURA = 5448.0 / 4096.0;
+    public static final double ONE_POINT_THREE_ORB = 5324.0 / 4096.0;
+    public static final double THREE_QUARTER = 3072.0 / 4096.0;
+    public static final double ONE = 1.0;
 
 }

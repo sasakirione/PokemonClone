@@ -10,11 +10,11 @@ public class Good {
     }
 
     public boolean isChoice() {
-        return (this.goodName.equals(GoodConst.choiceSpecs) || this.goodName.equals(GoodConst.choiceBand) || this.goodName.equals(GoodConst.choiceScarf));
+        return (this.goodName.equals(GoodConst.CHOICE_SPECS) || this.goodName.equals(GoodConst.CHOICE_BAND) || this.goodName.equals(GoodConst.CHOICE_SCARF));
     }
 
     public boolean isSpeedBoost() {
-        return (this.goodName.equals(GoodConst.choiceScarf) || this.goodName.equals(GoodConst.notChoiceScarf));
+        return (this.goodName.equals(GoodConst.CHOICE_SCARF) || this.goodName.equals(GoodConst.NOT_CHOICE_SCARF));
     }
 
 }

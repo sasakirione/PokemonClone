@@ -52,8 +52,7 @@ public class PokemonStadium {
      * @param pokemon ポケモンのインスタンス
      */
     private void makeField(Pokemon pokemon) {
-        String ability = pokemon.getAbility();
-        if (ability.equals("サイコメイカー")) {
+        if (pokemon.getAbility().isPsychoMaker()) {
             this.field = new Field("サイコフィールド");
             BattleLog.expandPsychoMaker(pokemon.getName());
         }
