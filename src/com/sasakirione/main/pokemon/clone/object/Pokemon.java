@@ -183,6 +183,13 @@ public class Pokemon {
         }
         this.status.damageCalculation(power, defenseChoice, magnification, a.getMoveType());
         BattleLog.typeMagnification(typeMagnification);
+        remainingDamageDecision();
+    }
+
+    private void remainingDamageDecision() {
+        if (ability.isTorrent() && status.isOneThird()) {
+            ability.torrent();
+        }
     }
 
     /**
@@ -297,4 +304,14 @@ public class Pokemon {
     private void lostGood() {
         this.good = null;
     }
+
+    public Type getType() {
+        return this.type;
+    }
+
+    public void changeType(String moveType) {
+        this.type = new Type(moveType);
+        BattleLog.changeType(this.name, moveType);
+    }
+
 }

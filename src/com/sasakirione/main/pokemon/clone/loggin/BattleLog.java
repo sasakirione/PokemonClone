@@ -110,4 +110,12 @@ public class BattleLog {
     private static void add(String message) {
         battleLog.add(message);
     }
+
+    public static void changeType(String name, String moveType) {
+        add(name + "は " + moveType +"タイプに なった！");
+    }
+
+    public static void ability(String name, String ability) {
+        add(name + "の " + ability);
+    }
 }

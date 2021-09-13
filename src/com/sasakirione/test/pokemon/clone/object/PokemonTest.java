@@ -24,6 +24,7 @@ public class PokemonTest {
     Pokemon polteageist;
     Pokemon decidueye;
     Pokemon tapuLele;
+    Pokemon primarina;
     PokemonDataGetInterface pokemonDataGet;
 
     int[] cs = new int[]{0, 0, 0, 252, 0, 252};
@@ -39,6 +40,7 @@ public class PokemonTest {
         greninja = pokemonDataGet.getObjectByID(658, new int[]{252, 0, 0, 0, 252 , 0}, 3, "なし", "おくびょう");
         decidueye = pokemonDataGet.getObjectByID(724, this.as, 1, "なし", "ようき");
         tapuLele = pokemonDataGet.getObjectByID(786, this.cs, 1, "なし", "おくびょう");
+        primarina = pokemonDataGet.getObjectByID(730, this.cs, 1, "なし", "いじっぱり");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
@@ -249,7 +251,28 @@ public class PokemonTest {
         Assertions.assertEquals("かくとう", sword.getMoveType());
     }
 
-
+    @Test
+    @DisplayName("リベロ系の実装")
+    public void test026() {
+        PokemonMove coolingbeam = greninja.getDamage("れいとうビーム");
+        PokemonMove b = zapdos.getDamage("ぼうふう");
+        PokemonStadium stadium = new PokemonStadium(greninja, zapdos);
+        stadium.forwardTurn(coolingbeam, b);
+        BattleLog.getLogAll();
+        Assertions.assertTrue(greninja.getType().isTypeMatch("こおり"));
+    }
+    
+    @DisplayName("げきりゅう")
+    @RepeatedTest(100)
+    public void test027() {
+        PokemonMove a = primarina.getDamage("なみのり");
+        Pokemon tapuLele2 = pokemonDataGet.getObjectByID(786, this.cs, 1, "こだわりメガネ", "おくびょう");
+        PokemonMove b = tapuLele2.getDamage("サイコキネシス");
+        PokemonStadium stadium = new PokemonStadium(primarina, tapuLele2);
+        stadium.forwardTurn(a,b);
+        BattleLog.getLogAll();
+        Assertions.assertTrue(tapuLele2.getCurrentHP() < 44);
+    }
 
 
 

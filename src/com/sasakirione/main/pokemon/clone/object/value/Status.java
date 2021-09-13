@@ -171,6 +171,7 @@ public class Status {
         this.currentHP.pruneHP(finalDamage);
     }
 
+
     private double randomNumber() {
         Random random = new Random();
         int randomNumberRaw = random.nextInt(16);
@@ -206,5 +207,9 @@ public class Status {
 
     public boolean isDead() {
         return currentHP.getCurrentHP() == 0;
+    }
+
+    public boolean isOneThird() {
+        return this.currentHP.isOneThird();
     }
 }

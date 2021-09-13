@@ -94,6 +94,7 @@ public class PokemonStadium {
             return;
         }
         turnEndFieldDisposal();
+        turnEndDisposal();
     }
 
     private void attackAAfterB(PokemonMove a, PokemonMove b) {
@@ -106,6 +107,11 @@ public class PokemonStadium {
             return;
         }
         turnEndFieldDisposal();
+        turnEndDisposal();
+    }
+
+    private void turnEndDisposal() {
+
     }
 
     private void fieldWeatherBoost(PokemonMove a, PokemonMove b) {
@@ -141,6 +147,13 @@ public class PokemonStadium {
         if (a.isSelfChangeMove()) {
            this.pokemonInBattleA.takeChange(a);
         } else {
+            if (pokemonInBattleA.getAbility().isLibero()) {
+                if (!pokemonInBattleA.getType().isTypeMatch(a.getMoveType())) {
+                    BattleLog.ability(pokemonInBattleA.getName(), pokemonInBattleA.getAbility().getName());
+                    pokemonInBattleA.changeType(a.getMoveType());
+                    a.libero();
+                }
+            }
             this.pokemonInBattleB.takeDamage(a);
             BattleLog.hp(pokemonInBattleB);
         }
@@ -168,6 +181,13 @@ public class PokemonStadium {
         if (b.isSelfChangeMove()) {
             this.pokemonInBattleB.takeChange(b);
         } else {
+            if (pokemonInBattleB.getAbility().isLibero()) {
+                if (!pokemonInBattleB.getType().isTypeMatch(b.getMoveType())) {
+                    BattleLog.ability(pokemonInBattleB.getName(), pokemonInBattleB.getAbility().getName());
+                    pokemonInBattleB.changeType(b.getMoveType());
+                    b.libero();
+                }
+            }
             this.pokemonInBattleA.takeDamage(b);
             BattleLog.hp(pokemonInBattleA);
         }

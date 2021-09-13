@@ -22,7 +22,7 @@ public class PokemonMove {
     /** 技のタイプ */
     private String moveType;
     /** 技を出すポケモンのタイプ */
-    private final Type types;
+    private Type types;
     /** 技の優先度 */
     private final int priority;
 
@@ -205,9 +205,14 @@ public class PokemonMove {
         }
     }
 
+
     public double getPower(Ability ability) {
         double a = Math.floor(50 * 0.4 + 2);
         double b = a * moveDamage * getRealAttack();
         return CalculationUtility.fiveOutOverFiveIn(b * this.ability.powerBoost(this));
+    }
+
+    public void libero() {
+        types = new Type(moveType);
     }
 }
