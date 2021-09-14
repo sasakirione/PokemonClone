@@ -78,7 +78,8 @@ public class PokemonDataGet implements PokemonDataGetInterface {
         MoveClass moveClass = getMoveClass(move[11],move[12]);
         int priority = Integer.parseInt(move[10]);
         String moveType = getMoveType(move[6]);
-        return new PokemonMove(name, status, type, moveClass, damage, moveType, priority, ability);
+        int accuracy = Integer.parseInt(move[9]);
+        return new PokemonMove(name, status, type, moveClass, damage, moveType, priority, ability, accuracy);
     }
 
     private String getMoveType(String type) {

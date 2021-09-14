@@ -162,7 +162,11 @@ public class Pokemon {
      *
      * @param a 受ける技のインスタンス
      */
-    public void takeDamage(PokemonMove a) {
+    public void takeDamage(PokemonMove a, boolean isTest) {
+        if (!a.isMoveHit() && !isTest) {
+            BattleLog.moveMiss();
+            return;
+        }
         if (a.isEnemyChangeMove()) {
             takeChange(a);
             return;
@@ -188,7 +192,7 @@ public class Pokemon {
 
     private void remainingDamageDecision() {
         if (ability.isTorrent() && status.isOneThird()) {
-            ability.torrent();
+            ability.abilityOn();
         }
     }
 

@@ -7,6 +7,8 @@ import com.sasakirione.main.pokemon.clone.object.value.Status;
 import com.sasakirione.main.pokemon.clone.object.value.Type;
 import com.sasakirione.main.pokemon.clone.utility.CalculationUtility;
 
+import java.util.Random;
+
 /**
  * ポケモンのわざを担当するクラス
  */
@@ -25,10 +27,12 @@ public class PokemonMove {
     private Type types;
     /** 技の優先度 */
     private final int priority;
-
+    /** 技を出すポケモンの特性 */
     private final Ability ability;
+    /** 技の命中率 */
+    private int accuracy;
 
-    public PokemonMove(String name, Status status, Type type, MoveClass moveClass, int moveDamage, String moveType, int priority, Ability ability) {
+    public PokemonMove(String name, Status status, Type type, MoveClass moveClass, int moveDamage, String moveType, int priority, Ability ability, int accuracy) {
         this.moveName = name;
         this.moveClass = moveClass;
         this.real = new int[]{status.getA(), status.getC()};
@@ -37,6 +41,7 @@ public class PokemonMove {
         this.moveDamage = moveDamage;
         this.moveType = moveType;
         this.ability = ability;
+        this.accuracy = accuracy;
     }
 
     /**
@@ -52,6 +57,7 @@ public class PokemonMove {
         this.types = type;
         this.priority = 0;
         this.ability = ability;
+        this.accuracy = 100;
 
         if (name.equals("サンダープリズン")) {
             this.moveClass = MoveClass.SPECIAL;
@@ -205,7 +211,6 @@ public class PokemonMove {
         }
     }
 
-
     public double getPower(Ability ability) {
         double a = Math.floor(50 * 0.4 + 2);
         double b = a * moveDamage * getRealAttack();
@@ -215,4 +220,14 @@ public class PokemonMove {
     public void libero() {
         types = new Type(moveType);
     }
+
+    public boolean isMoveHit() {
+        return randomForAccuracy() < this.accuracy;
+    }
+
+    public int randomForAccuracy() {
+        Random random = new Random();
+        return random.nextInt(100);
+    }
+
 }

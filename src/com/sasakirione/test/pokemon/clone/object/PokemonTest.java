@@ -47,7 +47,7 @@ public class PokemonTest {
     @RepeatedTest(100)
     public void test005() {
         PokemonMove a = regieleki.getDamage2("サンダープリズン");
-        zapdos.takeDamage(a);
+        zapdos.takeDamage(a, true);
         Assertions.assertTrue(zapdos.getCurrentHP() < 73);
     }
 
@@ -77,7 +77,7 @@ public class PokemonTest {
     @RepeatedTest(100)
     public void test009() {
         PokemonMove a = regieleki.getDamage2("サンダープリズン");
-        greninja.takeDamage(a);
+        greninja.takeDamage(a, true);
         Assertions.assertTrue(greninja.getCurrentHP() < 12);
         Assertions.assertFalse(greninja.getCurrentHP() < 0);
     }
@@ -95,6 +95,7 @@ public class PokemonTest {
     @RepeatedTest(100)
     public void test011() {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
+        stadium.setTestMode(true);
         PokemonMove a = regieleki.getDamage2("サンダープリズン");
         PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a,b);
@@ -107,6 +108,7 @@ public class PokemonTest {
     @DisplayName("メッセージ機能")
     public void test012() {
         PokemonStadium stadium = new PokemonStadium(regieleki, greninja);
+        stadium.setTestMode(true);
         PokemonMove a = regieleki.getDamage2("サンダープリズン");
         PokemonMove b = greninja.getDamage("ハイドロポンプ");
         stadium.forwardTurn(a,b);
@@ -118,6 +120,7 @@ public class PokemonTest {
     @RepeatedTest(100)
     public void test013() {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
+        stadium.setTestMode(true);
         PokemonMove a = regieleki_megane.getDamage2("サンダープリズン");
         PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a, b);
@@ -138,17 +141,19 @@ public class PokemonTest {
     @RepeatedTest(100)
     public void test015() {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
+        stadium.setTestMode(true);
         PokemonMove a = regieleki.getDamage("げんしのちから");
         PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
-        Assertions.assertTrue(68 < zapdos.getCurrentHP());
+        Assertions.assertTrue((68 < zapdos.getCurrentHP()) || BattleLog.getLog(3).equals("きゅうしょにあたった！"));
     }
 
     @Test
     @DisplayName("デモ用")
     public void test016() {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
+        stadium.setTestMode(true);
         PokemonMove a = regieleki_megane.getDamage2("サンダープリズン");
         PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a, b);
@@ -162,6 +167,7 @@ public class PokemonTest {
         Pokemon nanao = new Pokemon("七尾百合子", this.cs, new int[]{60,50,70,130,90,95}, "こだわりメガネ" , "おくびょう",
                 "みず", "フェアリー", "うるおいボディ");
         PokemonStadium stadium = new PokemonStadium(nanao, regieleki);
+        stadium.setTestMode(true);
         PokemonMove a = nanao.getDamage("ハイドロポンプ");
         PokemonMove b = regieleki.getDamage2("サンダープリズン");
         stadium.forwardTurn(a, b);
@@ -173,6 +179,7 @@ public class PokemonTest {
     @DisplayName("ポットデス　からをやぶる")
     public void test018() {
         PokemonStadium stadium = new PokemonStadium(polteageist, regieleki);
+        stadium.setTestMode(true);
         PokemonMove a = polteageist.getDamage2("からをやぶる");
         PokemonMove b = regieleki.getDamage2("サンダープリズン");
         PokemonMove a2 = polteageist.getDamage("シャドーボール");
@@ -187,6 +194,7 @@ public class PokemonTest {
     @DisplayName("状態異常を実装する、マヒ、素早さだけ")
     public void test019() {
         PokemonStadium stadium = new PokemonStadium(zapdos, greninja);
+        stadium.setTestMode(true);
         PokemonMove a = zapdos.getDamage2("でんじは");
         PokemonMove b = greninja.getDamage("ハイドロポンプ");
         stadium.forwardTurn(a, b);
@@ -200,6 +208,7 @@ public class PokemonTest {
     @DisplayName("先制技を実装")
     public void test020() {
         PokemonStadium stadium = new PokemonStadium(decidueye, zapdos);
+        stadium.setTestMode(true);
         PokemonMove a = decidueye.getDamage("かげうち");
         PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a, b);
@@ -211,6 +220,7 @@ public class PokemonTest {
     @DisplayName("テテフちゃんと特性とフィールドを実装")
     public void test021() {
         PokemonStadium stadium = new PokemonStadium(decidueye, tapuLele);
+        stadium.setTestMode(true);
         PokemonMove a = decidueye.getDamage("かげうち");
         PokemonMove b = tapuLele.getDamage("サイコキネシス");
         PokemonMove c = tapuLele.getDamage2("めいそう");
@@ -223,6 +233,7 @@ public class PokemonTest {
     @DisplayName("フィールドおわり")
     public void test022() {
         PokemonStadium stadium = new PokemonStadium(decidueye, tapuLele);
+        stadium.setTestMode(true);
         PokemonMove a = decidueye.getDamage("かげうち");
         PokemonMove c = tapuLele.getDamage2("めいそう");
         stadium.forwardTurn(a,c);
@@ -272,6 +283,16 @@ public class PokemonTest {
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
         Assertions.assertTrue((tapuLele2.getCurrentHP() < 47) || primarina.isDead());
+    }
+
+    @Test
+    @DisplayName("技の命中率の実装")
+    public void test028() {
+        PokemonStadium stadium = new PokemonStadium(zapdos, primarina);
+        PokemonMove a = zapdos.getDamage("ぼうふう");
+        PokemonMove b = primarina.getDamage("ハイドロポンプ");
+        stadium.forwardTurn(a,b);
+        BattleLog.getLogAll();
     }
 
 

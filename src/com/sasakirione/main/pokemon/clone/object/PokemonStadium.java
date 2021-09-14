@@ -15,6 +15,8 @@ public class PokemonStadium {
     private boolean matchEndFlag = false;
     /** フィールド */
     private Field field;
+    /** テストモード(技が必中になります) */
+    private boolean testMode = false;
 
     /**
      * バトル場クラスのコンストラクタ
@@ -148,7 +150,7 @@ public class PokemonStadium {
            this.pokemonInBattleA.takeChange(a);
         } else {
             liberoDisposal(pokemonInBattleA, a);
-            this.pokemonInBattleB.takeDamage(a);
+            this.pokemonInBattleB.takeDamage(a, testMode);
             BattleLog.hp(pokemonInBattleB);
         }
         if (pokemonInBattleB.isDead()) {
@@ -162,7 +164,7 @@ public class PokemonStadium {
             return;
         }
         if (!pokemon.getType().isTypeMatch(move.getMoveType())) {
-            BattleLog.ability(pokemon.getName(), pokemon.getAbility().getName());
+            BattleLog.ability(pokemon.getName(), pokemon.getAbility());
             pokemon.changeType(move.getMoveType());
             move.libero();
         }
@@ -187,7 +189,7 @@ public class PokemonStadium {
             this.pokemonInBattleB.takeChange(b);
         } else {
             liberoDisposal(pokemonInBattleB, b);
-            this.pokemonInBattleA.takeDamage(b);
+            this.pokemonInBattleA.takeDamage(b, testMode);
             BattleLog.hp(pokemonInBattleA);
         }
         if (pokemonInBattleA.isDead()) {
@@ -228,5 +230,9 @@ public class PokemonStadium {
 
     public boolean getEndFlag() {
         return this.matchEndFlag;
+    }
+
+    public void setTestMode(boolean testMode) {
+        this.testMode = testMode;
     }
 }
