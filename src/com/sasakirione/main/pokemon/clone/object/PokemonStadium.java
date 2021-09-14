@@ -52,8 +52,7 @@ public class PokemonStadium {
      * @param pokemon ポケモンのインスタンス
      */
     private void makeField(Pokemon pokemon) {
-        String ability = pokemon.getAbility();
-        if (ability.equals("サイコメーカー")) {
+        if (pokemon.getAbility().isPsychoMaker()) {
             this.field = new Field("サイコフィールド");
             BattleLog.expandPsychoMaker(pokemon.getName());
         }
@@ -64,52 +63,55 @@ public class PokemonStadium {
      * 1ターン分のバトル処理を行います。
      * @param a Aサイドのポケモンのわざのインスタンス
      * @param b Bサイドのポケモンのわざのインスタンス
-     * @return どちらかのポケモンが瀕死状態になるか最初から瀕死状態の時に「おわりだよ」と返します。
      */
-    public String forwardTurn(PokemonMove a, PokemonMove b) {
-        if (this.pokemonInBattleA.isDead() || this.pokemonInBattleB.isDead()) {
-            return "おわりだよ";
+    public void forwardTurn(PokemonMove a, PokemonMove b) {
+        if (this.matchEndFlag) {
+            return;
         }
         fieldWeatherBoost(a,b);
         if (priorityDecision(a, b) == 1) {
-            attackSideA(a);
-            if (matchEndFlag) {
-                return "おわりだよ";
-            }
-            attackSideB(b);
-            if (matchEndFlag) {
-                return "おわりだよ";
-            }
-            turnEndFieldDisposal();
-            return "なにもなし";
+            attackAAfterB(a, b);
+            return;
         }
         if (priorityDecision(a, b) == 2) {
-            attackSideB(b);
-            if (matchEndFlag) {
-                return "おわりだよ";
-            }
-            attackSideA(a);
-            if (matchEndFlag) {
-                return "おわりだよ";
-            }
-            turnEndFieldDisposal();
-            return "なにもなし";
+            attackBAfterA(a, b);
+            return;
         }
         if (rapidityDecision() == 1) {
-            attackSideB(b);
-            if (matchEndFlag) {
-                return "おわりだよ";
-            }
-            attackSideA(a);
+            attackBAfterA(a, b);
         } else {
-            attackSideA(a);
-            if (matchEndFlag) {
-                return "おわりだよ";
-            }
-            attackSideB(b);
+            attackAAfterB(a, b);
+        }
+    }
+
+    private void attackBAfterA(PokemonMove a, PokemonMove b) {
+        attackSideB(b);
+        if (matchEndFlag) {
+            return;
+        }
+        attackSideA(a);
+        if (matchEndFlag) {
+            return;
         }
         turnEndFieldDisposal();
-        return "何もなし";
+        turnEndDisposal();
+    }
+
+    private void attackAAfterB(PokemonMove a, PokemonMove b) {
+        attackSideA(a);
+        if (matchEndFlag) {
+            return;
+        }
+        attackSideB(b);
+        if (matchEndFlag) {
+            return;
+        }
+        turnEndFieldDisposal();
+        turnEndDisposal();
+    }
+
+    private void turnEndDisposal() {
+
     }
 
     private void fieldWeatherBoost(PokemonMove a, PokemonMove b) {
@@ -145,6 +147,13 @@ public class PokemonStadium {
         if (a.isSelfChangeMove()) {
            this.pokemonInBattleA.takeChange(a);
         } else {
+            if (pokemonInBattleA.getAbility().isLibero()) {
+                if (!pokemonInBattleA.getType().isTypeMatch(a.getMoveType())) {
+                    BattleLog.ability(pokemonInBattleA.getName(), pokemonInBattleA.getAbility().getName());
+                    pokemonInBattleA.changeType(a.getMoveType());
+                    a.libero();
+                }
+            }
             this.pokemonInBattleB.takeDamage(a);
             BattleLog.hp(pokemonInBattleB);
         }
@@ -172,6 +181,13 @@ public class PokemonStadium {
         if (b.isSelfChangeMove()) {
             this.pokemonInBattleB.takeChange(b);
         } else {
+            if (pokemonInBattleB.getAbility().isLibero()) {
+                if (!pokemonInBattleB.getType().isTypeMatch(b.getMoveType())) {
+                    BattleLog.ability(pokemonInBattleB.getName(), pokemonInBattleB.getAbility().getName());
+                    pokemonInBattleB.changeType(b.getMoveType());
+                    b.libero();
+                }
+            }
             this.pokemonInBattleA.takeDamage(b);
             BattleLog.hp(pokemonInBattleA);
         }
@@ -209,5 +225,9 @@ public class PokemonStadium {
             return 2;
         }
         return 0;
+    }
+
+    public boolean getEndFlag() {
+        return this.matchEndFlag;
     }
 }

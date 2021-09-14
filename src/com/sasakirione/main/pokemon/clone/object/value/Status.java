@@ -1,6 +1,7 @@
 package com.sasakirione.main.pokemon.clone.object.value;
 
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
+import com.sasakirione.main.pokemon.clone.utility.CalculationUtility;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -15,19 +16,17 @@ public class Status {
     private final Effort effort;
     private String good;
     private final Nature nature;
-    private final String ability;
     private boolean parCheck = false;
     private boolean brnCheck = false;
 
-    public Status(int[] base, Effort effort, String good, Nature nature, String ability) {
+    public Status(int[] base, Effort effort, String good, Nature nature) {
         this.rank = new int[] {0, 0, 0, 0, 0, 0};
         this.good = good;
         this.base = base;
         this.effort = effort;
         this.nature = nature;
-        this.ability = ability;
         pokemonRealSet();
-        this.realSource = real;
+        this.realSource = real.clone();
         setGood();
     }
 
@@ -106,26 +105,17 @@ public class Status {
     }
 
     private void ailmentCalculation(int item) {
-        if (item == 5 && parCheck) {
-            real[5] = (int) Math.round(this.real[5] * 0.5);
-        }
         if (item == 1 && brnCheck) {
             real[1] = (int) Math.round(this.real[1] * 0.5);
         }
     }
 
     private void goodCalculation(int i) {
-        if (this.good.equals("こだわりスカーフ") && i == 5) {
-            this.real[5] = (int) Math.round(real[5] * 1.5);
-        }
         if (this.good.equals("こだわりメガネ") && i == 3) {
             this.real[3] = (int) Math.round(real[3] * 1.5);
         }
         if (this.good.equals("こだわりハチマキ") && i==1) {
             this.real[1] = (int) Math.round(real[1] * 1.5);
-        }
-        if (this.good.equals("こだわってないスカーフ") && i == 5) {
-            this.real[5] = (int) Math.round(real[5] * 1.5);
         }
     }
 
@@ -138,7 +128,8 @@ public class Status {
         if (0 < rank) {
             magnification = (rank + 2.0) / 2.0;
         }
-        this.real[i] = (int) Math.round(this.realSource[i] * magnification);
+        int realSourceValue = this.realSource[i];
+        this.real[i] = (int) Math.round(realSourceValue * magnification);
     }
 
     private int realCalculationHP(int base, int effort) {
@@ -150,17 +141,10 @@ public class Status {
     }
 
     private void pokemonRealSet() {
-        int hp = realCalculationHP(this.base[0],this.effort.getH());
-        int a = realCalculationEtc(this.base[1],this.effort.getA());
-        int b = realCalculationEtc(this.base[2],this.effort.getB());
-        int c = realCalculationEtc(this.base[3],this.effort.getC());
-        int d = realCalculationEtc(this.base[4],this.effort.getD());
-        int s = realCalculationEtc(this.base[5],this.effort.getS());
-
-        int[] tempReal = new int[] {hp, a, b, c, d, s};
-        this.real = tempReal;
-        pokemonNatureCalculation(tempReal);
-        this.currentHP = new HP(hp);
+        int[] realTemp = effort.realCalculation(this.base);
+        this.real = realTemp;
+        pokemonNatureCalculation(realTemp);
+        this.currentHP = new HP(this.real[0]);
     }
 
     private void pokemonNatureCalculation(int[] tempReal) {
@@ -172,7 +156,7 @@ public class Status {
         }
     }
 
-    public void damageCalculation(double realAttack, int defense, int damage, double magnification, String type) {
+    public void damageCalculation(double power, int defense, double magnification, String type) {
         int realDefense = real[defense];
         double vitals = 1.0;
         if (isVitals()) {
@@ -180,13 +164,13 @@ public class Status {
             realDefense = realSource[defense];
             BattleLog.vitals();
         }
-        double a = Math.floor(50 * 0.4 + 2);
-        double b = Math.floor(a * damage * realAttack / realDefense);
-        double c = Math.floor((b / 50.0) + 2);
-        double d = fiveOutOverFiveIn(c * vitals);
+        double a = Math.floor(power / realDefense);
+        double c = Math.floor((a / 50.0) + 2);
+        double d = CalculationUtility.fiveOutOverFiveIn(c * vitals);
         int finalDamage = (int) Math.floor(d * randomNumber() * magnification);
         this.currentHP.pruneHP(finalDamage);
     }
+
 
     private double randomNumber() {
         Random random = new Random();
@@ -200,12 +184,6 @@ public class Status {
         return randomNumber == 0;
     }
 
-    private int fiveOutOverFiveIn(double i) {
-        BigDecimal bigDecimal = new BigDecimal(String.valueOf(i));
-        BigDecimal resBD = bigDecimal.setScale(0, RoundingMode.HALF_DOWN);
-        return (int) resBD.doubleValue();
-    }
-
     public void constantDamage(int i) {
         this.currentHP.pruneHP(i);
     }
@@ -213,6 +191,10 @@ public class Status {
     public void getPAR() {
         parCheck = true;
         real[5] = (int) Math.round(this.real[5] * 0.5);
+    }
+
+    public boolean isParCheck() {
+        return parCheck;
     }
 
     public int getCurrentHP() {
@@ -225,5 +207,9 @@ public class Status {
 
     public boolean isDead() {
         return currentHP.getCurrentHP() == 0;
+    }
+
+    public boolean isOneThird() {
+        return this.currentHP.isOneThird();
     }
 }

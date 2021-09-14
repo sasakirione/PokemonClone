@@ -1,6 +1,7 @@
 package com.sasakirione.test.pokemon.clone.object;
 
 import com.sasakirione.main.pokemon.clone.data.PokemonDataGet;
+import com.sasakirione.main.pokemon.clone.data.PokemonDataGetInterface;
 import com.sasakirione.main.pokemon.clone.exception.EvArgumentException;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 import com.sasakirione.main.pokemon.clone.object.Pokemon;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.*;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -24,6 +24,8 @@ public class PokemonTest {
     Pokemon polteageist;
     Pokemon decidueye;
     Pokemon tapuLele;
+    Pokemon primarina;
+    PokemonDataGetInterface pokemonDataGet;
 
     int[] cs = new int[]{0, 0, 0, 252, 0, 252};
     int[] as = new int[]{0, 252, 0, 0, 0, 252};
@@ -32,17 +34,19 @@ public class PokemonTest {
     public void before() {
         regieleki = new Pokemon("レジエレキ", this.cs, "なし" , "おくびょう", "トランジスタ");
         regieleki_megane = new Pokemon("レジエレキ", this.cs, "こだわりメガネ" , "おくびょう", "トランジスタ");
-        zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう", "せいでんき");
-        greninja = new Pokemon("ゲッコウガ", new int[]{252, 0, 0, 0, 252 , 0}, "こだわりスカーフ" , "おくびょう", "へんげんじざい");
         polteageist = new Pokemon("ポットデス", this.cs, "こだわってないスカーフ", "おくびょう", "のろわれボディ");
-        decidueye = new Pokemon("ジュナイパー", new int[]{0, 252, 0, 0, 0, 252}, "なし", "ようき", "しんりょく");
-        tapuLele = new Pokemon("カプ・テテフ", this.cs, "なし", "おくびょう", "サイコメーカー");
+        pokemonDataGet = new PokemonDataGet();
+        zapdos = pokemonDataGet.getObjectByID(145, this.cs, 1, "なし", "おくびょう");
+        greninja = pokemonDataGet.getObjectByID(658, new int[]{252, 0, 0, 0, 252 , 0}, 3, "なし", "おくびょう");
+        decidueye = pokemonDataGet.getObjectByID(724, this.as, 1, "なし", "ようき");
+        tapuLele = pokemonDataGet.getObjectByID(786, this.cs, 1, "なし", "おくびょう");
+        primarina = pokemonDataGet.getObjectByID(730, this.cs, 1, "なし", "いじっぱり");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
     @RepeatedTest(100)
     public void test005() {
-        PokemonMove a = regieleki.getDamage("サンダープリズン");
+        PokemonMove a = regieleki.getDamage2("サンダープリズン");
         zapdos.takeDamage(a);
         Assertions.assertTrue(zapdos.getCurrentHP() < 73);
     }
@@ -72,7 +76,7 @@ public class PokemonTest {
     @DisplayName("タイプ相性を実装する、レジエレキでゲッコウガを")
     @RepeatedTest(100)
     public void test009() {
-        PokemonMove a = regieleki.getDamage("サンダープリズン");
+        PokemonMove a = regieleki.getDamage2("サンダープリズン");
         greninja.takeDamage(a);
         Assertions.assertTrue(greninja.getCurrentHP() < 12);
         Assertions.assertFalse(greninja.getCurrentHP() < 0);
@@ -91,20 +95,21 @@ public class PokemonTest {
     @RepeatedTest(100)
     public void test011() {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
-        PokemonMove a = regieleki.getDamage("サンダープリズン");
+        PokemonMove a = regieleki.getDamage2("サンダープリズン");
         PokemonMove b = zapdos.getDamage("ぼうふう");
-        System.out.println(stadium.forwardTurn(a,b));
+        stadium.forwardTurn(a,b);
         stadium.forwardTurn(a, b);
-        Assertions.assertEquals("おわりだよ", stadium.forwardTurn(a, b));
+        stadium.forwardTurn(a, b);
+        Assertions.assertTrue(stadium.getEndFlag());
     }
 
     @Test
     @DisplayName("メッセージ機能")
     public void test012() {
         PokemonStadium stadium = new PokemonStadium(regieleki, greninja);
-        PokemonMove a = regieleki.getDamage("サンダープリズン");
+        PokemonMove a = regieleki.getDamage2("サンダープリズン");
         PokemonMove b = greninja.getDamage("ハイドロポンプ");
-        System.out.println(stadium.forwardTurn(a,b));
+        stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
         Assertions.assertEquals("こうかばつぐんだ！", BattleLog.getLog(3));
     }
@@ -113,7 +118,7 @@ public class PokemonTest {
     @RepeatedTest(100)
     public void test013() {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
-        PokemonMove a = regieleki_megane.getDamage("サンダープリズン");
+        PokemonMove a = regieleki_megane.getDamage2("サンダープリズン");
         PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
@@ -123,7 +128,7 @@ public class PokemonTest {
     @Test
     @DisplayName("こだわりメガネを実装_こだわり")
     public void test014() {
-        PokemonMove a1 = regieleki_megane.getDamage("サンダープリズン");
+        PokemonMove a1 = regieleki_megane.getDamage2("サンダープリズン");
         assertThrows(IllegalArgumentException.class, () -> {
             PokemonMove a2 = regieleki_megane.getDamage("10まんボルト");
         });
@@ -132,7 +137,6 @@ public class PokemonTest {
     @DisplayName("タイプ不一致技を設定")
     @RepeatedTest(100)
     public void test015() {
-        zapdos = new Pokemon("サンダー", this.cs, "なし" , "おくびょう", "せいでんき");
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
         PokemonMove a = regieleki.getDamage("げんしのちから");
         PokemonMove b = zapdos.getDamage("ぼうふう");
@@ -145,7 +149,7 @@ public class PokemonTest {
     @DisplayName("デモ用")
     public void test016() {
         PokemonStadium stadium = new PokemonStadium(regieleki, zapdos);
-        PokemonMove a = regieleki_megane.getDamage("サンダープリズン");
+        PokemonMove a = regieleki_megane.getDamage2("サンダープリズン");
         PokemonMove b = zapdos.getDamage("ぼうふう");
         stadium.forwardTurn(a, b);
         stadium.forwardTurn(a, b);
@@ -159,7 +163,7 @@ public class PokemonTest {
                 "みず", "フェアリー", "うるおいボディ");
         PokemonStadium stadium = new PokemonStadium(nanao, regieleki);
         PokemonMove a = nanao.getDamage("ハイドロポンプ");
-        PokemonMove b = regieleki.getDamage("サンダープリズン");
+        PokemonMove b = regieleki.getDamage2("サンダープリズン");
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
         Assertions.assertEquals("Aは 七尾百合子 を繰り出した！", BattleLog.getLog(0));
@@ -169,8 +173,8 @@ public class PokemonTest {
     @DisplayName("ポットデス　からをやぶる")
     public void test018() {
         PokemonStadium stadium = new PokemonStadium(polteageist, regieleki);
-        PokemonMove a = polteageist.getDamage("からをやぶる");
-        PokemonMove b = regieleki.getDamage("サンダープリズン");
+        PokemonMove a = polteageist.getDamage2("からをやぶる");
+        PokemonMove b = regieleki.getDamage2("サンダープリズン");
         PokemonMove a2 = polteageist.getDamage("シャドーボール");
         stadium.forwardTurn(a, b);
         stadium.forwardTurn(a2, b);
@@ -183,7 +187,7 @@ public class PokemonTest {
     @DisplayName("状態異常を実装する、マヒ、素早さだけ")
     public void test019() {
         PokemonStadium stadium = new PokemonStadium(zapdos, greninja);
-        PokemonMove a = zapdos.getDamage("でんじは");
+        PokemonMove a = zapdos.getDamage2("でんじは");
         PokemonMove b = greninja.getDamage("ハイドロポンプ");
         stadium.forwardTurn(a, b);
         PokemonMove a2 = zapdos.getDamage("ぼうふう");
@@ -209,7 +213,7 @@ public class PokemonTest {
         PokemonStadium stadium = new PokemonStadium(decidueye, tapuLele);
         PokemonMove a = decidueye.getDamage("かげうち");
         PokemonMove b = tapuLele.getDamage("サイコキネシス");
-        PokemonMove c = tapuLele.getDamage("めいそう");
+        PokemonMove c = tapuLele.getDamage2("めいそう");
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
         Assertions.assertEquals("カプ・テテフは サイコフィールドに 守られている！", BattleLog.getLog(5));
@@ -220,32 +224,56 @@ public class PokemonTest {
     public void test022() {
         PokemonStadium stadium = new PokemonStadium(decidueye, tapuLele);
         PokemonMove a = decidueye.getDamage("かげうち");
-        PokemonMove c = tapuLele.getDamage("めいそう");
+        PokemonMove c = tapuLele.getDamage2("めいそう");
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
+        stadium.forwardTurn(a,c);
         PokemonMove b = tapuLele.getDamage("サイコキネシス");
-        stadium.forwardTurn(a,c);
-        stadium.forwardTurn(a,c);
-        stadium.forwardTurn(a,c);
-        stadium.forwardTurn(a,c);
-        stadium.forwardTurn(a,c);
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
-    }
-
-    @Test
-    @DisplayName("ポケモンのデータを取得する")
-    public void test023() {
-        try {
-            Assertions.assertEquals("マーシャドー", PokemonDataGet.getNameByID(802));
-        } catch (FileNotFoundException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
     @DisplayName("ポケモンのデータを取得してポケモンインスタンスを作る")
     public void test024() {
         Pokemon katana;
-        katana = PokemonDataGet.getObjectByID(798, as, 1, "こだわりハチマキ", "いじっぱり");
+        katana = pokemonDataGet.getObjectByID(798, as, 1, "こだわりハチマキ", "いじっぱり");
         Assertions.assertEquals("カミツルギ", katana.getName());
     }
+
+    @Test
+    @DisplayName("技データを取得して技を出す")
+    public void test025() {
+        Pokemon katana = pokemonDataGet.getObjectByID(798, as, 1, "こだわりハチマキ", "いじっぱり");
+        PokemonMove sword = katana.getDamage("せいなるつるぎ");
+        Assertions.assertEquals("かくとう", sword.getMoveType());
+    }
+
+    @Test
+    @DisplayName("リベロ系の実装")
+    public void test026() {
+        PokemonMove coolingbeam = greninja.getDamage("れいとうビーム");
+        PokemonMove b = zapdos.getDamage("ぼうふう");
+        PokemonStadium stadium = new PokemonStadium(greninja, zapdos);
+        stadium.forwardTurn(coolingbeam, b);
+        BattleLog.getLogAll();
+        Assertions.assertTrue(greninja.getType().isTypeMatch("こおり"));
+    }
+    
+    @DisplayName("げきりゅう")
+    @RepeatedTest(100)
+    public void test027() {
+        PokemonMove a = primarina.getDamage("なみのり");
+        Pokemon tapuLele2 = pokemonDataGet.getObjectByID(786, this.cs, 1, "こだわりメガネ", "おくびょう");
+        PokemonMove b = tapuLele2.getDamage("サイコキネシス");
+        PokemonStadium stadium = new PokemonStadium(primarina, tapuLele2);
+        stadium.forwardTurn(a,b);
+        BattleLog.getLogAll();
+        Assertions.assertTrue(tapuLele2.getCurrentHP() < 44);
+    }
+
+
+
 }

@@ -1,8 +1,11 @@
 package com.sasakirione.main.pokemon.clone.object;
 
+import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
+import com.sasakirione.main.pokemon.clone.object.value.Ability;
 import com.sasakirione.main.pokemon.clone.object.value.MoveClass;
 import com.sasakirione.main.pokemon.clone.object.value.Status;
 import com.sasakirione.main.pokemon.clone.object.value.Type;
+import com.sasakirione.main.pokemon.clone.utility.CalculationUtility;
 
 /**
  * ポケモンのわざを担当するクラス
@@ -19,9 +22,22 @@ public class PokemonMove {
     /** 技のタイプ */
     private String moveType;
     /** 技を出すポケモンのタイプ */
-    private final Type types;
+    private Type types;
     /** 技の優先度 */
-    private int priority;
+    private final int priority;
+
+    private final Ability ability;
+
+    public PokemonMove(String name, Status status, Type type, MoveClass moveClass, int moveDamage, String moveType, int priority, Ability ability) {
+        this.moveName = name;
+        this.moveClass = moveClass;
+        this.real = new int[]{status.getA(), status.getC()};
+        this.types = type;
+        this.priority = priority;
+        this.moveDamage = moveDamage;
+        this.moveType = moveType;
+        this.ability = ability;
+    }
 
     /**
      * コンストラクタ
@@ -30,37 +46,17 @@ public class PokemonMove {
      * @param status 攻撃側のステータス
      * @param type 攻撃側のタイプ
      */
-    public PokemonMove(String name, Status status, Type type) {
+    public PokemonMove(String name, Status status, Type type, Ability ability) {
         this.moveName = name;
         this.real = new int[]{status.getA(), status.getC()};
         this.types = type;
         this.priority = 0;
+        this.ability = ability;
 
         if (name.equals("サンダープリズン")) {
             this.moveClass = MoveClass.SPECIAL;
             this.moveDamage = 80;
-            this.moveDamage *= 1.5;
             this.moveType = "でんき";
-        }
-        if (name.equals("ぼうふう")) {
-            this.moveClass = MoveClass.SPECIAL;
-            this.moveDamage = 110;
-            this.moveType = "ひこう";
-        }
-        if (name.equals("ハイドロポンプ")) {
-            this.moveClass = MoveClass.SPECIAL;
-            this.moveDamage = 110;
-            this.moveType = "みず";
-        }
-        if (name.equals("げんしのちから")) {
-            this.moveClass = MoveClass.SPECIAL;
-            this.moveDamage = 60;
-            this.moveType = "いわ";
-        }
-        if (name.equals("シャドーボール")) {
-            this.moveClass = MoveClass.SPECIAL;
-            this.moveDamage = 80;
-            this.moveType = "ゴースト";
         }
         if (name.equals("からをやぶる")) {
             this.moveClass = MoveClass.SELF_CHANGE;
@@ -77,17 +73,6 @@ public class PokemonMove {
         if (name.equals("でんじは")) {
             this.moveClass = MoveClass.ENEMY_CHANGE;
             this.moveType = "でんき";
-        }
-        if (name.equals("かげうち")) {
-            this.moveClass = MoveClass.PHYSICS;
-            this.moveDamage = 40;
-            this.moveType = "ゴースト";
-            this.priority = 1;
-        }
-        if (name.equals("サイコキネシス")) {
-            this.moveClass = MoveClass.SPECIAL;
-            this.moveDamage = 90;
-            this.moveType = "エスパー";
         }
         if (name.equals("めいそう")) {
             this.moveClass = MoveClass.SELF_CHANGE;
@@ -112,15 +97,6 @@ public class PokemonMove {
      */
     public MoveClass getMoveClass() {
         return moveClass;
-    }
-
-    /**
-     * わざの威力を返す
-     * わざの威力を返します。
-     * @return わざの威力
-     */
-    public int getMoveDamage() {
-        return moveDamage;
     }
 
     /**
@@ -225,7 +201,18 @@ public class PokemonMove {
      */
     private void fieldBoost() {
         if (this.moveClass.equals(MoveClass.PHYSICS) || this.moveClass.equals(MoveClass.SPECIAL)) {
-            this.moveDamage = (int) Math.round(this.moveDamage * (5325.0 / 4096.0));
+            this.moveDamage = (int) Math.round(this.moveDamage * CalculationConst.ONE_POINT_THREE);
         }
+    }
+
+
+    public double getPower(Ability ability) {
+        double a = Math.floor(50 * 0.4 + 2);
+        double b = a * moveDamage * getRealAttack();
+        return CalculationUtility.fiveOutOverFiveIn(b * this.ability.powerBoost(this));
+    }
+
+    public void libero() {
+        types = new Type(moveType);
     }
 }

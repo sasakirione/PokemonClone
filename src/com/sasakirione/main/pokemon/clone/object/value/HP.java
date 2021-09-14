@@ -34,4 +34,11 @@ public class HP {
     public int getCurrentHP() {
         return currentHP;
     }
+
+    public boolean isOneThird() {
+        if(currentHP == 0) {
+            return false;
+        }
+        return (3 < (maxHP / currentHP));
+    }
 }
