@@ -40,7 +40,7 @@ public class PokemonTest {
         greninja = pokemonDataGet.getObjectByID(658, new int[]{252, 0, 0, 0, 252 , 0}, 3, "なし", "おくびょう");
         decidueye = pokemonDataGet.getObjectByID(724, this.as, 1, "なし", "ようき");
         tapuLele = pokemonDataGet.getObjectByID(786, this.cs, 1, "なし", "おくびょう");
-        primarina = pokemonDataGet.getObjectByID(730, this.cs, 1, "なし", "いじっぱり");
+        primarina = pokemonDataGet.getObjectByID(730, this.cs, 1, "なし", "ひかえめ");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
@@ -261,8 +261,8 @@ public class PokemonTest {
         BattleLog.getLogAll();
         Assertions.assertTrue(greninja.getType().isTypeMatch("こおり"));
     }
-    
-    @DisplayName("げきりゅう")
+
+    @DisplayName("げきりゅう系の実装")
     @RepeatedTest(100)
     public void test027() {
         PokemonMove a = primarina.getDamage("なみのり");
@@ -271,7 +271,7 @@ public class PokemonTest {
         PokemonStadium stadium = new PokemonStadium(primarina, tapuLele2);
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
-        Assertions.assertTrue(tapuLele2.getCurrentHP() < 44);
+        Assertions.assertTrue((tapuLele2.getCurrentHP() < 47) || primarina.isDead());
     }
 
 

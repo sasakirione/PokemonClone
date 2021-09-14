@@ -147,19 +147,24 @@ public class PokemonStadium {
         if (a.isSelfChangeMove()) {
            this.pokemonInBattleA.takeChange(a);
         } else {
-            if (pokemonInBattleA.getAbility().isLibero()) {
-                if (!pokemonInBattleA.getType().isTypeMatch(a.getMoveType())) {
-                    BattleLog.ability(pokemonInBattleA.getName(), pokemonInBattleA.getAbility().getName());
-                    pokemonInBattleA.changeType(a.getMoveType());
-                    a.libero();
-                }
-            }
+            liberoDisposal(pokemonInBattleA, a);
             this.pokemonInBattleB.takeDamage(a);
             BattleLog.hp(pokemonInBattleB);
         }
         if (pokemonInBattleB.isDead()) {
             BattleLog.death(pokemonInBattleB);
             this.matchEndFlag = true;
+        }
+    }
+
+    private void liberoDisposal(Pokemon pokemon, PokemonMove move) {
+        if (!pokemon.getAbility().isLibero()) {
+            return;
+        }
+        if (!pokemon.getType().isTypeMatch(move.getMoveType())) {
+            BattleLog.ability(pokemon.getName(), pokemon.getAbility().getName());
+            pokemon.changeType(move.getMoveType());
+            move.libero();
         }
     }
 
@@ -181,13 +186,7 @@ public class PokemonStadium {
         if (b.isSelfChangeMove()) {
             this.pokemonInBattleB.takeChange(b);
         } else {
-            if (pokemonInBattleB.getAbility().isLibero()) {
-                if (!pokemonInBattleB.getType().isTypeMatch(b.getMoveType())) {
-                    BattleLog.ability(pokemonInBattleB.getName(), pokemonInBattleB.getAbility().getName());
-                    pokemonInBattleB.changeType(b.getMoveType());
-                    b.libero();
-                }
-            }
+            liberoDisposal(pokemonInBattleB, b);
             this.pokemonInBattleA.takeDamage(b);
             BattleLog.hp(pokemonInBattleA);
         }
