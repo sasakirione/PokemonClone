@@ -295,6 +295,19 @@ public class PokemonTest {
         BattleLog.getLogAll();
     }
 
-
+    @Test
+    @DisplayName("ポケモンの交代")
+    public void test029() {
+        PokemonStadium stadium = new PokemonStadium(decidueye, tapuLele);
+        PokemonMove a = decidueye.getDamage("かげうち");
+        PokemonMove c = tapuLele.getDamage2("めいそう");
+        stadium.forwardTurn(a, c);
+        stadium.getChangeB(zapdos, a);
+        PokemonMove b = tapuLele.getDamage("サイコキネシス");
+        BattleLog.getLogAll();
+        Assertions.assertEquals("サンダー", stadium.getPokemonName(1));
+        int power = 540540;
+        Assertions.assertNotEquals(power, ((int) b.getPower()));
+    }
 
 }

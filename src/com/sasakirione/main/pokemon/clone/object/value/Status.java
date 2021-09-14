@@ -212,4 +212,9 @@ public class Status {
     public boolean isOneThird() {
         return this.currentHP.isOneThird();
     }
+
+    public void rankReset() {
+        this.rank = new int[] {0, 0, 0, 0, 0, 0};
+        pokemonRealSet();
+    }
 }

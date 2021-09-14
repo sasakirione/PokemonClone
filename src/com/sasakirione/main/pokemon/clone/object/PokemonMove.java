@@ -211,7 +211,7 @@ public class PokemonMove {
         }
     }
 
-    public double getPower(Ability ability) {
+    public double getPower() {
         double a = Math.floor(50 * 0.4 + 2);
         double b = a * moveDamage * getRealAttack();
         return CalculationUtility.fiveOutOverFiveIn(b * this.ability.powerBoost(this));

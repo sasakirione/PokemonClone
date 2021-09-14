@@ -123,4 +123,9 @@ public class BattleLog {
     public static void moveMiss() {
         add("しかし うまく 決まらなかった!!");
     }
+
+    public static void change(String side, String name, String name1) {
+        add(side + "は " + name + "を 引っこめた！");
+        add(side + "は " + name1 + " をくりだした！");
+    }
 }

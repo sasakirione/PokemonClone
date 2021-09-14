@@ -8,9 +8,9 @@ import com.sasakirione.main.pokemon.clone.object.value.Field;
  */
 public class PokemonStadium {
     /** Aサイドのバトル場に出てるポケモン */
-    private final Pokemon pokemonInBattleA;
+    private Pokemon pokemonInBattleA;
     /** Bサイドのバトル場に出てるポケモン */
-    private final Pokemon pokemonInBattleB;
+    private Pokemon pokemonInBattleB;
     /** 試合が終了してるかの判定 */
     private boolean matchEndFlag = false;
     /** フィールド */
@@ -234,5 +234,20 @@ public class PokemonStadium {
 
     public void setTestMode(boolean testMode) {
         this.testMode = testMode;
+    }
+
+    public String getPokemonName(int a) {
+        if (a == 0) {
+            return pokemonInBattleA.getName();
+        } else {
+            return pokemonInBattleB.getName();
+        }
+    }
+
+    public void getChangeB(Pokemon pokemon, PokemonMove a) {
+        pokemonInBattleB.changePokemon();
+        BattleLog.change("B", pokemonInBattleB.getName(), pokemon.getName());
+        pokemonInBattleB = pokemon;
+        attackSideA(a);
     }
 }

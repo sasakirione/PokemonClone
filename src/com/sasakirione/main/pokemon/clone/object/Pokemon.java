@@ -22,6 +22,8 @@ public class Pokemon {
      * ポケモンのタイプ
      */
     private Type type;
+
+    private Type originalType;
     /**
      * ポケモンの特性
      */
@@ -75,6 +77,7 @@ public class Pokemon {
     public Pokemon(String name, int[] effort, int[] base, String good, String nature, String type1, String type2, String ability) {
         this.name = name;
         this.type = new Type(type1, type2);
+        this.originalType = new Type(type1, type2);
         this.status = new Status(base, new Effort(effort), good, new Nature(nature));
         this.ability = new Ability(ability);
         this.good = new Good(good);
@@ -175,7 +178,7 @@ public class Pokemon {
             this.status.constantDamage(50);
             return;
         }
-        double power = a.getPower(this.ability);
+        double power = a.getPower();
         int defenseChoice;
         double typeMagnification = this.type.getTypeMagnification(a.getMoveType());
         double magnification = a.getMagnification() * typeMagnification;
@@ -318,4 +321,10 @@ public class Pokemon {
         BattleLog.changeType(this.name, moveType);
     }
 
+    public void changePokemon() {
+        if (ability.isLibero()) {
+           type = originalType.copy();
+        }
+        status.rankReset();
+    }
 }
