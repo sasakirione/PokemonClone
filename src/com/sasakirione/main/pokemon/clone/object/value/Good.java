@@ -1,5 +1,6 @@
 package com.sasakirione.main.pokemon.clone.object.value;
 
+import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
 import com.sasakirione.main.pokemon.clone.constant.GoodConst;
 
 public class Good {
@@ -17,4 +18,18 @@ public class Good {
         return (this.goodName.equals(GoodConst.CHOICE_SCARF) || this.goodName.equals(GoodConst.NOT_CHOICE_SCARF));
     }
 
+    public double powerBoost(MoveClass moveClass) {
+        if ((this.goodName.equals(GoodConst.CHOICE_BAND) && moveClass.equals(MoveClass.PHYSICS)) ||
+                (this.goodName.equals(GoodConst.CHOICE_SPECS) && moveClass.equals(MoveClass.SPECIAL))) {
+            return CalculationConst.ONE_POINT_FIVE;
+        }
+        if (this.goodName.equals(GoodConst.LIFE_ORB) && (moveClass.equals(MoveClass.SPECIAL) || moveClass.equals(MoveClass.PHYSICS))) {
+            return CalculationConst.ONE_POINT_THREE_ORB;
+        }
+        return CalculationConst.ONE;
+    }
+
+    public boolean isDamageOneEighth() {
+        return this.goodName.equals(GoodConst.LIFE_ORB);
+    }
 }

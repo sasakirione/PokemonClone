@@ -20,6 +20,7 @@ public class PokemonTest {
     Pokemon regieleki;
     Pokemon regieleki_megane;
     Pokemon zapdos;
+    Pokemon zapdos_tama;
     Pokemon greninja;
     Pokemon polteageist;
     Pokemon decidueye;
@@ -37,6 +38,7 @@ public class PokemonTest {
         polteageist = new Pokemon("ポットデス", this.cs, "こだわってないスカーフ", "おくびょう", "のろわれボディ");
         pokemonDataGet = new PokemonDataGet();
         zapdos = pokemonDataGet.getObjectByID(145, this.cs, 1, "なし", "おくびょう");
+        zapdos_tama = pokemonDataGet.getObjectByID(145, this.cs, 1, "いのちのたま", "おくびょう");
         greninja = pokemonDataGet.getObjectByID(658, new int[]{252, 0, 0, 0, 252 , 0}, 3, "なし", "おくびょう");
         decidueye = pokemonDataGet.getObjectByID(724, this.as, 1, "なし", "ようき");
         tapuLele = pokemonDataGet.getObjectByID(786, this.cs, 1, "なし", "おくびょう");
@@ -308,6 +310,16 @@ public class PokemonTest {
         Assertions.assertEquals("サンダー", stadium.getPokemonName(1));
         int power = 540540;
         Assertions.assertNotEquals(power, ((int) b.getPower()));
+    }
+
+    @Test
+    @DisplayName("いのちのたまの実装")
+    public void test030() {
+        PokemonStadium stadium = new PokemonStadium(tapuLele, zapdos_tama);
+        PokemonMove a = tapuLele.getDamage("サイコキネシス");
+        PokemonMove b = zapdos_tama.getDamage("ほうでん");
+        stadium.forwardTurn(a,b);
+        BattleLog.getLogAll();
     }
 
 }

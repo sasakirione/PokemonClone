@@ -245,9 +245,31 @@ public class PokemonStadium {
     }
 
     public void getChangeB(Pokemon pokemon, PokemonMove a) {
-        pokemonInBattleB.changePokemon();
-        BattleLog.change("B", pokemonInBattleB.getName(), pokemon.getName());
-        pokemonInBattleB = pokemon;
-        attackSideA(a);
+        getChange(pokemonInBattleB, pokemon, a, 1);
+    }
+
+    public void getChangeA(Pokemon pokemon, PokemonMove b) {
+        getChange(pokemonInBattleA, pokemon, b, 0);
+    }
+
+    private void getChange(Pokemon pokemonFrom, Pokemon pokemonTo, PokemonMove enemyMove, int side) {
+        pokemonFrom.changePokemon();
+        String strSide = getStrSide(side);
+        BattleLog.change(strSide, pokemonFrom.getName(), pokemonTo.getName());
+        if (side == 0) {
+            pokemonInBattleA = pokemonTo;
+            attackSideB(enemyMove);
+        } else {
+            pokemonInBattleB = pokemonTo;
+            attackSideA(enemyMove);
+        }
+    }
+
+    private String getStrSide(int side) {
+        return switch (side) {
+            case 0 -> "A";
+            case 1 -> "B";
+            default -> "?";
+        };
     }
 }

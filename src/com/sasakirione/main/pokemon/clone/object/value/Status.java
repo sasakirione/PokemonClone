@@ -8,6 +8,7 @@ import java.math.RoundingMode;
 import java.util.Random;
 
 public class Status {
+    private String pokemonName;
     private HP currentHP;
     private int[] real;
     private int[] rank;
@@ -19,12 +20,13 @@ public class Status {
     private boolean parCheck = false;
     private boolean brnCheck = false;
 
-    public Status(int[] base, Effort effort, String good, Nature nature) {
+    public Status(int[] base, Effort effort, String good, Nature nature, String name) {
         this.rank = new int[] {0, 0, 0, 0, 0, 0};
         this.good = good;
         this.base = base;
         this.effort = effort;
         this.nature = nature;
+        this.pokemonName = name;
         pokemonRealSet();
         this.realSource = real.clone();
         setGood();
@@ -50,6 +52,9 @@ public class Status {
     }
 
     public int getA() {
+        if (brnCheck) {
+            return (int) Math.floor(real[1] * 0.5);
+        }
         return real[1];
     }
 
@@ -100,23 +105,6 @@ public class Status {
         }
         this.rank[item] = rank;
         rankCalculation(item);
-        goodCalculation(item);
-        ailmentCalculation(item);
-    }
-
-    private void ailmentCalculation(int item) {
-        if (item == 1 && brnCheck) {
-            real[1] = (int) Math.round(this.real[1] * 0.5);
-        }
-    }
-
-    private void goodCalculation(int i) {
-        if (this.good.equals("こだわりメガネ") && i == 3) {
-            this.real[3] = (int) Math.round(real[3] * 1.5);
-        }
-        if (this.good.equals("こだわりハチマキ") && i==1) {
-            this.real[1] = (int) Math.round(real[1] * 1.5);
-        }
     }
 
     private void rankCalculation(int i) {
@@ -216,5 +204,10 @@ public class Status {
     public void rankReset() {
         this.rank = new int[] {0, 0, 0, 0, 0, 0};
         pokemonRealSet();
+    }
+
+    public void damageOneEighth() {
+        this.currentHP.damageOneEighth();
+        BattleLog.tama(pokemonName);
     }
 }

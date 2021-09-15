@@ -78,7 +78,7 @@ public class Pokemon {
         this.name = name;
         this.type = new Type(type1, type2);
         this.originalType = new Type(type1, type2);
-        this.status = new Status(base, new Effort(effort), good, new Nature(nature));
+        this.status = new Status(base, new Effort(effort), good, new Nature(nature), this.getName());
         this.ability = new Ability(ability);
         this.good = new Good(good);
         pokemonDataGet = new PokemonDataGet();
@@ -95,7 +95,7 @@ public class Pokemon {
     }
 
     /**
-     * ポケモンのわざを出す
+     * ポケモンのわざを出す(データベースにない定義済みの技用)
      * ポケモンのわざを担当するクラスをインスタンス化して返します。
      *
      * @param name わざの名前
@@ -105,14 +105,21 @@ public class Pokemon {
         if (good.isChoice()) {
             choiceCheck(name);
         }
-        return new PokemonMove(name, this.status, this.type, this.ability);
+        return new PokemonMove(name, this.status, this.type, this.ability, this.good);
     }
 
+    /**
+     * ポケモンのわざを出す
+     * ポケモンのわざを担当するクラスをインスタンス化して返します。
+     *
+     * @param name わざの名前
+     * @return ポケモンのわざクラスのインスタンス
+     */
     public PokemonMove getDamage(String name) {
         if (good.isChoice()) {
             choiceCheck(name);
         }
-        return pokemonDataGet.getMoveByName(name, type, status, ability);
+        return pokemonDataGet.getMoveByName(name, type, status, ability, good);
     }
 
     /**
@@ -156,7 +163,7 @@ public class Pokemon {
             effort = new Effort(effortInt);
             this.type = new Type("ゴースト");
         }
-        this.status = new Status(base, effort, good, nature);
+        this.status = new Status(base, effort, good, nature, name);
     }
 
     /**
@@ -189,6 +196,7 @@ public class Pokemon {
             defenseChoice = 4;
         }
         this.status.damageCalculation(power, defenseChoice, magnification, a.getMoveType());
+        a.endDecision();
         BattleLog.typeMagnification(typeMagnification);
         remainingDamageDecision();
     }
@@ -196,30 +204,6 @@ public class Pokemon {
     private void remainingDamageDecision() {
         if (ability.isTorrent() && status.isOneThird()) {
             ability.abilityOn();
-        }
-    }
-
-    /**
-     * 変化技の処理をする
-     * 自分にかかった変化技の処理を行います。
-     *
-     * @param a 自分に向けられた変化技のインスタンス
-     */
-    public void takeChange(PokemonMove a) {
-        if (a.isMoveNameCheck("からをやぶる")) {
-            rankUp(1, 2);
-            rankUp(3, 2);
-            rankUp(5, 2);
-        }
-        if (a.isMoveNameCheck("かいでんぱ")) {
-            rankUp(3, -2);
-        }
-        if (a.isMoveNameCheck("でんじは")) {
-            getPAR();
-        }
-        if (a.isMoveNameCheck("めいそう")) {
-            rankUp(3, 1);
-            rankUp(4, 1);
         }
     }
 
@@ -326,5 +310,30 @@ public class Pokemon {
            type = originalType.copy();
         }
         status.rankReset();
+    }
+
+
+    /**
+     * 変化技の処理をする
+     * 自分にかかった変化技の処理を行います。
+     *
+     * @param a 自分に向けられた変化技のインスタンス
+     */
+    public void takeChange(PokemonMove a) {
+        if (a.isMoveNameCheck("からをやぶる")) {
+            rankUp(1, 2);
+            rankUp(3, 2);
+            rankUp(5, 2);
+        }
+        if (a.isMoveNameCheck("かいでんぱ")) {
+            rankUp(3, -2);
+        }
+        if (a.isMoveNameCheck("でんじは")) {
+            getPAR();
+        }
+        if (a.isMoveNameCheck("めいそう")) {
+            rankUp(3, 1);
+            rankUp(4, 1);
+        }
     }
 }

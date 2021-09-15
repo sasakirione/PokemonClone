@@ -128,4 +128,8 @@ public class BattleLog {
         add(side + "は " + name + "を 引っこめた！");
         add(side + "は " + name1 + " をくりだした！");
     }
+
+    public static void tama(String pokemonName) {
+        add(pokemonName + "は 命が 少し削られた！");
+    }
 }

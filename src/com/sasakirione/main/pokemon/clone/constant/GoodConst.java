@@ -7,5 +7,7 @@ public class GoodConst {
     public static final String CHOICE_BAND = "こだわりハチマキ";
     public static final String CHOICE_SPECS = "こだわりメガネ";
 
+    public static final String LIFE_ORB = "いのちのたま";
+
     public static final String NOT_CHOICE_SCARF = "こだわってないスカーフ";
 }
