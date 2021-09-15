@@ -2,6 +2,7 @@ package com.sasakirione.main.pokemon.clone.loggin;
 
 import com.sasakirione.main.pokemon.clone.object.Pokemon;
 import com.sasakirione.main.pokemon.clone.object.PokemonMove;
+import com.sasakirione.main.pokemon.clone.object.value.Ability;
 import com.sasakirione.main.pokemon.clone.object.value.Field;
 
 import java.util.ArrayList;
@@ -115,7 +116,20 @@ public class BattleLog {
         add(name + "は " + moveType +"タイプに なった！");
     }
 
-    public static void ability(String name, String ability) {
+    public static void ability(String name, Ability ability) {
         add(name + "の " + ability);
+    }
+
+    public static void moveMiss() {
+        add("しかし うまく 決まらなかった!!");
+    }
+
+    public static void change(String side, String name, String name1) {
+        add(side + "は " + name + "を 引っこめた！");
+        add(side + "は " + name1 + " をくりだした！");
+    }
+
+    public static void tama(String pokemonName) {
+        add(pokemonName + "は 命が 少し削られた！");
     }
 }

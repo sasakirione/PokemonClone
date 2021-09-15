@@ -8,13 +8,15 @@ import com.sasakirione.main.pokemon.clone.object.value.Field;
  */
 public class PokemonStadium {
     /** Aサイドのバトル場に出てるポケモン */
-    private final Pokemon pokemonInBattleA;
+    private Pokemon pokemonInBattleA;
     /** Bサイドのバトル場に出てるポケモン */
-    private final Pokemon pokemonInBattleB;
+    private Pokemon pokemonInBattleB;
     /** 試合が終了してるかの判定 */
     private boolean matchEndFlag = false;
     /** フィールド */
     private Field field;
+    /** テストモード(技が必中になります) */
+    private boolean testMode = false;
 
     /**
      * バトル場クラスのコンストラクタ
@@ -147,19 +149,24 @@ public class PokemonStadium {
         if (a.isSelfChangeMove()) {
            this.pokemonInBattleA.takeChange(a);
         } else {
-            if (pokemonInBattleA.getAbility().isLibero()) {
-                if (!pokemonInBattleA.getType().isTypeMatch(a.getMoveType())) {
-                    BattleLog.ability(pokemonInBattleA.getName(), pokemonInBattleA.getAbility().getName());
-                    pokemonInBattleA.changeType(a.getMoveType());
-                    a.libero();
-                }
-            }
-            this.pokemonInBattleB.takeDamage(a);
+            liberoDisposal(pokemonInBattleA, a);
+            this.pokemonInBattleB.takeDamage(a, testMode);
             BattleLog.hp(pokemonInBattleB);
         }
         if (pokemonInBattleB.isDead()) {
             BattleLog.death(pokemonInBattleB);
             this.matchEndFlag = true;
+        }
+    }
+
+    private void liberoDisposal(Pokemon pokemon, PokemonMove move) {
+        if (!pokemon.getAbility().isLibero()) {
+            return;
+        }
+        if (!pokemon.getType().isTypeMatch(move.getMoveType())) {
+            BattleLog.ability(pokemon.getName(), pokemon.getAbility());
+            pokemon.changeType(move.getMoveType());
+            move.libero();
         }
     }
 
@@ -181,14 +188,8 @@ public class PokemonStadium {
         if (b.isSelfChangeMove()) {
             this.pokemonInBattleB.takeChange(b);
         } else {
-            if (pokemonInBattleB.getAbility().isLibero()) {
-                if (!pokemonInBattleB.getType().isTypeMatch(b.getMoveType())) {
-                    BattleLog.ability(pokemonInBattleB.getName(), pokemonInBattleB.getAbility().getName());
-                    pokemonInBattleB.changeType(b.getMoveType());
-                    b.libero();
-                }
-            }
-            this.pokemonInBattleA.takeDamage(b);
+            liberoDisposal(pokemonInBattleB, b);
+            this.pokemonInBattleA.takeDamage(b, testMode);
             BattleLog.hp(pokemonInBattleA);
         }
         if (pokemonInBattleA.isDead()) {
@@ -229,5 +230,46 @@ public class PokemonStadium {
 
     public boolean getEndFlag() {
         return this.matchEndFlag;
+    }
+
+    public void setTestMode(boolean testMode) {
+        this.testMode = testMode;
+    }
+
+    public String getPokemonName(int a) {
+        if (a == 0) {
+            return pokemonInBattleA.getName();
+        } else {
+            return pokemonInBattleB.getName();
+        }
+    }
+
+    public void getChangeB(Pokemon pokemon, PokemonMove a) {
+        getChange(pokemonInBattleB, pokemon, a, 1);
+    }
+
+    public void getChangeA(Pokemon pokemon, PokemonMove b) {
+        getChange(pokemonInBattleA, pokemon, b, 0);
+    }
+
+    private void getChange(Pokemon pokemonFrom, Pokemon pokemonTo, PokemonMove enemyMove, int side) {
+        pokemonFrom.changePokemon();
+        String strSide = getStrSide(side);
+        BattleLog.change(strSide, pokemonFrom.getName(), pokemonTo.getName());
+        if (side == 0) {
+            pokemonInBattleA = pokemonTo;
+            attackSideB(enemyMove);
+        } else {
+            pokemonInBattleB = pokemonTo;
+            attackSideA(enemyMove);
+        }
+    }
+
+    private String getStrSide(int side) {
+        return switch (side) {
+            case 0 -> "A";
+            case 1 -> "B";
+            default -> "?";
+        };
     }
 }

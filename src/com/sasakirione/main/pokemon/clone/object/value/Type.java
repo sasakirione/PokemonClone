@@ -53,6 +53,10 @@ public class Type {
         types = new String[]{type1, type2, type3};
     }
 
+    private Type(String[] types) {
+        this.types = types;
+    }
+
     /**
      * タイプが存在するかの判定
      * 入力されたStringがタイプとして存在するならTrue、そうでないならFalseを返す。
@@ -108,4 +112,7 @@ public class Type {
     }
 
 
+    public Type copy() {
+        return new Type(this.types.clone());
+    }
 }

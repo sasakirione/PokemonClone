@@ -35,6 +35,9 @@ public class Ability {
     }
 
     public boolean isTorrent(String moveType) {
+        if (!abilityBool) {
+            return false;
+        }
         return (abilityName.equals(AbilityConst.TORRENT) && moveType.equals("みず")) || (abilityName.equals(AbilityConst.BLAZE) && moveType.equals("ほのお")) ||
                 (abilityName.equals(AbilityConst.OVER_GROW) && moveType.equals("くさ")) || (abilityName.equals(AbilityConst.SWARM) && moveType.equals("むし"));
     }
@@ -44,11 +47,15 @@ public class Ability {
                 (abilityName.equals(AbilityConst.OVER_GROW)) || (abilityName.equals(AbilityConst.SWARM));
     }
 
-    public void torrent() {
+    public void abilityOn() {
         this.abilityBool = true;
     }
 
     public String getName() {
         return this.abilityName;
+    }
+
+    public String toString() {
+        return getName();
     }
 }

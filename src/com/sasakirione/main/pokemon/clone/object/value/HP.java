@@ -1,5 +1,8 @@
 package com.sasakirione.main.pokemon.clone.object.value;
 
+import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
+import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
+
 public class HP {
     private final int maxHP;
     private int currentHP;
@@ -40,5 +43,10 @@ public class HP {
             return false;
         }
         return (3 < (maxHP / currentHP));
+    }
+
+    public void damageOneEighth() {
+        int oneEighth = (int) Math.floor(maxHP * CalculationConst.ONE_EIGHTH);
+        pruneHP(oneEighth);
     }
 }
