@@ -105,7 +105,7 @@ public class Pokemon {
         if (good.isChoice()) {
             choiceCheck(name);
         }
-        return new PokemonMove(name, this.status, this.type, this.ability, this.good);
+        return new PokemonMove(name, this);
     }
 
     /**
@@ -119,7 +119,7 @@ public class Pokemon {
         if (good.isChoice()) {
             choiceCheck(name);
         }
-        return pokemonDataGet.getMoveByName(name, type, status, ability, good);
+        return pokemonDataGet.getMoveByName(name, this);
     }
 
     /**
@@ -196,8 +196,9 @@ public class Pokemon {
             defenseChoice = 4;
         }
         this.status.damageCalculation(power, defenseChoice, magnification, a.getMoveType());
-        a.endDecision();
         BattleLog.typeMagnification(typeMagnification);
+        BattleLog.hp(this);
+        a.endDecision();
         remainingDamageDecision();
     }
 
@@ -310,6 +311,18 @@ public class Pokemon {
            type = originalType.copy();
         }
         status.rankReset();
+    }
+
+    public Good getGood() {
+        return this.good;
+    }
+
+    public void libero(Type type) {
+        this.type = type;
+    }
+
+    public Status getStatus() {
+        return this.status;
     }
 
 

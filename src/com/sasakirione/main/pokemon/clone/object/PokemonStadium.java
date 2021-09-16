@@ -151,7 +151,6 @@ public class PokemonStadium {
         } else {
             liberoDisposal(pokemonInBattleA, a);
             this.pokemonInBattleB.takeDamage(a, testMode);
-            BattleLog.hp(pokemonInBattleB);
         }
         if (pokemonInBattleB.isDead()) {
             BattleLog.death(pokemonInBattleB);
@@ -190,7 +189,6 @@ public class PokemonStadium {
         } else {
             liberoDisposal(pokemonInBattleB, b);
             this.pokemonInBattleA.takeDamage(b, testMode);
-            BattleLog.hp(pokemonInBattleA);
         }
         if (pokemonInBattleA.isDead()) {
             BattleLog.death(pokemonInBattleA);

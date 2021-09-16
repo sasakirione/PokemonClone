@@ -12,54 +12,40 @@ import java.util.Random;
 public class PokemonMove {
     /** 技の名前 */
     private final String moveName;
+    /** ポケモン */
+    private final Pokemon pokemon;
     /** 技の種類 */
     private MoveClass moveClass;
-    /** 攻撃・特攻の実数値 */
-    private final Status status;
     /** 技の威力 */
     private int moveDamage;
     /** 技のタイプ */
     private String moveType;
-    /** 技を出すポケモンのタイプ */
-    private Type types;
     /** 技の優先度 */
     private final int priority;
-    /** 技を出すポケモンの特性 */
-    private final Ability ability;
     /** 技の命中率 */
-    private int accuracy;
+    private final int accuracy;
 
-    private final Good good;
-
-    public PokemonMove(String name, Status status, Type type, Good good, MoveClass moveClass, int moveDamage, String moveType,
-                       int priority, Ability ability, int accuracy) {
+    public PokemonMove(String name, Pokemon pokemon, MoveClass moveClass, int moveDamage, String moveType,
+                       int priority, int accuracy) {
         this.moveName = name;
         this.moveClass = moveClass;
-        this.status = status;
-        this.types = type;
         this.priority = priority;
         this.moveDamage = moveDamage;
         this.moveType = moveType;
-        this.ability = ability;
         this.accuracy = accuracy;
-        this.good = good;
+        this.pokemon = pokemon;
     }
 
     /**
      * コンストラクタ
      * 技クラスのコンストラクタです。
      * @param name わざの名前
-     * @param status 攻撃側のステータス
-     * @param type 攻撃側のタイプ
      */
-    public PokemonMove(String name, Status status, Type type, Ability ability, Good good) {
+    public PokemonMove(String name, Pokemon pokemon) {
         this.moveName = name;
-        this.status = status;
-        this.types = type;
         this.priority = 0;
-        this.ability = ability;
         this.accuracy = 100;
-        this.good = good;
+        this.pokemon = pokemon;
 
         if (name.equals("サンダープリズン")) {
             this.moveClass = MoveClass.SPECIAL;
@@ -114,9 +100,9 @@ public class PokemonMove {
      */
     public int getRealAttack() {
         if (moveClass.equals(MoveClass.PHYSICS)) {
-            return status.getA();
+            return this.pokemon.getStatus().getA();
         } else {
-            return status.getC();
+            return this.pokemon.getStatus().getC();
         }
     }
 
@@ -126,7 +112,7 @@ public class PokemonMove {
      * @return タイプ一致わざの場合は1.5
      */
     public double getMagnification() {
-        if (types.isTypeMatch(moveType)) {
+        if (pokemon.getType().isTypeMatch(moveType)) {
             return (6144.0/4096.0);
         }
         return (1.0);
@@ -216,11 +202,11 @@ public class PokemonMove {
     public double getPower() {
         double a = Math.floor(50 * 0.4 + 2);
         double b = a * moveDamage * getRealAttack();
-        return CalculationUtility.fiveOutOverFiveIn(b * this.ability.powerBoost(this) * this.good.powerBoost(moveClass));
+        return CalculationUtility.fiveOutOverFiveIn(b * this.pokemon.getAbility().powerBoost(this) * this.pokemon.getGood().powerBoost(moveClass));
     }
 
     public void libero() {
-        types = new Type(moveType);
+        pokemon.libero(new Type(moveType));
     }
 
     public boolean isMoveHit() {
@@ -233,8 +219,8 @@ public class PokemonMove {
     }
 
     public void endDecision() {
-        if (this.good.isDamageOneEighth()) {
-            this.status.damageOneEighth();
+        if (this.pokemon.getGood().isDamageOneEighth()) {
+            this.pokemon.getStatus().damageOneEighth();
         }
     }
 }

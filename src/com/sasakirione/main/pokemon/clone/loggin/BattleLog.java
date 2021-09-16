@@ -4,6 +4,7 @@ import com.sasakirione.main.pokemon.clone.object.Pokemon;
 import com.sasakirione.main.pokemon.clone.object.PokemonMove;
 import com.sasakirione.main.pokemon.clone.object.value.Ability;
 import com.sasakirione.main.pokemon.clone.object.value.Field;
+import com.sasakirione.main.pokemon.clone.object.value.Status;
 
 import java.util.ArrayList;
 
@@ -43,6 +44,8 @@ public class BattleLog {
     public static void hp(Pokemon pokemon) {
         add(pokemon.getCurrentHP2());
     }
+
+    public static void hp(Status status) { add(status.getCurrentHP2()); }
 
     public static void getLogAll() {
         battleLog.forEach(System.out::println);

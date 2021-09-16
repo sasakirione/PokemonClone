@@ -69,14 +69,14 @@ public class PokemonDataGet implements PokemonDataGetInterface {
     }
 
     @Override
-    public PokemonMove getMoveByName(String name, Type type, Status status, Ability ability, Good good) {
+    public PokemonMove getMoveByName(String name, Pokemon pokemon) {
         String[] move = pokemonMoveFileGet(name);
         int damage = Integer.parseInt(move[7]);
         MoveClass moveClass = getMoveClass(move[11],move[12]);
         int priority = Integer.parseInt(move[10]);
         String moveType = getMoveType(move[6]);
         int accuracy = Integer.parseInt(move[9]);
-        return new PokemonMove(name, status, type, good, moveClass, damage, moveType, priority, ability, accuracy);
+        return new PokemonMove(name, pokemon, moveClass, damage, moveType, priority, accuracy);
     }
 
     private String getMoveType(String type) {
