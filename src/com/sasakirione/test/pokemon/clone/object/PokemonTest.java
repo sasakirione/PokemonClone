@@ -35,10 +35,10 @@ public class PokemonTest {
 
     @BeforeEach
     public void before() {
-        regieleki = new Pokemon("レジエレキ", this.cs, "なし" , "おくびょう", "トランジスタ");
-        regieleki_megane = new Pokemon("レジエレキ", this.cs, "こだわりメガネ" , "おくびょう", "トランジスタ");
-        polteageist = new Pokemon("ポットデス", this.cs, "こだわってないスカーフ", "おくびょう", "のろわれボディ");
         pokemonDataGet = new PokemonDataGet();
+        regieleki = pokemonDataGet.getObjectByID(894, this.cs, 1,"なし" , "おくびょう");
+        regieleki_megane = pokemonDataGet.getObjectByID(894, this.cs, 1,"こだわりメガネ" , "おくびょう");
+        polteageist = pokemonDataGet.getObjectByID(855, this.cs,3, "こだわってないスカーフ", "おくびょう");
         zapdos = pokemonDataGet.getObjectByID(145, this.cs, 1, "なし", "おくびょう");
         zapdos_tama = pokemonDataGet.getObjectByID(145, this.cs, 1, "いのちのたま", "おくびょう");
         greninja = pokemonDataGet.getObjectByID(658, new int[]{252, 0, 0, 0, 252 , 0}, 3, "なし", "おくびょう");
