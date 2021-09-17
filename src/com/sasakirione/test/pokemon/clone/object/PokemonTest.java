@@ -26,10 +26,12 @@ public class PokemonTest {
     Pokemon decidueye;
     Pokemon tapuLele;
     Pokemon primarina;
+    Pokemon tapuFini;
     PokemonDataGetInterface pokemonDataGet;
 
     int[] cs = new int[]{0, 0, 0, 252, 0, 252};
     int[] as = new int[]{0, 252, 0, 0, 0, 252};
+    int[] hc = new int[]{252, 0, 0, 252, 0, 0};
 
     @BeforeEach
     public void before() {
@@ -43,6 +45,7 @@ public class PokemonTest {
         decidueye = pokemonDataGet.getObjectByID(724, this.as, 1, "なし", "ようき");
         tapuLele = pokemonDataGet.getObjectByID(786, this.cs, 1, "なし", "おくびょう");
         primarina = pokemonDataGet.getObjectByID(730, this.cs, 1, "なし", "ひかえめ");
+        tapuFini = pokemonDataGet.getObjectByID(788, this.hc, 1, "たべのこし", "ひかえめ");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
@@ -320,6 +323,17 @@ public class PokemonTest {
         PokemonMove b = zapdos_tama.getDamage("ほうでん");
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
+    }
+
+    @Test
+    @DisplayName("たべのこしの実装")
+    public void test031() {
+        PokemonStadium stadium = new PokemonStadium(tapuFini, primarina);
+        PokemonMove a = tapuFini.getDamage2("めいそう");
+        PokemonMove b = primarina.getDamage("サイコキネシス");
+        stadium.forwardTurn(a,b);
+        BattleLog.getLogAll();
+        Assertions.assertEquals("カプ・レヒレは たべのこしで 少し 回復",BattleLog.getLog(BattleLog.count()-2));
     }
 
 }

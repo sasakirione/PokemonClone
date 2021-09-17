@@ -17,6 +17,8 @@ public class BattleLog {
         battleLog = new ArrayList<>();
     }
 
+    public static int count() { return battleLog.size();}
+
     public static void startBattle(String tn, Pokemon pokemon) {
         add(tn + "は " + pokemon.getName() + " を繰り出した！");
     }
@@ -134,5 +136,9 @@ public class BattleLog {
 
     public static void tama(String pokemonName) {
         add(pokemonName + "は 命が 少し削られた！");
+    }
+
+    public static void LeftOvers(String pokemonName) {
+        add(pokemonName + "は たべのこしで 少し 回復");
     }
 }

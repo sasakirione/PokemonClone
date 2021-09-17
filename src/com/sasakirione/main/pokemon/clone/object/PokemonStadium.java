@@ -113,7 +113,8 @@ public class PokemonStadium {
     }
 
     private void turnEndDisposal() {
-
+        pokemonInBattleA.turnEndDisposal();
+        pokemonInBattleB.turnEndDisposal();
     }
 
     private void fieldWeatherBoost(PokemonMove a, PokemonMove b) {

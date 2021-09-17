@@ -32,4 +32,8 @@ public class Good {
     public boolean isDamageOneEighth() {
         return this.goodName.equals(GoodConst.LIFE_ORB);
     }
+
+    public boolean isLeftOvers() {
+        return this.goodName.equals(GoodConst.LEFT_OVERS);
+    }
 }

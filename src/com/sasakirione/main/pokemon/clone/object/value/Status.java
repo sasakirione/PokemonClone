@@ -211,4 +211,9 @@ public class Status {
         BattleLog.hp(this);
         BattleLog.tama(pokemonName);
     }
+
+    public void recoveryOnePointSixteen() {
+        this.currentHP.recoveryOnePointSixteen();
+        BattleLog.hp(this);
+    }
 }

@@ -49,4 +49,9 @@ public class HP {
         int oneEighth = (int) Math.floor(maxHP * CalculationConst.ONE_EIGHTH);
         pruneHP(oneEighth);
     }
+
+    public void recoveryOnePointSixteen() {
+        int calculationHP = (int) Math.floor(maxHP * CalculationConst.ONE_POINT_SIXTEEN + currentHP);
+        this.currentHP = Math.min(calculationHP , maxHP);
+    }
 }

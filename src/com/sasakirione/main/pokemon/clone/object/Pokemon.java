@@ -325,6 +325,13 @@ public class Pokemon {
         return this.status;
     }
 
+    public void turnEndDisposal() {
+        if (good.isLeftOvers()) {
+            BattleLog.LeftOvers(this.name);
+            this.status.recoveryOnePointSixteen();
+        }
+    }
+
 
     /**
      * 変化技の処理をする

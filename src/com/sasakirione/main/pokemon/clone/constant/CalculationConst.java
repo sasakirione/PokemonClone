@@ -13,5 +13,6 @@ public class CalculationConst {
     public static final double THREE_QUARTER = 3072.0 / 4096.0;
     public static final double ONE = 1.0;
     public static final double ONE_EIGHTH = 1.0 / 8.0;
+    public static final double ONE_POINT_SIXTEEN = 1.0 / 16.0;
 
 }
