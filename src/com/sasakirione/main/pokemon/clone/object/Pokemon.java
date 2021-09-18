@@ -13,17 +13,17 @@ public class Pokemon {
     /**
      * ポケモンの名前
      */
-    private String name;
+    private final String name;
     /**
      * ポケモンのステータス
      */
-    private Status status;
+    private final Status status;
     /**
      * ポケモンのタイプ
      */
     private Type type;
 
-    private Type originalType;
+    private final Type originalType;
     /**
      * ポケモンの特性
      */
