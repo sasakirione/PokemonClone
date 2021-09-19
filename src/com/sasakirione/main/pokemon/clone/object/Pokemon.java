@@ -167,8 +167,8 @@ public class Pokemon {
     }
 
     private void remainingDamageDecision() {
-        if (ability.isTorrent() && status.isOneThird()) {
-            ability.abilityOn();
+        if (status.isOneThird()) {
+            ability.isTorrent();
         }
     }
 

@@ -336,4 +336,10 @@ public class PokemonTest {
         Assertions.assertEquals("カプ・レヒレは たべのこしで 少し 回復",BattleLog.getLog(BattleLog.count()-2));
     }
 
+    @Test
+    @DisplayName("")
+    public void test032() {
+
+    }
+
 }
