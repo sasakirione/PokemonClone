@@ -4,6 +4,7 @@ import com.sasakirione.main.pokemon.clone.object.Pokemon;
 import com.sasakirione.main.pokemon.clone.object.PokemonMove;
 import com.sasakirione.main.pokemon.clone.object.value.Ability;
 import com.sasakirione.main.pokemon.clone.object.value.Field;
+import com.sasakirione.main.pokemon.clone.object.value.Status;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,8 @@ public class BattleLog {
     public static void start() {
         battleLog = new ArrayList<>();
     }
+
+    public static int count() { return battleLog.size();}
 
     public static void startBattle(String tn, Pokemon pokemon) {
         add(tn + "は " + pokemon.getName() + " を繰り出した！");
@@ -43,6 +46,8 @@ public class BattleLog {
     public static void hp(Pokemon pokemon) {
         add(pokemon.getCurrentHP2());
     }
+
+    public static void hp(Status status) { add(status.getCurrentHP2()); }
 
     public static void getLogAll() {
         battleLog.forEach(System.out::println);
@@ -131,5 +136,15 @@ public class BattleLog {
 
     public static void tama(String pokemonName) {
         add(pokemonName + "は 命が 少し削られた！");
+    }
+
+    public static void LeftOvers(String pokemonName) {
+        add(pokemonName + "は たべのこしで 少し 回復");
+    }
+
+    public static void bakekawa(String name) {
+        add(name + "の ばけのかわ");
+        add("ばけのかわが みがわりに なった！");
+        add(name + "の ばけのかわが はがれた！");
     }
 }

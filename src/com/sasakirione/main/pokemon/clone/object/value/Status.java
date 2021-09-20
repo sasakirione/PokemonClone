@@ -208,6 +208,11 @@ public class Status {
 
     public void damageOneEighth() {
         this.currentHP.damageOneEighth();
-        BattleLog.tama(pokemonName);
+        BattleLog.hp(this);
+    }
+
+    public void recoveryOnePointSixteen() {
+        this.currentHP.recoveryOnePointSixteen();
+        BattleLog.hp(this);
     }
 }

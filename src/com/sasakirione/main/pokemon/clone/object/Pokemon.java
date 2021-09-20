@@ -13,17 +13,20 @@ public class Pokemon {
     /**
      * ポケモンの名前
      */
-    private String name;
+    private final String name;
     /**
      * ポケモンのステータス
      */
-    private Status status;
+    private final Status status;
     /**
      * ポケモンのタイプ
      */
     private Type type;
 
-    private Type originalType;
+    /**
+     * ポケモンの初期タイプ
+     */
+    private final Type originalType;
     /**
      * ポケモンの特性
      */
@@ -46,22 +49,6 @@ public class Pokemon {
     PokemonDataGetInterface pokemonDataGet;
 
     /**
-     * コンストラクタ(登録されてるポケモン用)
-     * 登録されてるポケモンを使うためのコンストラクタ
-     *
-     * @param name    ポケモンの名前
-     * @param effort  ポケモンの努力値
-     * @param good    ポケモンの道具
-     * @param nature  ポケモンの性格
-     * @param ability ポケモンの特性
-     */
-    public Pokemon(String name, int[] effort, String good, String nature, String ability) {
-        setPokemon(name, effort, new Nature(nature), good, ability);
-        this.good = new Good(good);
-        pokemonDataGet = new PokemonDataGet();
-    }
-
-    /**
      * コンストラクタ(登録されてるポケモン以外用)
      * 登録されてるポケモン以外のポケモンやポケモンじゃないものを使うためのコンストラクタ
      *
@@ -76,12 +63,24 @@ public class Pokemon {
      */
     public Pokemon(String name, int[] effort, int[] base, String good, String nature, String type1, String type2, String ability) {
         this.name = name;
-        this.type = new Type(type1, type2);
-        this.originalType = new Type(type1, type2);
+        setType(type1, type2);
+        if (type2.equals("")) {
+            this.originalType = new Type(type1);
+        } else {
+            this.originalType = new Type(type1, type2);
+        }
         this.status = new Status(base, new Effort(effort), good, new Nature(nature), this.getName());
         this.ability = new Ability(ability);
         this.good = new Good(good);
         pokemonDataGet = new PokemonDataGet();
+    }
+
+    private void setType(String type1, String type2) {
+        if (type2.equals("")) {
+            this.type = new Type(type1);
+        } else {
+            this.type = new Type(type1, type2);
+        }
     }
 
     /**
@@ -105,7 +104,7 @@ public class Pokemon {
         if (good.isChoice()) {
             choiceCheck(name);
         }
-        return new PokemonMove(name, this.status, this.type, this.ability, this.good);
+        return new PokemonMove(name, this);
     }
 
     /**
@@ -119,7 +118,7 @@ public class Pokemon {
         if (good.isChoice()) {
             choiceCheck(name);
         }
-        return pokemonDataGet.getMoveByName(name, type, status, ability, good);
+        return pokemonDataGet.getMoveByName(name, this);
     }
 
     /**
@@ -139,34 +138,6 @@ public class Pokemon {
     }
 
     /**
-     * 登録されてるポケモンの設定
-     * 登録されてるポケモンの情報を呼び出してポケモンを登録します。
-     *
-     * @param name      ポケモンの名前
-     * @param effortInt ポケモンの努力値
-     * @param nature    ポケモンの性格
-     * @param good      ポケモンの道具
-     * @param ability   ポケモンの特性
-     */
-    private void setPokemon(String name, int[] effortInt, Nature nature, String good, String ability) {
-        this.name = name;
-        int[] base = null;
-        Effort effort = null;
-        this.ability = new Ability(ability);
-        if (name.equals("レジエレキ")) {
-            base = new int[]{80, 100, 50, 100, 50, 200};
-            effort = new Effort(effortInt);
-            this.type = new Type("でんき");
-        }
-        if (name.equals("ポットデス")) {
-            base = new int[]{60, 65, 65, 134, 114, 70};
-            effort = new Effort(effortInt);
-            this.type = new Type("ゴースト");
-        }
-        this.status = new Status(base, effort, good, nature, name);
-    }
-
-    /**
      * ポケモンのわざを受ける
      * ポケモンのわざクラスのインスタンスを受け取ってダメージ処理を行います。
      *
@@ -175,6 +146,12 @@ public class Pokemon {
     public void takeDamage(PokemonMove a, boolean isTest) {
         if (!a.isMoveHit() && !isTest) {
             BattleLog.moveMiss();
+            return;
+        }
+        if (ability.isBakekawa()) {
+            ability.abilityOn();
+            BattleLog.bakekawa(this.name);
+            status.damageOneEighth();
             return;
         }
         if (a.isEnemyChangeMove()) {
@@ -196,14 +173,19 @@ public class Pokemon {
             defenseChoice = 4;
         }
         this.status.damageCalculation(power, defenseChoice, magnification, a.getMoveType());
-        a.endDecision();
         BattleLog.typeMagnification(typeMagnification);
+        BattleLog.hp(this);
+        a.endDecision();
         remainingDamageDecision();
     }
 
+    /**
+     * 残りHP処理
+     * 残りHPによって発動する道具や特性に関する処理を行います。
+     */
     private void remainingDamageDecision() {
-        if (ability.isTorrent() && status.isOneThird()) {
-            ability.abilityOn();
+        if (status.isOneThird()) {
+            ability.doOneThird();
         }
     }
 
@@ -310,6 +292,25 @@ public class Pokemon {
            type = originalType.copy();
         }
         status.rankReset();
+    }
+
+    public Good getGood() {
+        return this.good;
+    }
+
+    public void libero(Type type) {
+        this.type = type;
+    }
+
+    public Status getStatus() {
+        return this.status;
+    }
+
+    public void turnEndDisposal() {
+        if (good.isLeftOvers()) {
+            BattleLog.LeftOvers(this.name);
+            this.status.recoveryOnePointSixteen();
+        }
     }
 
 

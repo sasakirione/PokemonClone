@@ -9,5 +9,7 @@ public class GoodConst {
 
     public static final String LIFE_ORB = "いのちのたま";
 
+    public static final String LEFT_OVERS = "たべのこし";
+
     public static final String NOT_CHOICE_SCARF = "こだわってないスカーフ";
 }

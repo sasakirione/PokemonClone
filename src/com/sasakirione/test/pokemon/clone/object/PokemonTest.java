@@ -26,23 +26,28 @@ public class PokemonTest {
     Pokemon decidueye;
     Pokemon tapuLele;
     Pokemon primarina;
+    Pokemon tapuFini;
+    Pokemon mimikyu;
     PokemonDataGetInterface pokemonDataGet;
 
     int[] cs = new int[]{0, 0, 0, 252, 0, 252};
     int[] as = new int[]{0, 252, 0, 0, 0, 252};
+    int[] hc = new int[]{252, 0, 0, 252, 0, 0};
 
     @BeforeEach
     public void before() {
-        regieleki = new Pokemon("レジエレキ", this.cs, "なし" , "おくびょう", "トランジスタ");
-        regieleki_megane = new Pokemon("レジエレキ", this.cs, "こだわりメガネ" , "おくびょう", "トランジスタ");
-        polteageist = new Pokemon("ポットデス", this.cs, "こだわってないスカーフ", "おくびょう", "のろわれボディ");
         pokemonDataGet = new PokemonDataGet();
+        regieleki = pokemonDataGet.getObjectByID(894, this.cs, 1,"なし" , "おくびょう");
+        regieleki_megane = pokemonDataGet.getObjectByID(894, this.cs, 1,"こだわりメガネ" , "おくびょう");
+        polteageist = pokemonDataGet.getObjectByID(855, this.cs,3, "こだわってないスカーフ", "おくびょう");
         zapdos = pokemonDataGet.getObjectByID(145, this.cs, 1, "なし", "おくびょう");
         zapdos_tama = pokemonDataGet.getObjectByID(145, this.cs, 1, "いのちのたま", "おくびょう");
         greninja = pokemonDataGet.getObjectByID(658, new int[]{252, 0, 0, 0, 252 , 0}, 3, "なし", "おくびょう");
         decidueye = pokemonDataGet.getObjectByID(724, this.as, 1, "なし", "ようき");
         tapuLele = pokemonDataGet.getObjectByID(786, this.cs, 1, "なし", "おくびょう");
         primarina = pokemonDataGet.getObjectByID(730, this.cs, 1, "なし", "ひかえめ");
+        tapuFini = pokemonDataGet.getObjectByID(788, this.hc, 1, "たべのこし", "ひかえめ");
+        mimikyu = pokemonDataGet.getObjectByID(778, this.as, 1, "いのちのたま", "ようき");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
@@ -320,6 +325,28 @@ public class PokemonTest {
         PokemonMove b = zapdos_tama.getDamage("ほうでん");
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
+    }
+
+    @Test
+    @DisplayName("たべのこしの実装")
+    public void test031() {
+        PokemonStadium stadium = new PokemonStadium(tapuFini, primarina);
+        PokemonMove a = tapuFini.getDamage2("めいそう");
+        PokemonMove b = primarina.getDamage("サイコキネシス");
+        stadium.forwardTurn(a,b);
+        BattleLog.getLogAll();
+        Assertions.assertEquals("カプ・レヒレは たべのこしで 少し 回復",BattleLog.getLog(BattleLog.count()-2));
+    }
+
+    @Test
+    @DisplayName("ばけのかわの実装")
+    public void test032() {
+        PokemonStadium stadium = new PokemonStadium(mimikyu, zapdos);
+        PokemonMove a = mimikyu.getDamage("シャドークロー");
+        PokemonMove b = zapdos.getDamage("ほうでん");
+        stadium.forwardTurn(a,b);
+        BattleLog.getLogAll();
+        Assertions.assertEquals(114, mimikyu.getCurrentHP());
     }
 
 }
