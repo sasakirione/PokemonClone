@@ -27,6 +27,7 @@ public class PokemonTest {
     Pokemon tapuLele;
     Pokemon primarina;
     Pokemon tapuFini;
+    Pokemon mimikyu;
     PokemonDataGetInterface pokemonDataGet;
 
     int[] cs = new int[]{0, 0, 0, 252, 0, 252};
@@ -46,6 +47,7 @@ public class PokemonTest {
         tapuLele = pokemonDataGet.getObjectByID(786, this.cs, 1, "なし", "おくびょう");
         primarina = pokemonDataGet.getObjectByID(730, this.cs, 1, "なし", "ひかえめ");
         tapuFini = pokemonDataGet.getObjectByID(788, this.hc, 1, "たべのこし", "ひかえめ");
+        mimikyu = pokemonDataGet.getObjectByID(778, this.as, 1, "いのちのたま", "ようき");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
@@ -337,9 +339,14 @@ public class PokemonTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("ばけのかわの実装")
     public void test032() {
-
+        PokemonStadium stadium = new PokemonStadium(mimikyu, zapdos);
+        PokemonMove a = mimikyu.getDamage("シャドークロー");
+        PokemonMove b = zapdos.getDamage("ほうでん");
+        stadium.forwardTurn(a,b);
+        BattleLog.getLogAll();
+        Assertions.assertEquals(114, mimikyu.getCurrentHP());
     }
 
 }

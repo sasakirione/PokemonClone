@@ -1,6 +1,7 @@
 package com.sasakirione.main.pokemon.clone.object;
 
 import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
+import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 import com.sasakirione.main.pokemon.clone.object.value.*;
 import com.sasakirione.main.pokemon.clone.utility.CalculationUtility;
 
@@ -221,6 +222,7 @@ public class PokemonMove {
     public void endDecision() {
         if (this.pokemon.getGood().isDamageOneEighth()) {
             this.pokemon.getStatus().damageOneEighth();
+            BattleLog.tama(this.pokemon.getName());
         }
     }
 }

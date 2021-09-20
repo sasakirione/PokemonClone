@@ -141,4 +141,10 @@ public class BattleLog {
     public static void LeftOvers(String pokemonName) {
         add(pokemonName + "は たべのこしで 少し 回復");
     }
+
+    public static void bakekawa(String name) {
+        add(name + "の ばけのかわ");
+        add("ばけのかわが みがわりに なった！");
+        add(name + "の ばけのかわが はがれた！");
+    }
 }

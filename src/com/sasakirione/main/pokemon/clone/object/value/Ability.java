@@ -88,7 +88,7 @@ public class Ability {
      *  HPが1/3以下になった時に呼ばれて、対応する特性だった場合にはabilityBoolをtrueにします
      *  ex) げきりゅう、もうか、しんりょく、むしのしらせ
      */
-    public void isTorrent() {
+    public void doOneThird() {
         if ((abilityName.equals(AbilityConst.TORRENT)) || (abilityName.equals(AbilityConst.BLAZE)) ||
                 (abilityName.equals(AbilityConst.OVER_GROW)) || (abilityName.equals(AbilityConst.SWARM))) {
             abilityOn();
@@ -119,5 +119,14 @@ public class Ability {
      */
     public String toString() {
         return getName();
+    }
+
+    /**
+     *  ばかかわ判定
+     *  相手の攻撃を無効化する特性かどうか、それが使える状態かどうかを判定します
+     *  @return 条件に合致した場合にtrue
+     */
+    public boolean isBakekawa() {
+        return (this.abilityName.equals(AbilityConst.DISGUISE) && !this.abilityBool);
     }
 }

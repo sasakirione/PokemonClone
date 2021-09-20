@@ -23,6 +23,9 @@ public class Pokemon {
      */
     private Type type;
 
+    /**
+     * ポケモンの初期タイプ
+     */
     private final Type originalType;
     /**
      * ポケモンの特性
@@ -60,11 +63,7 @@ public class Pokemon {
      */
     public Pokemon(String name, int[] effort, int[] base, String good, String nature, String type1, String type2, String ability) {
         this.name = name;
-        if (type2.equals("")) {
-            this.type = new Type(type1);
-        } else {
-            this.type = new Type(type1, type2);
-        }
+        setType(type1, type2);
         if (type2.equals("")) {
             this.originalType = new Type(type1);
         } else {
@@ -74,6 +73,14 @@ public class Pokemon {
         this.ability = new Ability(ability);
         this.good = new Good(good);
         pokemonDataGet = new PokemonDataGet();
+    }
+
+    private void setType(String type1, String type2) {
+        if (type2.equals("")) {
+            this.type = new Type(type1);
+        } else {
+            this.type = new Type(type1, type2);
+        }
     }
 
     /**
@@ -141,6 +148,12 @@ public class Pokemon {
             BattleLog.moveMiss();
             return;
         }
+        if (ability.isBakekawa()) {
+            ability.abilityOn();
+            BattleLog.bakekawa(this.name);
+            status.damageOneEighth();
+            return;
+        }
         if (a.isEnemyChangeMove()) {
             takeChange(a);
             return;
@@ -166,9 +179,13 @@ public class Pokemon {
         remainingDamageDecision();
     }
 
+    /**
+     * 残りHP処理
+     * 残りHPによって発動する道具や特性に関する処理を行います。
+     */
     private void remainingDamageDecision() {
         if (status.isOneThird()) {
-            ability.isTorrent();
+            ability.doOneThird();
         }
     }
 
