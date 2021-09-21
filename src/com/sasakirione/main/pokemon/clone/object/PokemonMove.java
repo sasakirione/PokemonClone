@@ -77,6 +77,10 @@ public class PokemonMove {
             this.moveClass = MoveClass.SELF_CHANGE;
             this.moveType = "ノーマル";
         }
+        if (name.equals("みずびたし")) {
+            this.moveClass = MoveClass.ENEMY_CHANGE;
+            this.moveType = "みず";
+        }
 
     }
 

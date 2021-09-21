@@ -341,8 +341,12 @@ public class Pokemon {
             rankUp(3, 1);
             rankUp(4, 1);
         }
-        if(a.isMoveNameCheck("かたくなる")) {
+        if (a.isMoveNameCheck("かたくなる")) {
             rankUp(2, 1);
+        }
+        if (a.isMoveNameCheck("みずびたし")) {
+            this.type = new Type("みず");
+            BattleLog.changeType(this.name, "みず");
         }
     }
 }

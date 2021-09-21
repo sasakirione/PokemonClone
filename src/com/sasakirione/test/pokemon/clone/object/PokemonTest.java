@@ -366,4 +366,17 @@ public class PokemonTest {
         Assertions.assertTrue(94 < pyukumuku.getCurrentHP());
     }
 
+    @Test
+    @DisplayName("みずびたしの実装")
+    public void test034() {
+        PokemonStadium stadium = new PokemonStadium(pyukumuku, polteageist);
+        PokemonMove a = pyukumuku.getDamage2("みずびたし");
+        PokemonMove b = polteageist.getDamage2("からをやぶる");
+        stadium.forwardTurn(a,b);
+        BattleLog.getLogAll();
+        String water = "みず";
+        System.out.println(polteageist.getType());
+        Assertions.assertEquals(water, polteageist.getType().toString());
+    }
+
 }

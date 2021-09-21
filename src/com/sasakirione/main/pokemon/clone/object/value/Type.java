@@ -115,4 +115,16 @@ public class Type {
     public Type copy() {
         return new Type(this.types.clone());
     }
+
+    @Override
+    public String toString() {
+        String type1 = types[0];
+        String type2;
+        if (types.length == 1) {
+            type2 = "";
+        } else {
+            type2 = types[1];
+        }
+        return type1 + type2;
+    }
 }
