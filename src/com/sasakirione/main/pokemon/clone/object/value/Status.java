@@ -215,4 +215,12 @@ public class Status {
         this.currentHP.recoveryOnePointSixteen();
         BattleLog.hp(this);
     }
+
+    public double getA2() {
+        return this.realSource[1];
+    }
+
+    public double getC2() {
+        return this.realSource[3];
+    }
 }

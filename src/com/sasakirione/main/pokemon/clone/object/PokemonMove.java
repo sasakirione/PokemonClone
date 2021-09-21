@@ -73,6 +73,10 @@ public class PokemonMove {
             this.moveClass = MoveClass.SELF_CHANGE;
             this.moveType = "エスパー";
         }
+        if (name.equals("かたくなる")) {
+            this.moveClass = MoveClass.SELF_CHANGE;
+            this.moveType = "ノーマル";
+        }
 
     }
 
@@ -225,4 +229,19 @@ public class PokemonMove {
             BattleLog.tama(this.pokemon.getName());
         }
     }
+
+    public double getPower2() {
+        double a = Math.floor(50 * 0.4 + 2);
+        double b = a * moveDamage * getRealAttack2();
+        return CalculationUtility.fiveOutOverFiveIn(b * this.pokemon.getAbility().powerBoost(this) * this.pokemon.getGood().powerBoost(moveClass));
+    }
+
+    private double getRealAttack2() {
+        if (moveClass.equals(MoveClass.PHYSICS)) {
+            return this.pokemon.getStatus().getA2();
+        } else {
+            return this.pokemon.getStatus().getC2();
+        }
+    }
+
 }

@@ -144,6 +144,7 @@ public class Pokemon {
      * @param a 受ける技のインスタンス
      */
     public void takeDamage(PokemonMove a, boolean isTest) {
+        double power;
         if (!a.isMoveHit() && !isTest) {
             BattleLog.moveMiss();
             return;
@@ -162,7 +163,11 @@ public class Pokemon {
             this.status.constantDamage(50);
             return;
         }
-        double power = a.getPower();
+        if (this.ability.isUnware()) {
+            power = a.getPower2();
+        } else {
+            power = a.getPower();
+        }
         int defenseChoice;
         double typeMagnification = this.type.getTypeMagnification(a.getMoveType());
         double magnification = a.getMagnification() * typeMagnification;
@@ -335,6 +340,9 @@ public class Pokemon {
         if (a.isMoveNameCheck("めいそう")) {
             rankUp(3, 1);
             rankUp(4, 1);
+        }
+        if(a.isMoveNameCheck("かたくなる")) {
+            rankUp(2, 1);
         }
     }
 }

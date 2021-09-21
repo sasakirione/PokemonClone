@@ -129,4 +129,8 @@ public class Ability {
     public boolean isBakekawa() {
         return (this.abilityName.equals(AbilityConst.DISGUISE) && !this.abilityBool);
     }
+
+    public boolean isUnware() {
+        return this.abilityName.equals(AbilityConst.UNWARE);
+    }
 }

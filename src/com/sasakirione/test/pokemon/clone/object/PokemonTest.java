@@ -28,11 +28,13 @@ public class PokemonTest {
     Pokemon primarina;
     Pokemon tapuFini;
     Pokemon mimikyu;
+    Pokemon pyukumuku;
     PokemonDataGetInterface pokemonDataGet;
 
     int[] cs = new int[]{0, 0, 0, 252, 0, 252};
     int[] as = new int[]{0, 252, 0, 0, 0, 252};
     int[] hc = new int[]{252, 0, 0, 252, 0, 0};
+    int[] hb = new int[]{252, 0, 252, 0, 0, 0};
 
     @BeforeEach
     public void before() {
@@ -48,6 +50,7 @@ public class PokemonTest {
         primarina = pokemonDataGet.getObjectByID(730, this.cs, 1, "なし", "ひかえめ");
         tapuFini = pokemonDataGet.getObjectByID(788, this.hc, 1, "たべのこし", "ひかえめ");
         mimikyu = pokemonDataGet.getObjectByID(778, this.as, 1, "いのちのたま", "ようき");
+        pyukumuku = pokemonDataGet.getObjectByID(771, this.hb, 3, "オボンのみ", "ずぶとい");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
@@ -347,6 +350,20 @@ public class PokemonTest {
         stadium.forwardTurn(a,b);
         BattleLog.getLogAll();
         Assertions.assertEquals(114, mimikyu.getCurrentHP());
+    }
+
+    @Test
+    @DisplayName("てんねんの実装")
+    public void test033() {
+        PokemonStadium stadium = new PokemonStadium(pyukumuku, polteageist);
+        PokemonMove a = polteageist.getDamage2("からをやぶる");
+        PokemonMove b = pyukumuku.getDamage2("かたくなる");
+        PokemonMove sb = polteageist.getDamage("シャドーボール");
+        PokemonMove b2 = pyukumuku.getDamage2("かたくなる");
+        stadium.forwardTurn(b,a);
+        stadium.forwardTurn(b2, sb);
+        BattleLog.getLogAll();
+        Assertions.assertTrue(94 < pyukumuku.getCurrentHP());
     }
 
 }

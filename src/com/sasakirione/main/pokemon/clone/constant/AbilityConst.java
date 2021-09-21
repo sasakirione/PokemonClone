@@ -13,4 +13,5 @@ public class AbilityConst {
     public static final String SWARM = "むしのしらせ";
     public static final String DRAGONS_MAW = "りゅうのあぎと";
     public static final String DISGUISE = "ばけのかわ";
+    public static final String UNWARE = "てんねん";
 }
