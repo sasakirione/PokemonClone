@@ -379,4 +379,5 @@ public class PokemonTest {
         Assertions.assertEquals(water, polteageist.getType().toString());
     }
 
+
 }

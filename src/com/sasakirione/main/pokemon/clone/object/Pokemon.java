@@ -1,6 +1,7 @@
 package com.sasakirione.main.pokemon.clone.object;
 
 import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
+import com.sasakirione.main.pokemon.clone.constant.MoveConst;
 import com.sasakirione.main.pokemon.clone.data.PokemonDataGet;
 import com.sasakirione.main.pokemon.clone.data.PokemonDataGetInterface;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
@@ -326,25 +327,25 @@ public class Pokemon {
      * @param a 自分に向けられた変化技のインスタンス
      */
     public void takeChange(PokemonMove a) {
-        if (a.isMoveNameCheck("からをやぶる")) {
+        if (a.isMoveNameCheck(MoveConst.SHELL_SMASH)) {
             rankUp(1, 2);
             rankUp(3, 2);
             rankUp(5, 2);
         }
-        if (a.isMoveNameCheck("かいでんぱ")) {
+        if (a.isMoveNameCheck(MoveConst.EERIE_IMPULSE)) {
             rankUp(3, -2);
         }
-        if (a.isMoveNameCheck("でんじは")) {
+        if (a.isMoveNameCheck(MoveConst.THUNDER_WAVE)) {
             getPAR();
         }
-        if (a.isMoveNameCheck("めいそう")) {
+        if (a.isMoveNameCheck(MoveConst.CALM_MIND)) {
             rankUp(3, 1);
             rankUp(4, 1);
         }
-        if (a.isMoveNameCheck("かたくなる")) {
+        if (a.isMoveNameCheck(MoveConst.HARDEN)) {
             rankUp(2, 1);
         }
-        if (a.isMoveNameCheck("みずびたし")) {
+        if (a.isMoveNameCheck(MoveConst.SOAK)) {
             this.type = new Type("みず");
             BattleLog.changeType(this.name, "みず");
         }
