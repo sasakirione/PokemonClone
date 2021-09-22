@@ -391,6 +391,7 @@ public class PokemonTest {
         stadium.forwardTurn(a, b);
         BattleLog.getLogAll();
         Assertions.assertEquals("[0, 2, 0, 2, 0, 2]", Arrays.toString(polteageist2.getStatus().getRank()));
+        Assertions.assertFalse(polteageist2.hasGood());
     }
 
 

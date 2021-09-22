@@ -184,6 +184,9 @@ public class Pokemon {
         BattleLog.typeMagnification(typeMagnification);
         BattleLog.hp(this);
         a.endDecision();
+        if (this.good.isGoodUsed()) {
+            this.lostGood();
+        }
         remainingDamageDecision();
     }
 
@@ -278,7 +281,7 @@ public class Pokemon {
         return ability;
     }
 
-    private boolean hasGood() {
+    public boolean hasGood() {
         return this.good != null;
     }
 
@@ -318,6 +321,9 @@ public class Pokemon {
         if (good.isLeftOvers()) {
             BattleLog.LeftOvers(this.name);
             this.status.recoveryOnePointSixteen();
+        }
+        if (good.isGoodUsed()) {
+            lostGood();
         }
     }
 
@@ -360,6 +366,7 @@ public class Pokemon {
         if (this.good.isWhiteHerb()) {
             whiteHerb.forEach(i -> getStatus().rankReset(i));
             BattleLog.whiteHerb(this.name);
+            this.good.goodUsed();
         }
     }
 }
