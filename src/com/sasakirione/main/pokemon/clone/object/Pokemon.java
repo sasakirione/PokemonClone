@@ -363,7 +363,7 @@ public class Pokemon {
             this.type = new Type("みず");
             BattleLog.changeType(this.name, "みず");
         }
-        if (this.good.isWhiteHerb()) {
+        if (this.good.isWhiteHerb() && !whiteHerb.isEmpty()) {
             whiteHerb.forEach(i -> getStatus().rankReset(i));
             BattleLog.whiteHerb(this.name);
             this.good.goodUsed();
