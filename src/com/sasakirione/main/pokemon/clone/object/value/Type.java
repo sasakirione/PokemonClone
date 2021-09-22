@@ -111,7 +111,11 @@ public class Type {
         return Arrays.asList(type1).contains(type2);
     }
 
-
+    /**
+     * タイプのコピー
+     * タイプをディープコピーします
+     * @return タイプのディープコピー
+     */
     public Type copy() {
         return new Type(this.types.clone());
     }

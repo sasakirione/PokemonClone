@@ -10,6 +10,8 @@ public class Good {
     /** 道具の名前 */
     private final String goodName;
 
+    private boolean goodUsed = false;
+
     /**
      * 道具クラスのコンストラクタ
      * 道具を設定します。
@@ -70,5 +72,17 @@ public class Good {
      */
     public boolean isLeftOvers() {
         return this.goodName.equals(GoodConst.LEFT_OVERS);
+    }
+
+    public boolean isGoodUsed() {
+        return goodUsed;
+    }
+
+    public void goodUsed() {
+        this.goodUsed = true;
+    }
+
+    public boolean isWhiteHerb() {
+        return this.goodName.equals(GoodConst.WHITE_HERB);
     }
 }

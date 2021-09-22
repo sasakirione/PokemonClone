@@ -8,7 +8,7 @@ import java.math.RoundingMode;
 import java.util.Random;
 
 public class Status {
-    private String pokemonName;
+    private final String pokemonName;
     private HP currentHP;
     private int[] real;
     private int[] rank;
@@ -204,6 +204,10 @@ public class Status {
     public void rankReset() {
         this.rank = new int[] {0, 0, 0, 0, 0, 0};
         pokemonRealSet();
+    }
+
+    public void rankReset(Integer i) {
+        this.rank[i] = 0;
     }
 
     public void damageOneEighth() {

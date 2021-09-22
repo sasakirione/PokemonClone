@@ -27,6 +27,17 @@ public class PokemonMove {
     /** 技の命中率 */
     private final int accuracy;
 
+    /**
+     * コンストラクタ(通常用)
+     * 技クラスのコンストラクタです。
+     * @param name わざの名前
+     * @param pokemon ポケモンのインスタンス
+     * @param moveClass 技の酒類
+     * @param moveDamage 技の威力
+     * @param moveType 技のタイプ
+     * @param priority 技の優先度
+     * @param accuracy 技の命中率
+     */
     public PokemonMove(String name, Pokemon pokemon, MoveClass moveClass, int moveDamage, String moveType,
                        int priority, int accuracy) {
         this.moveName = name;
@@ -209,25 +220,49 @@ public class PokemonMove {
         }
     }
 
+    /**
+     * 攻撃力を返す
+     * 防御補正前の段階まで計算を進めた攻撃力を返します
+     * @return 攻撃力
+     */
     public double getPower() {
         double a = Math.floor(50 * 0.4 + 2);
         double b = a * moveDamage * getRealAttack();
         return CalculationUtility.fiveOutOverFiveIn(b * this.pokemon.getAbility().powerBoost(this) * this.pokemon.getGood().powerBoost(moveClass));
     }
 
+    /**
+     * リベロ処理
+     * 攻撃する側のタイプを技のタイプにします
+     */
     public void libero() {
         pokemon.libero(new Type(moveType));
     }
 
+    /**
+     * 技の命中判定
+     * 技の命中判定をします
+     * @return 技が命中した場合はtrue
+     */
     public boolean isMoveHit() {
         return  randomForAccuracy() < this.accuracy;
     }
 
+    /**
+     * 命中判定用乱数
+     * 技の命中判定をするのに必要な乱数を返します
+     * @return 乱数(0-99)
+     */
     public int randomForAccuracy() {
         Random random = new Random();
         return random.nextInt(100);
     }
 
+    /**
+     * 攻撃終了後の処理
+     * 技が命中した後に行う処理を行います
+     * ex) いのちのたま
+     */
     public void endDecision() {
         if (this.pokemon.getGood().isDamageOneEighth()) {
             this.pokemon.getStatus().damageOneEighth();
@@ -235,12 +270,22 @@ public class PokemonMove {
         }
     }
 
+    /**
+     * てんねん用攻撃力を返す
+     *　てんねん用に能力変化を無視した攻撃力を返します
+     *  @return てんねん用攻撃力
+     */
     public double getPower2() {
         double a = Math.floor(50 * 0.4 + 2);
         double b = a * moveDamage * getRealAttack2();
         return CalculationUtility.fiveOutOverFiveIn(b * this.pokemon.getAbility().powerBoost(this) * this.pokemon.getGood().powerBoost(moveClass));
     }
 
+    /**
+     * てんねん用攻撃実数値を返す
+     * 補正がかかってない攻撃または特防の実数値を返します
+     * @return 物理技の場合は攻撃実数値(補正なし)、特殊技の場合は特攻実数値(補正なし)
+     */
     private double getRealAttack2() {
         if (moveClass.equals(MoveClass.PHYSICS)) {
             return this.pokemon.getStatus().getA2();

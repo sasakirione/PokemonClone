@@ -147,4 +147,8 @@ public class BattleLog {
         add("ばけのかわが みがわりに なった！");
         add(name + "の ばけのかわが はがれた！");
     }
+
+    public static void whiteHerb(String name) {
+        add(name + "は しろいハーブで ステータスを 元に戻した！");
+    }
 }

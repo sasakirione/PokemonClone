@@ -13,6 +13,7 @@ import org.junit.jupiter.api.*;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -23,6 +24,7 @@ public class PokemonTest {
     Pokemon zapdos_tama;
     Pokemon greninja;
     Pokemon polteageist;
+    Pokemon polteageist2;
     Pokemon decidueye;
     Pokemon tapuLele;
     Pokemon primarina;
@@ -42,6 +44,7 @@ public class PokemonTest {
         regieleki = pokemonDataGet.getObjectByID(894, this.cs, 1,"なし" , "おくびょう");
         regieleki_megane = pokemonDataGet.getObjectByID(894, this.cs, 1,"こだわりメガネ" , "おくびょう");
         polteageist = pokemonDataGet.getObjectByID(855, this.cs,3, "こだわってないスカーフ", "おくびょう");
+        polteageist2 = pokemonDataGet.getObjectByID(855, this.cs,3, "しろいハーブ", "おくびょう");
         zapdos = pokemonDataGet.getObjectByID(145, this.cs, 1, "なし", "おくびょう");
         zapdos_tama = pokemonDataGet.getObjectByID(145, this.cs, 1, "いのちのたま", "おくびょう");
         greninja = pokemonDataGet.getObjectByID(658, new int[]{252, 0, 0, 0, 252 , 0}, 3, "なし", "おくびょう");
@@ -377,6 +380,17 @@ public class PokemonTest {
         String water = "みず";
         System.out.println(polteageist.getType());
         Assertions.assertEquals(water, polteageist.getType().toString());
+    }
+
+    @Test
+    @DisplayName("しろいハーブ実装")
+    public void test035() {
+        PokemonStadium stadium = new PokemonStadium(regieleki, polteageist2);
+        PokemonMove a = regieleki.getDamage2("でんじは");
+        PokemonMove b = polteageist2.getDamage2("からをやぶる");
+        stadium.forwardTurn(a, b);
+        BattleLog.getLogAll();
+        Assertions.assertEquals("[0, 2, 0, 2, 0, 2]", Arrays.toString(polteageist2.getStatus().getRank()));
     }
 
 

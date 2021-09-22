@@ -7,6 +7,8 @@ import com.sasakirione.main.pokemon.clone.data.PokemonDataGetInterface;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 import com.sasakirione.main.pokemon.clone.object.value.*;
 
+import java.util.ArrayList;
+
 /**
  * ポケモン自体を表すクラス
  */
@@ -327,13 +329,19 @@ public class Pokemon {
      * @param a 自分に向けられた変化技のインスタンス
      */
     public void takeChange(PokemonMove a) {
+        ArrayList<Integer> whiteHerb = new ArrayList<>();
         if (a.isMoveNameCheck(MoveConst.SHELL_SMASH)) {
+            rankUp(2, -1);
+            whiteHerb.add(2);
+            rankUp(4, -1);
+            whiteHerb.add(4);
             rankUp(1, 2);
             rankUp(3, 2);
             rankUp(5, 2);
         }
         if (a.isMoveNameCheck(MoveConst.EERIE_IMPULSE)) {
             rankUp(3, -2);
+            whiteHerb.add(3);
         }
         if (a.isMoveNameCheck(MoveConst.THUNDER_WAVE)) {
             getPAR();
@@ -348,6 +356,10 @@ public class Pokemon {
         if (a.isMoveNameCheck(MoveConst.SOAK)) {
             this.type = new Type("みず");
             BattleLog.changeType(this.name, "みず");
+        }
+        if (this.good.isWhiteHerb()) {
+            whiteHerb.forEach(i -> getStatus().rankReset(i));
+            BattleLog.whiteHerb(this.name);
         }
     }
 }
