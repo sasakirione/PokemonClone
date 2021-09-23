@@ -9,7 +9,7 @@ import com.sasakirione.main.pokemon.clone.constant.GoodConst;
 public class Good {
     /** 道具の名前 */
     private final String goodName;
-
+    /** 道具の使用判定 */
     private boolean goodUsed = false;
 
     /**
@@ -74,14 +74,28 @@ public class Good {
         return this.goodName.equals(GoodConst.LEFT_OVERS);
     }
 
+    /**
+     * 道具の使用判定
+     * 道具の使用判定を返します。
+     * @return 道具の使用判定
+     */
     public boolean isGoodUsed() {
         return goodUsed;
     }
 
+    /**
+     * 道具の消費
+     * 消費アイテムの使用判定をtrueにします。
+     */
     public void goodUsed() {
         this.goodUsed = true;
     }
 
+    /**
+     * しろいハーブ判定
+     * アイテムがしろいハーブだったバイアにtrueを返します。
+     * @return 道具がしろいハーブだった場合にtrue
+     */
     public boolean isWhiteHerb() {
         return this.goodName.equals(GoodConst.WHITE_HERB);
     }
