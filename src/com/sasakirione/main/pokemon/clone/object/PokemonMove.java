@@ -2,6 +2,7 @@ package com.sasakirione.main.pokemon.clone.object;
 
 import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
 import com.sasakirione.main.pokemon.clone.constant.MoveConst;
+import com.sasakirione.main.pokemon.clone.exception.UnsupportedMoveException;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 import com.sasakirione.main.pokemon.clone.object.value.*;
 import com.sasakirione.main.pokemon.clone.utility.CalculationUtility;
@@ -64,36 +65,44 @@ public class PokemonMove {
             this.moveClass = MoveClass.SPECIAL;
             this.moveDamage = 80;
             this.moveType = "でんき";
+            return;
         }
         if (name.equals(MoveConst.SHELL_SMASH)) {
             this.moveClass = MoveClass.SELF_CHANGE;
             this.moveType = "ノーマル";
+            return;
         }
         if (name.equals(MoveConst.SEISMIC_TOSS)) {
             this.moveClass = MoveClass.PHYSICS;
             this.moveType = "ノーマル";
+            return;
         }
         if (name.equals(MoveConst.EERIE_IMPULSE)) {
             this.moveClass = MoveClass.ENEMY_CHANGE;
             this.moveType = "でんき";
+            return;
         }
         if (name.equals(MoveConst.THUNDER_WAVE)) {
             this.moveClass = MoveClass.ENEMY_CHANGE;
             this.moveType = "でんき";
+            return;
         }
         if (name.equals(MoveConst.CALM_MIND)) {
             this.moveClass = MoveClass.SELF_CHANGE;
             this.moveType = "エスパー";
+            return;
         }
         if (name.equals(MoveConst.HARDEN)) {
             this.moveClass = MoveClass.SELF_CHANGE;
             this.moveType = "ノーマル";
+            return;
         }
         if (name.equals(MoveConst.SOAK)) {
             this.moveClass = MoveClass.ENEMY_CHANGE;
             this.moveType = "みず";
+            return;
         }
-
+        throw new UnsupportedMoveException();
     }
 
     /**

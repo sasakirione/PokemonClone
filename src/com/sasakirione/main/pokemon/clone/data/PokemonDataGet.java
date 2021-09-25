@@ -1,31 +1,47 @@
 package com.sasakirione.main.pokemon.clone.data;
 
+import com.sasakirione.main.pokemon.clone.exception.UnsupportedMoveException;
 import com.sasakirione.main.pokemon.clone.object.Pokemon;
 import com.sasakirione.main.pokemon.clone.object.PokemonMove;
 import com.sasakirione.main.pokemon.clone.object.value.*;
 
 import java.io.*;
+import java.util.Properties;
 
 public class PokemonDataGet implements PokemonDataGetInterface {
-    private static final File filePokemon = new File("C:\\Users\\Yuki Yamada\\IdeaProjects\\PokemonClone\\data\\pokemon_status.csv");
-    private static final File fileMove = new File("C:\\Users\\Yuki Yamada\\IdeaProjects\\PokemonClone\\data\\moves.csv");
+    private final Properties properties;
+
+    public PokemonDataGet() {
+        properties = new Properties();
+        try (Reader reader = new FileReader("path.properties")) {
+            properties.load(reader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private String[] pokemonFileGet(int i) {
         String[] res = new String[0];
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filePokemon), "windows-31j"))) {
-            while(true) {
-                String row = reader.readLine();
-                if (row == null) {
-                    throw new AssertionError("ポケモンが見つかりません！");
-                }
-                String[] rowList = row.split(",");
-                if (rowList[0].equals(String.valueOf(i))) {
-                    res = rowList;
-                    break;
-                }
-            }
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(properties.getProperty("pokemon")), "windows-31j"))) {
+            res = pokemonFileGetSerch(i, reader);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        return res;
+    }
+
+    private String[] pokemonFileGetSerch(int i, BufferedReader reader) throws IOException {
+        String[] res;
+        while(true) {
+            String row = reader.readLine();
+            if (row == null) {
+                throw new AssertionError("ポケモンが見つかりません！");
+            }
+            String[] rowList = row.split(",");
+            if (rowList[0].equals(String.valueOf(i))) {
+                res = rowList;
+                break;
+            }
         }
         return res;
     }
@@ -50,11 +66,11 @@ public class PokemonDataGet implements PokemonDataGetInterface {
     private String[] pokemonMoveFileGet(String name) {
         String[] res = new String[0];
         String name2 = "\"" + name + "\"";
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileMove))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(properties.getProperty("move")))) {
             while(true) {
                 String row = reader.readLine();
                 if (row == null) {
-                    throw new AssertionError("技が見つかりません！");
+                    throw new UnsupportedMoveException("技が見つかりません！");
                 }
                 String[] rowList = row.split(",");
                 if (rowList[3].equals(name2)) {
@@ -99,7 +115,7 @@ public class PokemonDataGet implements PokemonDataGetInterface {
             case 15 -> "こおり";
             case 16 -> "ドラゴン";
             case 17 -> "あく";
-            default -> throw new IllegalArgumentException("技データベースの不正値です");
+            default -> throw new UnsupportedMoveException("技データベースの不正値です");
         };
     }
 
@@ -110,6 +126,6 @@ public class PokemonDataGet implements PokemonDataGetInterface {
         if (s1.equals("3")) {
             return MoveClass.SPECIAL;
         }
-        throw new IllegalArgumentException("現在対応してない技です");
+        throw new UnsupportedMoveException("現在対応してない技です");
     }
 }

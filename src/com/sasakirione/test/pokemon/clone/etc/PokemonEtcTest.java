@@ -1,5 +1,7 @@
 package com.sasakirione.test.pokemon.clone.etc;
 
+import com.sasakirione.main.pokemon.clone.data.PokemonDataGetInterface;
+import com.sasakirione.main.pokemon.clone.object.Pokemon;
 import com.sasakirione.main.pokemon.clone.utility.CalculationUtility;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -13,5 +15,13 @@ public class PokemonEtcTest {
         double b = 3.500001;
         Assertions.assertEquals(3,CalculationUtility.fiveOutOverFiveIn(a));
         Assertions.assertEquals(4,CalculationUtility.fiveOutOverFiveIn(b));
+    }
+
+    @Test
+    @DisplayName("propertiesファイルの使用")
+    public void test002() {
+        PokemonDataGetInterface pokemonDataGet = new PokemonDataGetTest();
+        Pokemon test = pokemonDataGet.getObjectByID(100, new int[] {252, 252, 0, 0, 0, 0}, 1, "なし", "まじめ");
+        System.out.println(test.getName());
     }
 }

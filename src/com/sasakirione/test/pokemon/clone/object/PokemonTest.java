@@ -200,7 +200,7 @@ public class PokemonTest {
         stadium.forwardTurn(a2, b);
         BattleLog.getLogAll();
         Assertions.assertEquals("ポットデス の からをやぶる のこうげきだ！", BattleLog.getLog(4));
-        Assertions.assertEquals("ポットデス の シャドーボール のこうげきだ！", BattleLog.getLog(8));
+        Assertions.assertEquals("ポットデス の シャドーボール のこうげきだ！", BattleLog.getLog(10));
     }
 
     @Test
