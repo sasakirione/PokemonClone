@@ -66,24 +66,12 @@ public class Pokemon {
      */
     public Pokemon(String name, int[] effort, int[] base, String good, String nature, String type1, String type2, String ability) {
         this.name = name;
-        setType(type1, type2);
-        if (type2.equals("")) {
-            this.originalType = new Type(type1);
-        } else {
-            this.originalType = new Type(type1, type2);
-        }
+        this.type = new Type(type1, type2);
+        this.originalType = new Type(type1, type2);
         this.status = new Status(base, new Effort(effort), good, new Nature(nature), this.getName());
         this.ability = new Ability(ability);
         this.good = new Good(good);
         pokemonDataGet = new PokemonDataGet();
-    }
-
-    private void setType(String type1, String type2) {
-        if (type2.equals("")) {
-            this.type = new Type(type1);
-        } else {
-            this.type = new Type(type1, type2);
-        }
     }
 
     /**
@@ -152,12 +140,7 @@ public class Pokemon {
             BattleLog.moveMiss();
             return;
         }
-        if (ability.isBakekawa()) {
-            ability.abilityOn();
-            BattleLog.bakekawa(this.name);
-            status.damageOneEighth();
-            return;
-        }
+
         if (a.isEnemyChangeMove()) {
             takeChange(a);
             return;
@@ -180,14 +163,30 @@ public class Pokemon {
         } else {
             defenseChoice = 4;
         }
-        this.status.damageCalculation(power, defenseChoice, magnification, a.getMoveType());
-        BattleLog.typeMagnification(typeMagnification);
-        BattleLog.hp(this);
+        int count = a.getCombCount();
+        for (int i = 0; i < count; i++){
+            if (ability.isBakekawa()) {
+                ability.abilityOn();
+                BattleLog.bakekawa(this.name);
+                status.damageOneEighth();
+                continue;
+            }
+            moveDecision(a, power, defenseChoice, typeMagnification, magnification);
+            remainingDamageDecision();
+        }
+        if (a.isCombAttack()) {
+            BattleLog.combAttack(count);
+        }
         a.endDecision();
         if (this.good.isGoodUsed()) {
             this.lostGood();
         }
-        remainingDamageDecision();
+    }
+
+    private void moveDecision(PokemonMove a, double power, int defenseChoice, double typeMagnification, double magnification) {
+        this.status.damageCalculation(power, defenseChoice, magnification, a.getMoveType());
+        BattleLog.typeMagnification(typeMagnification);
+        BattleLog.hp(this);
     }
 
     /**

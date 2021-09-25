@@ -407,5 +407,14 @@ public class PokemonTest {
         Assertions.assertFalse(polteageist2.hasGood());
     }
 
-
+    @Test
+    @DisplayName("連続技を実装")
+    public void test036() {
+        PokemonStadium stadium = new PokemonStadium(mimikyu, greninja);
+        PokemonMove mi = mimikyu.getDamage("シャドークロー");
+        PokemonMove g = greninja.getDamage("みずしゅりけん");
+        stadium.forwardTurn(mi, g);
+        BattleLog.getLogAll();
+        Assertions.assertNotEquals(114, mimikyu.getCurrentHP());
+    }
 }

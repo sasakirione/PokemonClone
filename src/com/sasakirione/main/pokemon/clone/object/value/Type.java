@@ -18,6 +18,10 @@ public class Type {
      * コンストラクタ(複合タイプ)
      */
     public Type(String type1, String type2) {
+        if (type2.equals("") && !isTypeErrorCheck(type1)) {
+            types = new String[]{type1};
+            return;
+        }
         if (isTypeErrorCheck(type1)) {
             throw new IllegalArgumentException("存在しないタイプが含まれています");
         }

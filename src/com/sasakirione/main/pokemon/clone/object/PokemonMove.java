@@ -4,6 +4,8 @@ import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
 import com.sasakirione.main.pokemon.clone.constant.MoveConst;
 import com.sasakirione.main.pokemon.clone.exception.UnsupportedMoveException;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
+import com.sasakirione.main.pokemon.clone.object.code.MoveClass;
+import com.sasakirione.main.pokemon.clone.object.code.MoveCombo;
 import com.sasakirione.main.pokemon.clone.object.value.*;
 import com.sasakirione.main.pokemon.clone.utility.CalculationUtility;
 
@@ -18,15 +20,17 @@ public class PokemonMove {
     /** ポケモン */
     private final Pokemon pokemon;
     /** 技の種類 */
-    private MoveClass moveClass;
+    private final MoveClass moveClass;
     /** 技の威力 */
     private int moveDamage;
     /** 技のタイプ */
-    private String moveType;
+    private final String moveType;
     /** 技の優先度 */
     private final int priority;
     /** 技の命中率 */
     private final int accuracy;
+    /** 技の連続仕様 */
+    private final MoveCombo moveCombo;
 
     /**
      * コンストラクタ(通常用)
@@ -48,6 +52,11 @@ public class PokemonMove {
         this.moveType = moveType;
         this.accuracy = accuracy;
         this.pokemon = pokemon;
+        if (name.equals(MoveConst.WATER_SHURIKEN) || name.equals(MoveConst.SURGING_STRIKES)) {
+            this.moveCombo = MoveCombo.FIXED_THREE;
+        } else {
+            this.moveCombo = MoveCombo.NORMAL;
+        }
     }
 
     /**
@@ -60,6 +69,7 @@ public class PokemonMove {
         this.priority = 0;
         this.accuracy = 100;
         this.pokemon = pokemon;
+        this.moveCombo = MoveCombo.NORMAL;
 
         if (name.equals("サンダープリズン")) {
             this.moveClass = MoveClass.SPECIAL;
@@ -301,6 +311,47 @@ public class PokemonMove {
         } else {
             return this.pokemon.getStatus().getC2();
         }
+    }
+
+    public int getCombCount() {
+        if (this.moveCombo.equals(MoveCombo.NORMAL)) {
+            return 1;
+        }
+        if (this.moveCombo.equals(MoveCombo.FIXED_TWO)) {
+            return 2;
+        }
+        if (this.moveCombo.equals(MoveCombo.FIXED_THREE)) {
+            return 3;
+        }
+        if (this.moveCombo.equals(MoveCombo.MAX_THREE)) {
+            return setCombCount(3);
+        }
+        if (this.moveCombo.equals(MoveCombo.MAX_FIVE)) {
+            return setCombCount(5);
+        }
+        return 1;
+    }
+
+    private int setCombCount(int i) {
+        if (i == 3) {
+            return 3;
+        }
+        Random random = new Random();
+        int randomNumber = random.nextInt(100);
+        if (randomNumber < 35) {
+            return 2;
+        }
+        if (randomNumber < 70) {
+            return 3;
+        }
+        if (randomNumber < 85) {
+            return 4;
+        }
+        return 5;
+    }
+
+    public boolean isCombAttack() {
+        return !this.moveCombo.equals(MoveCombo.NORMAL);
     }
 
 }

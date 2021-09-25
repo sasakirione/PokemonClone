@@ -8,4 +8,6 @@ public class MoveConst {
     public static final String CALM_MIND = "めいそう";
     public static final String HARDEN = "かたくなる";
     public static final String SOAK = "みずびたし";
+    public static final String WATER_SHURIKEN = "みずしゅりけん";
+    public static final String SURGING_STRIKES = "すいりゅうれんだ";
 }

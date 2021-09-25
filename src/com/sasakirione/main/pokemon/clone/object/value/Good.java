@@ -2,6 +2,7 @@ package com.sasakirione.main.pokemon.clone.object.value;
 
 import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
 import com.sasakirione.main.pokemon.clone.constant.GoodConst;
+import com.sasakirione.main.pokemon.clone.object.code.MoveClass;
 
 /**
  * ポケモンの道具を担当するクラス

@@ -3,7 +3,7 @@ package com.sasakirione.main.pokemon.clone.data;
 import com.sasakirione.main.pokemon.clone.exception.UnsupportedMoveException;
 import com.sasakirione.main.pokemon.clone.object.Pokemon;
 import com.sasakirione.main.pokemon.clone.object.PokemonMove;
-import com.sasakirione.main.pokemon.clone.object.value.*;
+import com.sasakirione.main.pokemon.clone.object.code.MoveClass;
 
 import java.io.*;
 import java.util.Properties;
