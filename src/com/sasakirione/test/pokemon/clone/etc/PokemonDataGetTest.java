@@ -21,7 +21,7 @@ public class PokemonDataGetTest implements PokemonDataGetInterface {
 
     private String[] pokemonFileGet(int i) {
         String[] res = new String[0];
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(properties.getProperty("pokemon")), "windows-31j"))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(properties.getProperty("test")), "windows-31j"))) {
             res = pokemonFileGetSerch(i, reader);
         } catch (IOException e) {
             e.printStackTrace();

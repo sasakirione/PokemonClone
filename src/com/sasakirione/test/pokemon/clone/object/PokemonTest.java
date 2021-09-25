@@ -18,18 +18,31 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PokemonTest {
+    /** CSレジエレキ　*/
     Pokemon regieleki;
+    /** CSめがねレジエレキ　*/
     Pokemon regieleki_megane;
+    /** CSサンダー　*/
     Pokemon zapdos;
+    /** CS珠サンダー　*/
     Pokemon zapdos_tama;
+    /** HDゲッコウガ　*/
     Pokemon greninja;
+    /** CSスカーフポットデス　*/
     Pokemon polteageist;
+    /** CSしろいハーブポットデス　*/
     Pokemon polteageist2;
+    /** ASジュナイパー　*/
     Pokemon decidueye;
-    Pokemon tapuLele;
+    /** CSテテフちゃん　*/
+  Pokemon tapuLele;
+    /** CSアシレ　*/
     Pokemon primarina;
+    /** HC残飯レヒレ　*/
     Pokemon tapuFini;
+    /** AS珠ミミッキュ　*/
     Pokemon mimikyu;
+    /** HBオボンなまこちゃん　*/
     Pokemon pyukumuku;
     PokemonDataGetInterface pokemonDataGet;
 
