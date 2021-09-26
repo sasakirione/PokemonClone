@@ -1,6 +1,5 @@
 package com.sasakirione.main.pokemon.clone.object;
 
-import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
 import com.sasakirione.main.pokemon.clone.constant.MoveConst;
 import com.sasakirione.main.pokemon.clone.data.PokemonDataGet;
 import com.sasakirione.main.pokemon.clone.data.PokemonDataGetInterface;
@@ -68,9 +67,9 @@ public class Pokemon {
         this.name = name;
         this.type = new Type(type1, type2);
         this.originalType = new Type(type1, type2);
-        this.status = new Status(base, new Effort(effort), good, new Nature(nature), this.getName());
-        this.ability = new Ability(ability);
         this.good = new Good(good);
+        this.status = new Status(base, new Effort(effort), this.good, new Nature(nature), this.getName());
+        this.ability = new Ability(ability);
         pokemonDataGet = new PokemonDataGet();
     }
 
@@ -135,12 +134,10 @@ public class Pokemon {
      * @param a 受ける技のインスタンス
      */
     public void takeDamage(PokemonMove a, boolean isTest) {
-        double power;
         if (!a.isMoveHit() && !isTest) {
             BattleLog.moveMiss();
             return;
         }
-
         if (a.isEnemyChangeMove()) {
             takeChange(a);
             return;
@@ -149,20 +146,29 @@ public class Pokemon {
             this.status.constantDamage(50);
             return;
         }
-        if (this.ability.isUnware()) {
-            power = a.getPower2();
-        } else {
-            power = a.getPower();
-        }
-        int defenseChoice;
+        double power = getPower(a);
+        int defenseChoice = getDefenseChoice(a);
         double typeMagnification = this.type.getTypeMagnification(a.getMoveType());
         double magnification = a.getMagnification() * typeMagnification;
 
+        moveDecisionAll(a, power, defenseChoice, typeMagnification, magnification);
+        a.endDecision();
+        if (this.good.isGoodUsed()) {
+            this.lostGood();
+        }
+    }
+
+    private int getDefenseChoice(PokemonMove a) {
+        int defenseChoice;
         if (a.isPhysicsMove()) {
             defenseChoice = 2;
         } else {
             defenseChoice = 4;
         }
+        return defenseChoice;
+    }
+
+    private void moveDecisionAll(PokemonMove a, double power, int defenseChoice, double typeMagnification, double magnification) {
         int count = a.getCombCount();
         for (int i = 0; i < count; i++){
             if (ability.isBakekawa()) {
@@ -171,20 +177,26 @@ public class Pokemon {
                 status.damageOneEighth();
                 continue;
             }
-            moveDecision(a, power, defenseChoice, typeMagnification, magnification);
+            moveDecision(power, defenseChoice, typeMagnification, magnification);
             remainingDamageDecision();
         }
         if (a.isCombAttack()) {
             BattleLog.combAttack(count);
         }
-        a.endDecision();
-        if (this.good.isGoodUsed()) {
-            this.lostGood();
-        }
     }
 
-    private void moveDecision(PokemonMove a, double power, int defenseChoice, double typeMagnification, double magnification) {
-        this.status.damageCalculation(power, defenseChoice, magnification, a.getMoveType());
+    private double getPower(PokemonMove a) {
+        double power;
+        if (this.ability.isUnware()) {
+            power = a.getPower2();
+        } else {
+            power = a.getPower();
+        }
+        return power;
+    }
+
+    private void moveDecision(double power, int defenseChoice, double typeMagnification, double magnification) {
+        this.status.damageCalculation(power, defenseChoice, magnification);
         BattleLog.typeMagnification(typeMagnification);
         BattleLog.hp(this);
     }
@@ -260,14 +272,7 @@ public class Pokemon {
      * @return ポケモンの素早さ実数値
      */
     public int getS() {
-        double realSpeed = this.status.getS();
-        if (good.isSpeedBoost()) {
-            realSpeed = realSpeed * CalculationConst.ONE_POINT_FIVE;
-        }
-        if (status.isParCheck()) {
-            realSpeed = realSpeed * CalculationConst.HALF;
-        }
-        return (int) Math.round(realSpeed);
+        return this.status.getS();
     }
 
     /**

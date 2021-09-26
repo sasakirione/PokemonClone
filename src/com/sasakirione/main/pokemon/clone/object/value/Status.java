@@ -1,5 +1,6 @@
 package com.sasakirione.main.pokemon.clone.object.value;
 
+import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 import com.sasakirione.main.pokemon.clone.utility.CalculationUtility;
 
@@ -15,12 +16,12 @@ public class Status {
     private final int[] realSource;
     private int[] base;
     private final Effort effort;
-    private String good;
+    private Good good;
     private final Nature nature;
     private boolean parCheck = false;
     private boolean brnCheck = false;
 
-    public Status(int[] base, Effort effort, String good, Nature nature, String name) {
+    public Status(int[] base, Effort effort, Good good, Nature nature, String name) {
         this.rank = new int[] {0, 0, 0, 0, 0, 0};
         this.good = good;
         this.base = base;
@@ -29,22 +30,6 @@ public class Status {
         this.pokemonName = name;
         pokemonRealSet();
         this.realSource = real.clone();
-        setGood();
-    }
-
-    private void setGood() {
-        if (this.good.equals("こだわりスカーフ")) {
-            this.real[5] = (int) Math.round(real[5] * 1.5);
-        }
-        if (this.good.equals("こだわりメガネ")) {
-            this.real[3] = (int) Math.round(real[3] * 1.5);
-        }
-        if (this.good.equals("こだわりハチマキ")) {
-            this.real[1] = (int) Math.round(real[1] * 1.5);
-        }
-        if (this.good.equals("こだわらないスカーフ")) {
-            this.real[5] = (int) Math.round(real[5] * 1.5);
-        }
     }
 
     public int getHP() {
@@ -71,7 +56,14 @@ public class Status {
     }
 
     public int getS() {
-        return real[5];
+        double realSpeed = this.real[5];
+        if (good.isSpeedBoost()) {
+            realSpeed = realSpeed * CalculationConst.ONE_POINT_FIVE;
+        }
+        if (this.isParCheck()) {
+            realSpeed = realSpeed * CalculationConst.HALF;
+        }
+        return (int) Math.round(realSpeed);
     }
 
     public int[] getRank() {
@@ -144,7 +136,7 @@ public class Status {
         }
     }
 
-    public void damageCalculation(double power, int defense, double magnification, String type) {
+    public void damageCalculation(double power, int defense, double magnification) {
         int realDefense = real[defense];
         double vitals = 1.0;
         if (isVitals()) {

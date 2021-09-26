@@ -125,15 +125,6 @@ public class PokemonMove {
     }
 
     /**
-     * わざの種類を返す(テスト用)
-     * わざの種類を返します。
-     * @return わざの種類(0:物理技、1:特殊技、2：自分にかかる変化技、3:相手にかかる変化技、4：場にかかる変化技)
-     */
-    public MoveClass getMoveClass() {
-        return moveClass;
-    }
-
-    /**
      * 攻撃実数値を返す
      * 攻撃または特防の実数値を返します
      * @return 物理技の場合は攻撃実数値、特殊技の場合は特攻実数値
@@ -313,6 +304,11 @@ public class PokemonMove {
         }
     }
 
+    /**
+     * 技の連続回数を返す
+     * 技を何回連続で行うかを返します
+     * @return 技の連続回数
+     */
     public int getCombCount() {
         if (this.moveCombo.equals(MoveCombo.NORMAL)) {
             return 1;
@@ -332,6 +328,11 @@ public class PokemonMove {
         return 1;
     }
 
+    /**
+     * 技の連続回数を算出する
+     * 連続回数がランダムで決まる技の連続回数を決定する
+     * @return 技の連続回数
+     */
     private int setCombCount(int i) {
         if (i == 3) {
             return 3;
@@ -350,6 +351,11 @@ public class PokemonMove {
         return 5;
     }
 
+    /**
+     * 連続技判定
+     * 連続技かどうかを判定します
+     * @return 連続技の場合はtrueを返す
+     */
     public boolean isCombAttack() {
         return !this.moveCombo.equals(MoveCombo.NORMAL);
     }
