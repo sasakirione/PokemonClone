@@ -559,3 +559,4 @@ id,identifier,name,name_jp,name_jp_tm,generation_id,type_id,power,pp,accuracy,pr
 558,fusion-flare,"Fusion Flare","クロスフレイム","Cross Flame",5,10,100,5,100,0,10,3,336,"","","",""
 559,fusion-bolt,"Fusion Bolt","クロスサンダー","Cross Thunder",5,13,100,5,100,0,10,2,337,"","","",""
 600,"","","みずしゅりけん","",6,11,15,20,100,1,10,3,"","","","",""
+601,"","","すいりゅうれんだ","",8,11,25,5,100,0,10,2,"","","","",""

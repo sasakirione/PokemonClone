@@ -46,7 +46,7 @@ public class PokemonDataGetTest implements PokemonDataGetInterface {
     }
 
     @Override
-    public Pokemon getObjectByID(int dexNo, int[] effort, int i, String good, String nature) {
+    public Pokemon getObjectByID(int dexNo, int form, int[] effort, int i, String good, String nature) {
         String[] pokemon = pokemonFileGet(dexNo);
         int[] base = new int[] {
                 Integer.parseInt(pokemon[7]),

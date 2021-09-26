@@ -1,5 +1,6 @@
 package com.sasakirione.main.pokemon.clone.object;
 
+import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
 import com.sasakirione.main.pokemon.clone.constant.MoveConst;
 import com.sasakirione.main.pokemon.clone.data.PokemonDataGet;
 import com.sasakirione.main.pokemon.clone.data.PokemonDataGetInterface;
@@ -24,7 +25,6 @@ public class Pokemon {
      * ポケモンのタイプ
      */
     private Type type;
-
     /**
      * ポケモンの初期タイプ
      */
@@ -68,9 +68,9 @@ public class Pokemon {
         this.type = new Type(type1, type2);
         this.originalType = new Type(type1, type2);
         this.good = new Good(good);
-        this.status = new Status(base, new Effort(effort), this.good, new Nature(nature), this.getName());
+        this.status = new Status(base, new Effort(effort), new Nature(nature));
         this.ability = new Ability(ability);
-        pokemonDataGet = new PokemonDataGet();
+        this.pokemonDataGet = new PokemonDataGet();
     }
 
     /**
@@ -146,6 +146,7 @@ public class Pokemon {
             this.status.constantDamage(50);
             return;
         }
+
         double power = getPower(a);
         int defenseChoice = getDefenseChoice(a);
         double typeMagnification = this.type.getTypeMagnification(a.getMoveType());
@@ -170,6 +171,7 @@ public class Pokemon {
 
     private void moveDecisionAll(PokemonMove a, double power, int defenseChoice, double typeMagnification, double magnification) {
         int count = a.getCombCount();
+        int vitalRank = a.getVitalRank();
         for (int i = 0; i < count; i++){
             if (ability.isBakekawa()) {
                 ability.abilityOn();
@@ -177,7 +179,7 @@ public class Pokemon {
                 status.damageOneEighth();
                 continue;
             }
-            moveDecision(power, defenseChoice, typeMagnification, magnification);
+            moveDecision(power, defenseChoice, typeMagnification, magnification, vitalRank);
             remainingDamageDecision();
         }
         if (a.isCombAttack()) {
@@ -195,8 +197,8 @@ public class Pokemon {
         return power;
     }
 
-    private void moveDecision(double power, int defenseChoice, double typeMagnification, double magnification) {
-        this.status.damageCalculation(power, defenseChoice, magnification);
+    private void moveDecision(double power, int defenseChoice, double typeMagnification, double magnification, int vitalRank) {
+        this.status.damageCalculation(power, defenseChoice, magnification, vitalRank);
         BattleLog.typeMagnification(typeMagnification);
         BattleLog.hp(this);
     }
@@ -272,7 +274,11 @@ public class Pokemon {
      * @return ポケモンの素早さ実数値
      */
     public int getS() {
-        return this.status.getS();
+        int realSpeed = this.status.getS();
+        if (good.isSpeedBoost()) {
+            realSpeed = (int) Math.round(realSpeed * CalculationConst.ONE_POINT_FIVE);
+        }
+        return realSpeed;
     }
 
     /**

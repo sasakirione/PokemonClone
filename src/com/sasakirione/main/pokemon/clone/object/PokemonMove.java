@@ -31,6 +31,8 @@ public class PokemonMove {
     private final int accuracy;
     /** 技の連続仕様 */
     private final MoveCombo moveCombo;
+    /** 技の急所ランク */
+    private final int vitalRank;
 
     /**
      * コンストラクタ(通常用)
@@ -57,6 +59,11 @@ public class PokemonMove {
         } else {
             this.moveCombo = MoveCombo.NORMAL;
         }
+        if (name.equals(MoveConst.SURGING_STRIKES)) {
+            vitalRank = 3;
+        } else {
+            vitalRank = 1;
+        }
     }
 
     /**
@@ -70,6 +77,7 @@ public class PokemonMove {
         this.accuracy = 100;
         this.pokemon = pokemon;
         this.moveCombo = MoveCombo.NORMAL;
+        this.vitalRank = 0;
 
         if (name.equals("サンダープリズン")) {
             this.moveClass = MoveClass.SPECIAL;
@@ -358,6 +366,15 @@ public class PokemonMove {
      */
     public boolean isCombAttack() {
         return !this.moveCombo.equals(MoveCombo.NORMAL);
+    }
+
+    /**
+     * 急所ランクを返す
+     * 技の急所ランクと技を出すポケモンの急所ランクを合わせた急所ランクを返します
+     * @return 急所ランク
+     */
+    public int getVitalRank() {
+        return this.vitalRank;
     }
 
 }

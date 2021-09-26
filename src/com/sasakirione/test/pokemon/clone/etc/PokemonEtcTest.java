@@ -21,7 +21,7 @@ public class PokemonEtcTest {
     @DisplayName("propertiesファイルの使用")
     public void test002() {
         PokemonDataGetInterface pokemonDataGet = new PokemonDataGetTest();
-        Pokemon test = pokemonDataGet.getObjectByID(100, new int[] {252, 252, 0, 0, 0, 0}, 1, "なし", "まじめ");
+        Pokemon test = pokemonDataGet.getObjectByID(100, 0, new int[] {252, 252, 0, 0, 0, 0}, 1, "なし", "まじめ");
         System.out.println(test.getName());
     }
 }

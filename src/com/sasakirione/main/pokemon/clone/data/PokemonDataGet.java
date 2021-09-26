@@ -20,25 +20,31 @@ public class PokemonDataGet implements PokemonDataGetInterface {
         }
     }
 
-    private String[] pokemonFileGet(int i) {
+    private String[] pokemonFileGet(int i, int form) {
         String[] res = new String[0];
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(properties.getProperty("pokemon")), "windows-31j"))) {
-            res = pokemonFileGetSerch(i, reader);
+            res = pokemonFileGetSerch(i, form,  reader);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return res;
     }
 
-    private String[] pokemonFileGetSerch(int i, BufferedReader reader) throws IOException {
+    private String[] pokemonFileGetSerch(int i, int form, BufferedReader reader) throws IOException {
         String[] res;
+        String name;
+        if (form == 0) {
+            name = String.valueOf(i);
+        } else {
+            name = i + "-" + form;
+        }
         while(true) {
             String row = reader.readLine();
             if (row == null) {
                 throw new AssertionError("ポケモンが見つかりません！");
             }
             String[] rowList = row.split(",");
-            if (rowList[0].equals(String.valueOf(i))) {
+            if (rowList[0].equals(name)) {
                 res = rowList;
                 break;
             }
@@ -47,8 +53,8 @@ public class PokemonDataGet implements PokemonDataGetInterface {
     }
 
     @Override
-    public Pokemon getObjectByID(int dexNo, int[] effort, int i, String good, String nature) {
-        String[] pokemon = pokemonFileGet(dexNo);
+    public Pokemon getObjectByID(int dexNo, int form, int[] effort, int i, String good, String nature) {
+        String[] pokemon = pokemonFileGet(dexNo, form);
         int[] base = new int[] {
                 Integer.parseInt(pokemon[7]),
                 Integer.parseInt(pokemon[8]),
@@ -67,19 +73,25 @@ public class PokemonDataGet implements PokemonDataGetInterface {
         String[] res = new String[0];
         String name2 = "\"" + name + "\"";
         try (BufferedReader reader = new BufferedReader(new FileReader(properties.getProperty("move")))) {
-            while(true) {
-                String row = reader.readLine();
-                if (row == null) {
-                    throw new UnsupportedMoveException("技が見つかりません！");
-                }
-                String[] rowList = row.split(",");
-                if (rowList[3].equals(name2)) {
-                    res = rowList;
-                    break;
-                }
-            }
+            res = pokemonMoveFileGetSerch(name2, reader);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        return res;
+    }
+
+    private String[] pokemonMoveFileGetSerch(String name2, BufferedReader reader) throws IOException {
+        String[] res;
+        while(true) {
+            String row = reader.readLine();
+            if (row == null) {
+                throw new UnsupportedMoveException("技が見つかりません！");
+            }
+            String[] rowList = row.split(",");
+            if (rowList[3].equals(name2)) {
+                res = rowList;
+                break;
+            }
         }
         return res;
     }
