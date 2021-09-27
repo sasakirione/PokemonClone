@@ -71,9 +71,8 @@ public class PokemonDataGet implements PokemonDataGetInterface {
 
     private String[] pokemonMoveFileGet(String name) {
         String[] res = new String[0];
-        String name2 = "\"" + name + "\"";
         try (BufferedReader reader = new BufferedReader(new FileReader(properties.getProperty("move")))) {
-            res = pokemonMoveFileGetSerch(name2, reader);
+            res = pokemonMoveFileGetSerch(name, reader);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,7 +87,7 @@ public class PokemonDataGet implements PokemonDataGetInterface {
                 throw new UnsupportedMoveException("技が見つかりません！");
             }
             String[] rowList = row.split(",");
-            if (rowList[3].equals(name2)) {
+            if (rowList[1].equals(name2)) {
                 res = rowList;
                 break;
             }
@@ -99,12 +98,24 @@ public class PokemonDataGet implements PokemonDataGetInterface {
     @Override
     public PokemonMove getMoveByName(String name, Pokemon pokemon) {
         String[] move = pokemonMoveFileGet(name);
-        int damage = Integer.parseInt(move[7]);
-        MoveClass moveClass = getMoveClass(move[11],move[12]);
-        int priority = Integer.parseInt(move[10]);
-        String moveType = getMoveType(move[6]);
-        int accuracy = Integer.parseInt(move[9]);
-        return new PokemonMove(name, pokemon, moveClass, damage, moveType, priority, accuracy);
+        int damage = Integer.parseInt(move[3]);
+        MoveClass moveClass = getMoveClass(move[7],move[8]);
+        int priority = Integer.parseInt(move[6]);
+        String moveType = getMoveType(move[2]);
+        int accuracy = Integer.parseInt(move[5]);
+        int vitalRank;
+        int comb;
+        try {
+            vitalRank = Integer.parseInt(move[9]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            vitalRank = 0;
+        }
+        try {
+            comb = Integer.parseInt(move[10]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            comb = 0;
+        }
+        return new PokemonMove(name, pokemon, moveClass, damage, moveType, priority, accuracy, vitalRank, comb);
     }
 
     private String getMoveType(String type) {

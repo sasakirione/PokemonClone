@@ -44,9 +44,11 @@ public class PokemonMove {
      * @param moveType 技のタイプ
      * @param priority 技の優先度
      * @param accuracy 技の命中率
+     * @param vitalRank 技の急所ランク
+     * @param comb 技の連続仕様
      */
     public PokemonMove(String name, Pokemon pokemon, MoveClass moveClass, int moveDamage, String moveType,
-                       int priority, int accuracy) {
+                       int priority, int accuracy, int vitalRank, int comb) {
         this.moveName = name;
         this.moveClass = moveClass;
         this.priority = priority;
@@ -54,16 +56,12 @@ public class PokemonMove {
         this.moveType = moveType;
         this.accuracy = accuracy;
         this.pokemon = pokemon;
-        if (name.equals(MoveConst.WATER_SHURIKEN) || name.equals(MoveConst.SURGING_STRIKES)) {
+        if (comb == 3) {
             this.moveCombo = MoveCombo.FIXED_THREE;
         } else {
             this.moveCombo = MoveCombo.NORMAL;
         }
-        if (name.equals(MoveConst.SURGING_STRIKES)) {
-            vitalRank = 3;
-        } else {
-            vitalRank = 1;
-        }
+        this.vitalRank = vitalRank;
     }
 
     /**
