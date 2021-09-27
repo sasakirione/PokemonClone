@@ -1,7 +1,11 @@
 package com.sasakirione.main.pokemon.clone.object;
 
 import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
+import com.sasakirione.main.pokemon.clone.constant.MoveConst;
+import com.sasakirione.main.pokemon.clone.exception.UnsupportedMoveException;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
+import com.sasakirione.main.pokemon.clone.object.code.MoveClass;
+import com.sasakirione.main.pokemon.clone.object.code.MoveCombo;
 import com.sasakirione.main.pokemon.clone.object.value.*;
 import com.sasakirione.main.pokemon.clone.utility.CalculationUtility;
 
@@ -16,18 +20,35 @@ public class PokemonMove {
     /** ポケモン */
     private final Pokemon pokemon;
     /** 技の種類 */
-    private MoveClass moveClass;
+    private final MoveClass moveClass;
     /** 技の威力 */
     private int moveDamage;
     /** 技のタイプ */
-    private String moveType;
+    private final String moveType;
     /** 技の優先度 */
     private final int priority;
     /** 技の命中率 */
     private final int accuracy;
+    /** 技の連続仕様 */
+    private final MoveCombo moveCombo;
+    /** 技の急所ランク */
+    private final int vitalRank;
 
+    /**
+     * コンストラクタ(通常用)
+     * 技クラスのコンストラクタです。
+     * @param name わざの名前
+     * @param pokemon ポケモンのインスタンス
+     * @param moveClass 技の酒類
+     * @param moveDamage 技の威力
+     * @param moveType 技のタイプ
+     * @param priority 技の優先度
+     * @param accuracy 技の命中率
+     * @param vitalRank 技の急所ランク
+     * @param comb 技の連続仕様
+     */
     public PokemonMove(String name, Pokemon pokemon, MoveClass moveClass, int moveDamage, String moveType,
-                       int priority, int accuracy) {
+                       int priority, int accuracy, int vitalRank, int comb) {
         this.moveName = name;
         this.moveClass = moveClass;
         this.priority = priority;
@@ -35,6 +56,12 @@ public class PokemonMove {
         this.moveType = moveType;
         this.accuracy = accuracy;
         this.pokemon = pokemon;
+        if (comb == 3) {
+            this.moveCombo = MoveCombo.FIXED_THREE;
+        } else {
+            this.moveCombo = MoveCombo.NORMAL;
+        }
+        this.vitalRank = vitalRank;
     }
 
     /**
@@ -47,33 +74,51 @@ public class PokemonMove {
         this.priority = 0;
         this.accuracy = 100;
         this.pokemon = pokemon;
+        this.moveCombo = MoveCombo.NORMAL;
+        this.vitalRank = 0;
 
         if (name.equals("サンダープリズン")) {
             this.moveClass = MoveClass.SPECIAL;
             this.moveDamage = 80;
             this.moveType = "でんき";
+            return;
         }
-        if (name.equals("からをやぶる")) {
+        if (name.equals(MoveConst.SHELL_SMASH)) {
             this.moveClass = MoveClass.SELF_CHANGE;
             this.moveType = "ノーマル";
+            return;
         }
-        if (name.equals("ちきゅうなげ")) {
+        if (name.equals(MoveConst.SEISMIC_TOSS)) {
             this.moveClass = MoveClass.PHYSICS;
             this.moveType = "ノーマル";
+            return;
         }
-        if (name.equals("かいでんぱ")) {
+        if (name.equals(MoveConst.EERIE_IMPULSE)) {
             this.moveClass = MoveClass.ENEMY_CHANGE;
             this.moveType = "でんき";
+            return;
         }
-        if (name.equals("でんじは")) {
+        if (name.equals(MoveConst.THUNDER_WAVE)) {
             this.moveClass = MoveClass.ENEMY_CHANGE;
             this.moveType = "でんき";
+            return;
         }
-        if (name.equals("めいそう")) {
+        if (name.equals(MoveConst.CALM_MIND)) {
             this.moveClass = MoveClass.SELF_CHANGE;
             this.moveType = "エスパー";
+            return;
         }
-
+        if (name.equals(MoveConst.HARDEN)) {
+            this.moveClass = MoveClass.SELF_CHANGE;
+            this.moveType = "ノーマル";
+            return;
+        }
+        if (name.equals(MoveConst.SOAK)) {
+            this.moveClass = MoveClass.ENEMY_CHANGE;
+            this.moveType = "みず";
+            return;
+        }
+        throw new UnsupportedMoveException();
     }
 
     /**
@@ -83,15 +128,6 @@ public class PokemonMove {
      */
     public String getMoveName() {
         return moveName;
-    }
-
-    /**
-     * わざの種類を返す(テスト用)
-     * わざの種類を返します。
-     * @return わざの種類(0:物理技、1:特殊技、2：自分にかかる変化技、3:相手にかかる変化技、4：場にかかる変化技)
-     */
-    public MoveClass getMoveClass() {
-        return moveClass;
     }
 
     /**
@@ -200,29 +236,143 @@ public class PokemonMove {
         }
     }
 
+    /**
+     * 攻撃力を返す
+     * 防御補正前の段階まで計算を進めた攻撃力を返します
+     * @return 攻撃力
+     */
     public double getPower() {
         double a = Math.floor(50 * 0.4 + 2);
         double b = a * moveDamage * getRealAttack();
         return CalculationUtility.fiveOutOverFiveIn(b * this.pokemon.getAbility().powerBoost(this) * this.pokemon.getGood().powerBoost(moveClass));
     }
 
+    /**
+     * リベロ処理
+     * 攻撃する側のタイプを技のタイプにします
+     */
     public void libero() {
         pokemon.libero(new Type(moveType));
     }
 
+    /**
+     * 技の命中判定
+     * 技の命中判定をします
+     * @return 技が命中した場合はtrue
+     */
     public boolean isMoveHit() {
         return  randomForAccuracy() < this.accuracy;
     }
 
+    /**
+     * 命中判定用乱数
+     * 技の命中判定をするのに必要な乱数を返します
+     * @return 乱数(0-99)
+     */
     public int randomForAccuracy() {
         Random random = new Random();
         return random.nextInt(100);
     }
 
+    /**
+     * 攻撃終了後の処理
+     * 技が命中した後に行う処理を行います
+     * ex) いのちのたま
+     */
     public void endDecision() {
         if (this.pokemon.getGood().isDamageOneEighth()) {
             this.pokemon.getStatus().damageOneEighth();
             BattleLog.tama(this.pokemon.getName());
         }
     }
+
+    /**
+     * てんねん用攻撃力を返す
+     *　てんねん用に能力変化を無視した攻撃力を返します
+     *  @return てんねん用攻撃力
+     */
+    public double getPower2() {
+        double a = Math.floor(50 * 0.4 + 2);
+        double b = a * moveDamage * getRealAttack2();
+        return CalculationUtility.fiveOutOverFiveIn(b * this.pokemon.getAbility().powerBoost(this) * this.pokemon.getGood().powerBoost(moveClass));
+    }
+
+    /**
+     * てんねん用攻撃実数値を返す
+     * 補正がかかってない攻撃または特防の実数値を返します
+     * @return 物理技の場合は攻撃実数値(補正なし)、特殊技の場合は特攻実数値(補正なし)
+     */
+    private double getRealAttack2() {
+        if (moveClass.equals(MoveClass.PHYSICS)) {
+            return this.pokemon.getStatus().getA2();
+        } else {
+            return this.pokemon.getStatus().getC2();
+        }
+    }
+
+    /**
+     * 技の連続回数を返す
+     * 技を何回連続で行うかを返します
+     * @return 技の連続回数
+     */
+    public int getCombCount() {
+        if (this.moveCombo.equals(MoveCombo.NORMAL)) {
+            return 1;
+        }
+        if (this.moveCombo.equals(MoveCombo.FIXED_TWO)) {
+            return 2;
+        }
+        if (this.moveCombo.equals(MoveCombo.FIXED_THREE)) {
+            return 3;
+        }
+        if (this.moveCombo.equals(MoveCombo.MAX_THREE)) {
+            return setCombCount(3);
+        }
+        if (this.moveCombo.equals(MoveCombo.MAX_FIVE)) {
+            return setCombCount(5);
+        }
+        return 1;
+    }
+
+    /**
+     * 技の連続回数を算出する
+     * 連続回数がランダムで決まる技の連続回数を決定する
+     * @return 技の連続回数
+     */
+    private int setCombCount(int i) {
+        if (i == 3) {
+            return 3;
+        }
+        Random random = new Random();
+        int randomNumber = random.nextInt(100);
+        if (randomNumber < 35) {
+            return 2;
+        }
+        if (randomNumber < 70) {
+            return 3;
+        }
+        if (randomNumber < 85) {
+            return 4;
+        }
+        return 5;
+    }
+
+    /**
+     * 連続技判定
+     * 連続技かどうかを判定します
+     * @return 連続技の場合はtrueを返す
+     */
+    public boolean isCombAttack() {
+        return !this.moveCombo.equals(MoveCombo.NORMAL);
+    }
+
+    /**
+     * 急所ランクを返す
+     * 技の急所ランクと技を出すポケモンの急所ランクを合わせた急所ランクを返します
+     * @return 急所ランク
+     */
+    public int getVitalRank() {
+        return this.vitalRank;
+    }
+
 }

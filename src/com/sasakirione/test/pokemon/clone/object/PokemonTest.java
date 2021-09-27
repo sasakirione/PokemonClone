@@ -11,43 +11,63 @@ import com.sasakirione.main.pokemon.clone.object.value.Effort;
 import com.sasakirione.main.pokemon.clone.object.value.Type;
 import org.junit.jupiter.api.*;
 
-import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PokemonTest {
+    /** CSレジエレキ　*/
     Pokemon regieleki;
+    /** CSめがねレジエレキ　*/
     Pokemon regieleki_megane;
+    /** CSサンダー　*/
     Pokemon zapdos;
+    /** CS珠サンダー　*/
     Pokemon zapdos_tama;
+    /** HDゲッコウガ　*/
     Pokemon greninja;
+    /** CSスカーフポットデス　*/
     Pokemon polteageist;
+    /** CSしろいハーブポットデス　*/
+    Pokemon polteageist2;
+    /** ASジュナイパー　*/
     Pokemon decidueye;
+    /** CSテテフちゃん　*/
     Pokemon tapuLele;
+    /** CSアシレ　*/
     Pokemon primarina;
+    /** HC残飯レヒレ　*/
     Pokemon tapuFini;
+    /** AS珠ミミッキュ　*/
     Pokemon mimikyu;
+    /** HBオボンなまこちゃん　*/
+    Pokemon pyukumuku;
+    /** ASハチマキ水ウーラオス */
+    Pokemon urshifu;
     PokemonDataGetInterface pokemonDataGet;
 
     int[] cs = new int[]{0, 0, 0, 252, 0, 252};
     int[] as = new int[]{0, 252, 0, 0, 0, 252};
     int[] hc = new int[]{252, 0, 0, 252, 0, 0};
+    int[] hb = new int[]{252, 0, 252, 0, 0, 0};
 
     @BeforeEach
     public void before() {
         pokemonDataGet = new PokemonDataGet();
-        regieleki = pokemonDataGet.getObjectByID(894, this.cs, 1,"なし" , "おくびょう");
-        regieleki_megane = pokemonDataGet.getObjectByID(894, this.cs, 1,"こだわりメガネ" , "おくびょう");
-        polteageist = pokemonDataGet.getObjectByID(855, this.cs,3, "こだわってないスカーフ", "おくびょう");
-        zapdos = pokemonDataGet.getObjectByID(145, this.cs, 1, "なし", "おくびょう");
-        zapdos_tama = pokemonDataGet.getObjectByID(145, this.cs, 1, "いのちのたま", "おくびょう");
-        greninja = pokemonDataGet.getObjectByID(658, new int[]{252, 0, 0, 0, 252 , 0}, 3, "なし", "おくびょう");
-        decidueye = pokemonDataGet.getObjectByID(724, this.as, 1, "なし", "ようき");
-        tapuLele = pokemonDataGet.getObjectByID(786, this.cs, 1, "なし", "おくびょう");
-        primarina = pokemonDataGet.getObjectByID(730, this.cs, 1, "なし", "ひかえめ");
-        tapuFini = pokemonDataGet.getObjectByID(788, this.hc, 1, "たべのこし", "ひかえめ");
-        mimikyu = pokemonDataGet.getObjectByID(778, this.as, 1, "いのちのたま", "ようき");
+        regieleki = pokemonDataGet.getObjectByID(894,0 , this.cs, 1,"なし" , "おくびょう");
+        regieleki_megane = pokemonDataGet.getObjectByID(894, 0, this.cs, 1,"こだわりメガネ" , "おくびょう");
+        polteageist = pokemonDataGet.getObjectByID(855, 0, this.cs,3, "こだわってないスカーフ", "おくびょう");
+        polteageist2 = pokemonDataGet.getObjectByID(855, 0, this.cs,3, "しろいハーブ", "おくびょう");
+        zapdos = pokemonDataGet.getObjectByID(145, 0, this.cs, 1, "なし", "おくびょう");
+        zapdos_tama = pokemonDataGet.getObjectByID(145, 0, this.cs, 1, "いのちのたま", "おくびょう");
+        greninja = pokemonDataGet.getObjectByID(658, 0, new int[]{252, 0, 0, 0, 252 , 0}, 3, "なし", "おくびょう");
+        decidueye = pokemonDataGet.getObjectByID(724, 0, this.as, 1, "なし", "ようき");
+        tapuLele = pokemonDataGet.getObjectByID(786, 0, this.cs, 1, "なし", "おくびょう");
+        primarina = pokemonDataGet.getObjectByID(730, 0, this.cs, 1, "なし", "ひかえめ");
+        tapuFini = pokemonDataGet.getObjectByID(788, 0, this.hc, 1, "たべのこし", "ひかえめ");
+        mimikyu = pokemonDataGet.getObjectByID(778, 0, this.as, 1, "いのちのたま", "ようき");
+        pyukumuku = pokemonDataGet.getObjectByID(771, 0, this.hb, 3, "オボンのみ", "ずぶとい");
+        urshifu = pokemonDataGet.getObjectByID(892, 1, this.as, 1, "こだわりハチマキ" , "ようき");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
@@ -194,7 +214,7 @@ public class PokemonTest {
         stadium.forwardTurn(a2, b);
         BattleLog.getLogAll();
         Assertions.assertEquals("ポットデス の からをやぶる のこうげきだ！", BattleLog.getLog(4));
-        Assertions.assertEquals("ポットデス の シャドーボール のこうげきだ！", BattleLog.getLog(8));
+        Assertions.assertEquals("ポットデス の シャドーボール のこうげきだ！", BattleLog.getLog(10));
     }
 
     @Test
@@ -257,14 +277,14 @@ public class PokemonTest {
     @DisplayName("ポケモンのデータを取得してポケモンインスタンスを作る")
     public void test024() {
         Pokemon katana;
-        katana = pokemonDataGet.getObjectByID(798, as, 1, "こだわりハチマキ", "いじっぱり");
+        katana = pokemonDataGet.getObjectByID(798, 0, as, 1, "こだわりハチマキ", "いじっぱり");
         Assertions.assertEquals("カミツルギ", katana.getName());
     }
 
     @Test
     @DisplayName("技データを取得して技を出す")
     public void test025() {
-        Pokemon katana = pokemonDataGet.getObjectByID(798, as, 1, "こだわりハチマキ", "いじっぱり");
+        Pokemon katana = pokemonDataGet.getObjectByID(798, 0, as, 1, "こだわりハチマキ", "いじっぱり");
         PokemonMove sword = katana.getDamage("せいなるつるぎ");
         Assertions.assertEquals("かくとう", sword.getMoveType());
     }
@@ -284,7 +304,7 @@ public class PokemonTest {
     @RepeatedTest(100)
     public void test027() {
         PokemonMove a = primarina.getDamage("なみのり");
-        Pokemon tapuLele2 = pokemonDataGet.getObjectByID(786, this.cs, 1, "こだわりメガネ", "おくびょう");
+        Pokemon tapuLele2 = pokemonDataGet.getObjectByID(786,0,  this.cs, 1, "こだわりメガネ", "おくびょう");
         PokemonMove b = tapuLele2.getDamage("サイコキネシス");
         PokemonStadium stadium = new PokemonStadium(primarina, tapuLele2);
         stadium.forwardTurn(a,b);
@@ -349,4 +369,64 @@ public class PokemonTest {
         Assertions.assertEquals(114, mimikyu.getCurrentHP());
     }
 
+    @Test
+    @DisplayName("てんねんの実装")
+    public void test033() {
+        PokemonStadium stadium = new PokemonStadium(pyukumuku, polteageist);
+        PokemonMove a = polteageist.getDamage2("からをやぶる");
+        PokemonMove b = pyukumuku.getDamage2("かたくなる");
+        PokemonMove sb = polteageist.getDamage("シャドーボール");
+        PokemonMove b2 = pyukumuku.getDamage2("かたくなる");
+        stadium.forwardTurn(b,a);
+        stadium.forwardTurn(b2, sb);
+        BattleLog.getLogAll();
+        Assertions.assertTrue(94 < pyukumuku.getCurrentHP());
+    }
+
+    @Test
+    @DisplayName("みずびたしの実装")
+    public void test034() {
+        PokemonStadium stadium = new PokemonStadium(pyukumuku, polteageist);
+        PokemonMove a = pyukumuku.getDamage2("みずびたし");
+        PokemonMove b = polteageist.getDamage2("からをやぶる");
+        stadium.forwardTurn(a,b);
+        BattleLog.getLogAll();
+        String water = "みず";
+        System.out.println(polteageist.getType());
+        Assertions.assertEquals(water, polteageist.getType().toString());
+    }
+
+    @Test
+    @DisplayName("しろいハーブ実装")
+    public void test035() {
+        PokemonStadium stadium = new PokemonStadium(regieleki, polteageist2);
+        PokemonMove a = regieleki.getDamage2("でんじは");
+        PokemonMove b = polteageist2.getDamage2("からをやぶる");
+        stadium.forwardTurn(a, b);
+        BattleLog.getLogAll();
+        Assertions.assertEquals("[0, 2, 0, 2, 0, 2]", Arrays.toString(polteageist2.getStatus().getRank()));
+        Assertions.assertFalse(polteageist2.hasGood());
+    }
+
+    @Test
+    @DisplayName("連続技を実装")
+    public void test036() {
+        PokemonStadium stadium = new PokemonStadium(mimikyu, greninja);
+        PokemonMove mi = mimikyu.getDamage("シャドークロー");
+        PokemonMove g = greninja.getDamage("みずしゅりけん");
+        stadium.forwardTurn(mi, g);
+        BattleLog.getLogAll();
+        Assertions.assertNotEquals(114, mimikyu.getCurrentHP());
+    }
+
+    @RepeatedTest(100)
+    @DisplayName("すいりゅうれんだの実装(急所ランクが設定された技を実装)")
+    public void test037() {
+        PokemonStadium stadium = new PokemonStadium(urshifu, mimikyu);
+        PokemonMove u = urshifu.getDamage("すいりゅうれんだ");
+        PokemonMove m = mimikyu.getDamage("シャドークロー");
+        stadium.forwardTurn(u, m);
+        BattleLog.getLogAll();
+        Assertions.assertTrue(mimikyu.isDead());
+    }
 }

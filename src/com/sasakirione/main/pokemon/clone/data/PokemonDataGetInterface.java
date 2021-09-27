@@ -8,6 +8,6 @@ import com.sasakirione.main.pokemon.clone.object.value.Status;
 import com.sasakirione.main.pokemon.clone.object.value.Type;
 
 public interface PokemonDataGetInterface {
-    Pokemon getObjectByID(int dexNo, int[] effort, int i, String good, String nature);
+    Pokemon getObjectByID(int dexNo, int form, int[] effort, int i, String good, String nature);
     PokemonMove getMoveByName(String name, Pokemon pokemon);
 }

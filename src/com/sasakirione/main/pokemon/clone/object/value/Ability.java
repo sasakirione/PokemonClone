@@ -129,4 +129,13 @@ public class Ability {
     public boolean isBakekawa() {
         return (this.abilityName.equals(AbilityConst.DISGUISE) && !this.abilityBool);
     }
+
+    /**
+     *  てんねん判定
+     *  相手の能力変化を無効化する特性かどうかを判定します
+     *  @return 条件に合致した場合にtrue
+     */
+    public boolean isUnware() {
+        return this.abilityName.equals(AbilityConst.UNWARE);
+    }
 }

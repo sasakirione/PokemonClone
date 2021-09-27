@@ -58,7 +58,7 @@ public class BattleLog {
     }
 
     public static void vitals() {
-        add("きゅうしょにあたった！");
+        add("急所に 当たった！");
     }
 
     public static void statusAilmentError() {
@@ -146,5 +146,13 @@ public class BattleLog {
         add(name + "の ばけのかわ");
         add("ばけのかわが みがわりに なった！");
         add(name + "の ばけのかわが はがれた！");
+    }
+
+    public static void whiteHerb(String name) {
+        add(name + "は しろいハーブで ステータスを 元に戻した！");
+    }
+
+    public static void combAttack(int count) {
+        add(count +"回 当たった！");
     }
 }

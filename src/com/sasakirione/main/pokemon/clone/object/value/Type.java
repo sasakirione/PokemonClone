@@ -18,6 +18,10 @@ public class Type {
      * コンストラクタ(複合タイプ)
      */
     public Type(String type1, String type2) {
+        if (type2.equals("") && !isTypeErrorCheck(type1)) {
+            types = new String[]{type1};
+            return;
+        }
         if (isTypeErrorCheck(type1)) {
             throw new IllegalArgumentException("存在しないタイプが含まれています");
         }
@@ -111,8 +115,24 @@ public class Type {
         return Arrays.asList(type1).contains(type2);
     }
 
-
+    /**
+     * タイプのコピー
+     * タイプをディープコピーします
+     * @return タイプのディープコピー
+     */
     public Type copy() {
         return new Type(this.types.clone());
+    }
+
+    @Override
+    public String toString() {
+        String type1 = types[0];
+        String type2;
+        if (types.length == 1) {
+            type2 = "";
+        } else {
+            type2 = types[1];
+        }
+        return type1 + type2;
     }
 }

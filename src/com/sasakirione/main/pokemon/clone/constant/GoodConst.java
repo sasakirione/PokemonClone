@@ -11,5 +11,7 @@ public class GoodConst {
 
     public static final String LEFT_OVERS = "たべのこし";
 
+    public static final String WHITE_HERB = "しろいハーブ";
+
     public static final String NOT_CHOICE_SCARF = "こだわってないスカーフ";
 }

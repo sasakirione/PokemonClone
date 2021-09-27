@@ -1,10 +1,13 @@
 package com.sasakirione.main.pokemon.clone.object;
 
 import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
+import com.sasakirione.main.pokemon.clone.constant.MoveConst;
 import com.sasakirione.main.pokemon.clone.data.PokemonDataGet;
 import com.sasakirione.main.pokemon.clone.data.PokemonDataGetInterface;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 import com.sasakirione.main.pokemon.clone.object.value.*;
+
+import java.util.ArrayList;
 
 /**
  * ポケモン自体を表すクラス
@@ -22,7 +25,6 @@ public class Pokemon {
      * ポケモンのタイプ
      */
     private Type type;
-
     /**
      * ポケモンの初期タイプ
      */
@@ -63,24 +65,12 @@ public class Pokemon {
      */
     public Pokemon(String name, int[] effort, int[] base, String good, String nature, String type1, String type2, String ability) {
         this.name = name;
-        setType(type1, type2);
-        if (type2.equals("")) {
-            this.originalType = new Type(type1);
-        } else {
-            this.originalType = new Type(type1, type2);
-        }
-        this.status = new Status(base, new Effort(effort), good, new Nature(nature), this.getName());
-        this.ability = new Ability(ability);
+        this.type = new Type(type1, type2);
+        this.originalType = new Type(type1, type2);
         this.good = new Good(good);
-        pokemonDataGet = new PokemonDataGet();
-    }
-
-    private void setType(String type1, String type2) {
-        if (type2.equals("")) {
-            this.type = new Type(type1);
-        } else {
-            this.type = new Type(type1, type2);
-        }
+        this.status = new Status(base, new Effort(effort), new Nature(nature));
+        this.ability = new Ability(ability);
+        this.pokemonDataGet = new PokemonDataGet();
     }
 
     /**
@@ -148,12 +138,6 @@ public class Pokemon {
             BattleLog.moveMiss();
             return;
         }
-        if (ability.isBakekawa()) {
-            ability.abilityOn();
-            BattleLog.bakekawa(this.name);
-            status.damageOneEighth();
-            return;
-        }
         if (a.isEnemyChangeMove()) {
             takeChange(a);
             return;
@@ -162,21 +146,61 @@ public class Pokemon {
             this.status.constantDamage(50);
             return;
         }
-        double power = a.getPower();
-        int defenseChoice;
+
+        double power = getPower(a);
+        int defenseChoice = getDefenseChoice(a);
         double typeMagnification = this.type.getTypeMagnification(a.getMoveType());
         double magnification = a.getMagnification() * typeMagnification;
 
+        moveDecisionAll(a, power, defenseChoice, typeMagnification, magnification);
+        a.endDecision();
+        if (this.good.isGoodUsed()) {
+            this.lostGood();
+        }
+    }
+
+    private int getDefenseChoice(PokemonMove a) {
+        int defenseChoice;
         if (a.isPhysicsMove()) {
             defenseChoice = 2;
         } else {
             defenseChoice = 4;
         }
-        this.status.damageCalculation(power, defenseChoice, magnification, a.getMoveType());
+        return defenseChoice;
+    }
+
+    private void moveDecisionAll(PokemonMove a, double power, int defenseChoice, double typeMagnification, double magnification) {
+        int count = a.getCombCount();
+        int vitalRank = a.getVitalRank();
+        for (int i = 0; i < count; i++){
+            if (ability.isBakekawa()) {
+                ability.abilityOn();
+                BattleLog.bakekawa(this.name);
+                status.damageOneEighth();
+                continue;
+            }
+            moveDecision(power, defenseChoice, typeMagnification, magnification, vitalRank);
+            remainingDamageDecision();
+        }
+        if (a.isCombAttack()) {
+            BattleLog.combAttack(count);
+        }
+    }
+
+    private double getPower(PokemonMove a) {
+        double power;
+        if (this.ability.isUnware()) {
+            power = a.getPower2();
+        } else {
+            power = a.getPower();
+        }
+        return power;
+    }
+
+    private void moveDecision(double power, int defenseChoice, double typeMagnification, double magnification, int vitalRank) {
+        this.status.damageCalculation(power, defenseChoice, magnification, vitalRank);
         BattleLog.typeMagnification(typeMagnification);
         BattleLog.hp(this);
-        a.endDecision();
-        remainingDamageDecision();
     }
 
     /**
@@ -250,14 +274,11 @@ public class Pokemon {
      * @return ポケモンの素早さ実数値
      */
     public int getS() {
-        double realSpeed = this.status.getS();
+        int realSpeed = this.status.getS();
         if (good.isSpeedBoost()) {
-            realSpeed = realSpeed * CalculationConst.ONE_POINT_FIVE;
+            realSpeed = (int) Math.round(realSpeed * CalculationConst.ONE_POINT_FIVE);
         }
-        if (status.isParCheck()) {
-            realSpeed = realSpeed * CalculationConst.HALF;
-        }
-        return (int) Math.round(realSpeed);
+        return realSpeed;
     }
 
     /**
@@ -270,7 +291,7 @@ public class Pokemon {
         return ability;
     }
 
-    private boolean hasGood() {
+    public boolean hasGood() {
         return this.good != null;
     }
 
@@ -311,6 +332,9 @@ public class Pokemon {
             BattleLog.LeftOvers(this.name);
             this.status.recoveryOnePointSixteen();
         }
+        if (good.isGoodUsed()) {
+            lostGood();
+        }
     }
 
 
@@ -321,20 +345,38 @@ public class Pokemon {
      * @param a 自分に向けられた変化技のインスタンス
      */
     public void takeChange(PokemonMove a) {
-        if (a.isMoveNameCheck("からをやぶる")) {
+        ArrayList<Integer> whiteHerb = new ArrayList<>();
+        if (a.isMoveNameCheck(MoveConst.SHELL_SMASH)) {
+            rankUp(2, -1);
+            whiteHerb.add(2);
+            rankUp(4, -1);
+            whiteHerb.add(4);
             rankUp(1, 2);
             rankUp(3, 2);
             rankUp(5, 2);
         }
-        if (a.isMoveNameCheck("かいでんぱ")) {
+        if (a.isMoveNameCheck(MoveConst.EERIE_IMPULSE)) {
             rankUp(3, -2);
+            whiteHerb.add(3);
         }
-        if (a.isMoveNameCheck("でんじは")) {
+        if (a.isMoveNameCheck(MoveConst.THUNDER_WAVE)) {
             getPAR();
         }
-        if (a.isMoveNameCheck("めいそう")) {
+        if (a.isMoveNameCheck(MoveConst.CALM_MIND)) {
             rankUp(3, 1);
             rankUp(4, 1);
+        }
+        if (a.isMoveNameCheck(MoveConst.HARDEN)) {
+            rankUp(2, 1);
+        }
+        if (a.isMoveNameCheck(MoveConst.SOAK)) {
+            this.type = new Type("みず");
+            BattleLog.changeType(this.name, "みず");
+        }
+        if (this.good.isWhiteHerb() && !whiteHerb.isEmpty()) {
+            whiteHerb.forEach(i -> getStatus().rankReset(i));
+            BattleLog.whiteHerb(this.name);
+            this.good.goodUsed();
         }
     }
 }

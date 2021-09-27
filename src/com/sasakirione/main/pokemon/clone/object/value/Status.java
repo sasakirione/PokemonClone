@@ -1,50 +1,29 @@
 package com.sasakirione.main.pokemon.clone.object.value;
 
+import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
 import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
 import com.sasakirione.main.pokemon.clone.utility.CalculationUtility;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Random;
 
 public class Status {
-    private String pokemonName;
     private HP currentHP;
     private int[] real;
     private int[] rank;
     private final int[] realSource;
     private int[] base;
     private final Effort effort;
-    private String good;
     private final Nature nature;
     private boolean parCheck = false;
     private boolean brnCheck = false;
 
-    public Status(int[] base, Effort effort, String good, Nature nature, String name) {
+    public Status(int[] base, Effort effort, Nature nature) {
         this.rank = new int[] {0, 0, 0, 0, 0, 0};
-        this.good = good;
         this.base = base;
         this.effort = effort;
         this.nature = nature;
-        this.pokemonName = name;
         pokemonRealSet();
         this.realSource = real.clone();
-        setGood();
-    }
-
-    private void setGood() {
-        if (this.good.equals("こだわりスカーフ")) {
-            this.real[5] = (int) Math.round(real[5] * 1.5);
-        }
-        if (this.good.equals("こだわりメガネ")) {
-            this.real[3] = (int) Math.round(real[3] * 1.5);
-        }
-        if (this.good.equals("こだわりハチマキ")) {
-            this.real[1] = (int) Math.round(real[1] * 1.5);
-        }
-        if (this.good.equals("こだわらないスカーフ")) {
-            this.real[5] = (int) Math.round(real[5] * 1.5);
-        }
     }
 
     public int getHP() {
@@ -71,7 +50,11 @@ public class Status {
     }
 
     public int getS() {
-        return real[5];
+        double realSpeed = this.real[5];
+        if (this.isParCheck()) {
+            realSpeed = realSpeed * CalculationConst.HALF;
+        }
+        return (int) Math.round(realSpeed);
     }
 
     public int[] getRank() {
@@ -129,13 +112,12 @@ public class Status {
     }
 
     private void pokemonRealSet() {
-        int[] realTemp = effort.realCalculation(this.base);
-        this.real = realTemp;
-        pokemonNatureCalculation(realTemp);
+        this.real = effort.realCalculation(this.base);
+        pokemonNatureCalculation();
         this.currentHP = new HP(this.real[0]);
     }
 
-    private void pokemonNatureCalculation(int[] tempReal) {
+    private void pokemonNatureCalculation() {
         if (!nature.isMajime()) {
             int plus = this.nature.plusNature();
             int minus = this.nature.minusNature();
@@ -144,10 +126,10 @@ public class Status {
         }
     }
 
-    public void damageCalculation(double power, int defense, double magnification, String type) {
+    public void damageCalculation(double power, int defense, double magnification, int vitalRank) {
         int realDefense = real[defense];
         double vitals = 1.0;
-        if (isVitals()) {
+        if (isVitals(vitalRank)) {
             vitals = 1.5;
             realDefense = realSource[defense];
             BattleLog.vitals();
@@ -166,9 +148,15 @@ public class Status {
         return 0.85 + (0.01 * randomNumberRaw);
     }
 
-    private boolean isVitals() {
+    private boolean isVitals(int vitalRank) {
+        int vital = switch (vitalRank) {
+          case 1 -> 8;
+          case 2 -> 2;
+          case 3,4,5,6 -> 1;
+          default -> 24;
+        };
         Random random = new Random();
-        int randomNumber = random.nextInt(16);
+        int randomNumber = random.nextInt(vital);
         return randomNumber == 0;
     }
 
@@ -206,6 +194,10 @@ public class Status {
         pokemonRealSet();
     }
 
+    public void rankReset(Integer i) {
+        this.rank[i] = 0;
+    }
+
     public void damageOneEighth() {
         this.currentHP.damageOneEighth();
         BattleLog.hp(this);
@@ -214,5 +206,13 @@ public class Status {
     public void recoveryOnePointSixteen() {
         this.currentHP.recoveryOnePointSixteen();
         BattleLog.hp(this);
+    }
+
+    public double getA2() {
+        return this.realSource[1];
+    }
+
+    public double getC2() {
+        return this.realSource[3];
     }
 }
