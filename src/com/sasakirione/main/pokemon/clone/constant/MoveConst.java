@@ -10,4 +10,5 @@ public class MoveConst {
     public static final String SOAK = "みずびたし";
     public static final String WATER_SHURIKEN = "みずしゅりけん";
     public static final String SURGING_STRIKES = "すいりゅうれんだ";
+    public static final String PETAL_DANCE = "はなびらのまい";
 }

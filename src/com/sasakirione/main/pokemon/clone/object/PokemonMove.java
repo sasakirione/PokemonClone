@@ -33,13 +33,15 @@ public class PokemonMove {
     private final MoveCombo moveCombo;
     /** 技の急所ランク */
     private final int vitalRank;
+    /** 技の連続回数 */
+    private int multipleCount;
 
     /**
      * コンストラクタ(通常用)
      * 技クラスのコンストラクタです。
      * @param name わざの名前
      * @param pokemon ポケモンのインスタンス
-     * @param moveClass 技の酒類
+     * @param moveClass 技の種類
      * @param moveDamage 技の威力
      * @param moveType 技のタイプ
      * @param priority 技の優先度
@@ -56,12 +58,9 @@ public class PokemonMove {
         this.moveType = moveType;
         this.accuracy = accuracy;
         this.pokemon = pokemon;
-        if (comb == 3) {
-            this.moveCombo = MoveCombo.FIXED_THREE;
-        } else {
-            this.moveCombo = MoveCombo.NORMAL;
-        }
+        this.moveCombo = setMoveCombo(comb);
         this.vitalRank = vitalRank;
+        this.multipleCount = 0;
     }
 
     /**
@@ -119,6 +118,21 @@ public class PokemonMove {
             return;
         }
         throw new UnsupportedMoveException();
+    }
+
+    /**
+     * 連続仕様変換
+     * わざの連続仕様のコードをEnum型に変換します
+     * @return わざの連続仕様
+     */
+    private MoveCombo setMoveCombo(int code) {
+        return switch (code) {
+            case 3 -> MoveCombo.FIXED_THREE;
+            case 2 -> MoveCombo.FIXED_TWO;
+            case 30 -> MoveCombo.MAX_THREE;
+            case 50 -> MoveCombo.MAX_FIVE;
+            default -> MoveCombo.NORMAL;
+        };
     }
 
     /**
@@ -375,4 +389,21 @@ public class PokemonMove {
         return this.vitalRank;
     }
 
+    public boolean isMultipleTurnMove() {
+        return this.moveName.equals(MoveConst.PETAL_DANCE);
+    }
+
+    public boolean isMultipleTurnMoveEnd() {
+        if (isMultipleTurnMove() && this.multipleCount < 3) {
+            return false;
+        } else if (isMultipleTurnMove() && this.multipleCount == 3) {
+            return randomForAccuracy() < 50;
+        } else {
+            return true;
+        }
+    }
+
+    public void forwardTurn() {
+        this.multipleCount++;
+    }
 }

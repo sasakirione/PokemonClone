@@ -17,6 +17,14 @@ public class PokemonStadium {
     private Field field;
     /** テストモード(技が必中になります) */
     private boolean testMode = false;
+    /** Aサイドのバトル場に出てるポケモンの複数ターン技状態*/
+    private Boolean isMultipleTurnMoveByA = false;
+    /** Aサイドのバトル場に出てるポケモンの複数ターン技インスタンス*/
+    private PokemonMove multipleTurnMoveByA;
+    /** Bサイドのバトル場に出てるポケモンの複数ターン技状態*/
+    private Boolean isMultipleTurnMoveByB = false;
+    /** Bサイドのバトル場に出てるポケモンの複数ターン技インスタンス*/
+    private PokemonMove multipleTurnMoveByB;
 
     /**
      * バトル場クラスのコンストラクタ
@@ -62,6 +70,52 @@ public class PokemonStadium {
 
     /**
      * ターンを進める
+     * 1ターン分のバトル処理を行います。
+     * @param moveSideA Aサイドのポケモンのわざ
+     * @param moveSideB Bサイドのポケモンのわざ
+     */
+    public void forwardTurn(String moveSideA, String moveSideB) {
+        PokemonMove moveA = setMove(0, moveSideA);
+        PokemonMove moveB = setMove(1, moveSideB);
+        this.forwardTurn(moveA, moveB);
+    }
+
+    private PokemonMove setMove(int side, String moveName) {
+        PokemonMove move;
+        if (side == 0) {
+            if (this.isMultipleTurnMoveByA) {
+                move = this.multipleTurnMoveByA;
+                this.multipleTurnMoveByA.isMultipleTurnMove();
+                if (this.multipleTurnMoveByA.isMultipleTurnMoveEnd()) {
+                    this.isMultipleTurnMoveByA = false;
+                }
+            } else {
+                move = pokemonInBattleA.getDamage(moveName);
+                if (move.isMultipleTurnMove()) {
+                    this.isMultipleTurnMoveByA = true;
+                    this.multipleTurnMoveByA = move;
+                }
+            }
+        } else {
+            if (this.isMultipleTurnMoveByB) {
+                move = this.multipleTurnMoveByB;
+                this.multipleTurnMoveByB.isMultipleTurnMove();
+                if (this.multipleTurnMoveByB.isMultipleTurnMoveEnd()) {
+                    this.isMultipleTurnMoveByB = false;
+                }
+            } else {
+                move = pokemonInBattleB.getDamage(moveName);
+                if (move.isMultipleTurnMove()) {
+                    this.isMultipleTurnMoveByB = true;
+                    this.multipleTurnMoveByB = move;
+                }
+            }
+        }
+        return move;
+    }
+
+    /**
+     * ターンを進める(非推奨)
      * 1ターン分のバトル処理を行います。
      * @param a Aサイドのポケモンのわざのインスタンス
      * @param b Bサイドのポケモンのわざのインスタンス

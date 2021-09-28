@@ -155,4 +155,8 @@ public class BattleLog {
     public static void combAttack(int count) {
         add(count +"回 当たった！");
     }
+
+    public static int moveCount(String name) {
+        return Math.toIntExact(battleLog.stream().filter(x -> x.endsWith(name + " のこうげきだ！")).count());
+    }
 }
