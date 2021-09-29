@@ -390,7 +390,7 @@ public class PokemonMove {
     }
 
     public boolean isMultipleTurnMove() {
-        return this.moveName.equals(MoveConst.PETAL_DANCE);
+        return (this.moveName.equals(MoveConst.PETAL_DANCE) || this.moveName.equals(MoveConst.OUTRAGE) || this.moveName.equals(MoveConst.THRASH));
     }
 
     public boolean isMultipleTurnMoveEnd() {
