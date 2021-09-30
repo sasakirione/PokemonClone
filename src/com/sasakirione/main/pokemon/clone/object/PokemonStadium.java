@@ -85,7 +85,7 @@ public class PokemonStadium {
         if (side == 0) {
             if (this.isMultipleTurnMoveByA) {
                 move = this.multipleTurnMoveByA;
-                this.multipleTurnMoveByA.isMultipleTurnMove();
+                this.multipleTurnMoveByA.forwardTurn();
                 if (this.multipleTurnMoveByA.isMultipleTurnMoveEnd()) {
                     this.isMultipleTurnMoveByA = false;
                 }
@@ -94,12 +94,13 @@ public class PokemonStadium {
                 if (move.isMultipleTurnMove()) {
                     this.isMultipleTurnMoveByA = true;
                     this.multipleTurnMoveByA = move;
+                    move.forwardTurn();
                 }
             }
         } else {
             if (this.isMultipleTurnMoveByB) {
                 move = this.multipleTurnMoveByB;
-                this.multipleTurnMoveByB.isMultipleTurnMove();
+                this.multipleTurnMoveByB.forwardTurn();
                 if (this.multipleTurnMoveByB.isMultipleTurnMoveEnd()) {
                     this.isMultipleTurnMoveByB = false;
                 }
@@ -108,6 +109,7 @@ public class PokemonStadium {
                 if (move.isMultipleTurnMove()) {
                     this.isMultipleTurnMoveByB = true;
                     this.multipleTurnMoveByB = move;
+                    move.forwardTurn();
                 }
             }
         }

@@ -389,10 +389,20 @@ public class PokemonMove {
         return this.vitalRank;
     }
 
+    /**
+     * 複数ターン技判定
+     * 複数のターン攻撃を続ける技かを判定します。
+     * @return 条件に合致する場合はtrue
+     */
     public boolean isMultipleTurnMove() {
         return (this.moveName.equals(MoveConst.PETAL_DANCE) || this.moveName.equals(MoveConst.OUTRAGE) || this.moveName.equals(MoveConst.THRASH));
     }
 
+    /**
+     * 複数ターン技終了判定
+     * 複数ターン技がこのターンで終了するかを返します
+     * @return 終了する場合はtrue
+     */
     public boolean isMultipleTurnMoveEnd() {
         if (isMultipleTurnMove() && this.multipleCount < 3) {
             return false;
@@ -403,6 +413,10 @@ public class PokemonMove {
         }
     }
 
+    /**
+     * 複数ターン技用カウンタ
+     * 複数ターン技をカウントします
+     */
     public void forwardTurn() {
         this.multipleCount++;
     }
