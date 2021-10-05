@@ -159,4 +159,8 @@ public class BattleLog {
     public static int moveCount(String name) {
         return Math.toIntExact(battleLog.stream().filter(x -> x.endsWith(name + " のこうげきだ！")).count());
     }
+
+    public static void recoil(String name) {
+        add("攻撃の 反動で " + name+ "は 動けない！");
+    }
 }

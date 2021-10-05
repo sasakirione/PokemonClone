@@ -442,4 +442,14 @@ public class PokemonTest {
         BattleLog.getLogAll();
         Assertions.assertEquals(2, BattleLog.moveCount("はなびらのまい"));
     }
+
+    @Test
+    @DisplayName("はかいこうせんの実装")
+    public void test039() {
+        PokemonStadium stadium = new PokemonStadium(lilligant, regieleki);
+        stadium.forwardTurn("すいとる","はかいこうせん");
+        stadium.forwardTurn("すいとる","はかいこうせん");
+        BattleLog.getLogAll();
+        Assertions.assertEquals(1, BattleLog.moveCount("はかいこうせん"));
+    }
 }

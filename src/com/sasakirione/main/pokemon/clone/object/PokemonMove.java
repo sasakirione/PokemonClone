@@ -395,7 +395,34 @@ public class PokemonMove {
      * @return 条件に合致する場合はtrue
      */
     public boolean isMultipleTurnMove() {
+        return isThrashMove()||isRecoilMove();
+    }
+
+    /**
+     * あばれる技判定
+     * 複数のターン暴れ続ける技かを判定します。
+     * @return 条件に合致する場合はtrue
+     */
+    private boolean isThrashMove() {
         return (this.moveName.equals(MoveConst.PETAL_DANCE) || this.moveName.equals(MoveConst.OUTRAGE) || this.moveName.equals(MoveConst.THRASH));
+    }
+
+    /**
+     * 反動技判定
+     * 反動がある技かを判定します。
+     * @return 条件に合致する場合はtrue
+     */
+    private boolean isRecoilMove() {
+        return (this.moveName.equals(MoveConst.HYPER_BEAM));
+    }
+
+    /**
+     * 反動判定
+     * 反動かを判定します。
+     * @return 反動ターンだったらtrue
+     */
+    public boolean isRecoil() {
+        return (this.isRecoilMove() && this.multipleCount == 2);
     }
 
     /**
@@ -404,13 +431,11 @@ public class PokemonMove {
      * @return 終了する場合はtrue
      */
     public boolean isMultipleTurnMoveEnd() {
-        if (isMultipleTurnMove() && this.multipleCount < 3) {
+        if (isThrashMove() && this.multipleCount < 3) {
             return false;
-        } else if (isMultipleTurnMove() && this.multipleCount == 3) {
+        } else if (isThrashMove() && this.multipleCount == 3) {
             return randomForAccuracy() < 50;
-        } else {
-            return true;
-        }
+        } else return !isRecoilMove() || this.multipleCount != 2;
     }
 
     /**

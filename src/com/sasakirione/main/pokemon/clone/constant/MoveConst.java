@@ -13,4 +13,5 @@ public class MoveConst {
     public static final String PETAL_DANCE = "はなびらのまい";
     public static final String THRASH = "あばれる";
     public static final String OUTRAGE = "げきりん";
+    public static final String HYPER_BEAM = "はかいこうせん";
 }

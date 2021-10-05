@@ -198,6 +198,10 @@ public class PokemonStadium {
      * @param a ポケモンのわざのインスタンス
      */
     private void attackSideA (PokemonMove a) {
+        if (a.isRecoil()) {
+            BattleLog.recoil(this.pokemonInBattleA.getName());
+            return;
+        }
         BattleLog.attack(pokemonInBattleA, a);
         if (psychofieldCheck(a)) {
             BattleLog.psychofieldPriority(pokemonInBattleB.getName());
@@ -236,6 +240,10 @@ public class PokemonStadium {
      * @param b ポケモンのわざのインスタンス
      */
     private void attackSideB(PokemonMove b) {
+        if (b.isRecoil()) {
+            BattleLog.recoil(this.pokemonInBattleB.getName());
+            return;
+        }
         BattleLog.attack(pokemonInBattleB, b);
         if (psychofieldCheck(b)) {
             BattleLog.psychofieldPriority(pokemonInBattleA.getName());
