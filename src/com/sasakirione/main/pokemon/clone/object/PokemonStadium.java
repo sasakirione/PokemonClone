@@ -143,11 +143,11 @@ public class PokemonStadium {
     }
 
     private void attackBAfterA(PokemonMove a, PokemonMove b) {
-        attackSideB(b);
+        attack(b, this.pokemonInBattleB, this.pokemonInBattleA);
         if (matchEndFlag) {
             return;
         }
-        attackSideA(a);
+        attack(a, this.pokemonInBattleA, this.pokemonInBattleB);
         if (matchEndFlag) {
             return;
         }
@@ -156,11 +156,11 @@ public class PokemonStadium {
     }
 
     private void attackAAfterB(PokemonMove a, PokemonMove b) {
-        attackSideA(a);
+        attack(a, this.pokemonInBattleA, this.pokemonInBattleB);
         if (matchEndFlag) {
             return;
         }
-        attackSideB(b);
+        attack(b, this.pokemonInBattleB, this.pokemonInBattleA);
         if (matchEndFlag) {
             return;
         }
@@ -193,28 +193,30 @@ public class PokemonStadium {
     }
 
     /**
-     * 攻撃を行う(Aサイド)
-     * Aサイドのポケモンの攻撃処理を行います。
-     * @param a ポケモンのわざのインスタンス
+     * 攻撃を行う
+     * ポケモンの攻撃処理を行います。
+     * @param move ポケモンのわざのインスタンス
+     * @param attackPokemon 攻撃側のポケモンのインスタンス
+     * @param defensePokemon 防御側のポケモンのインスタンス
      */
-    private void attackSideA (PokemonMove a) {
-        if (a.isRecoil()) {
-            BattleLog.recoil(this.pokemonInBattleA.getName());
+    private void attack(PokemonMove move, Pokemon attackPokemon, Pokemon defensePokemon) {
+        if (move.isRecoil()) {
+            BattleLog.recoil(attackPokemon.getName());
             return;
         }
-        BattleLog.attack(pokemonInBattleA, a);
-        if (psychofieldCheck(a)) {
-            BattleLog.psychofieldPriority(pokemonInBattleB.getName());
+        BattleLog.attack(attackPokemon, move);
+        if (psychofieldCheck(move)) {
+            BattleLog.psychofieldPriority(defensePokemon.getName());
             return;
         }
-        if (a.isSelfChangeMove()) {
-           this.pokemonInBattleA.takeChange(a);
+        if (move.isSelfChangeMove()) {
+            attackPokemon.takeChange(move);
         } else {
-            liberoDisposal(pokemonInBattleA, a);
-            this.pokemonInBattleB.takeDamage(a, testMode);
+            liberoDisposal(attackPokemon, move);
+            defensePokemon.takeDamage(move, testMode);
         }
-        if (pokemonInBattleB.isDead()) {
-            BattleLog.death(pokemonInBattleB);
+        if (defensePokemon.isDead()) {
+            BattleLog.death(defensePokemon);
             this.matchEndFlag = true;
         }
     }
@@ -234,32 +236,6 @@ public class PokemonStadium {
         return ((0 < move.getPriority()) && (this.field != null) && (this.field.isPsychofield()));
     }
 
-    /**
-     * 攻撃を行う(Bサイド)
-     * Bサイドのポケモンの攻撃処理を行います。
-     * @param b ポケモンのわざのインスタンス
-     */
-    private void attackSideB(PokemonMove b) {
-        if (b.isRecoil()) {
-            BattleLog.recoil(this.pokemonInBattleB.getName());
-            return;
-        }
-        BattleLog.attack(pokemonInBattleB, b);
-        if (psychofieldCheck(b)) {
-            BattleLog.psychofieldPriority(pokemonInBattleA.getName());
-            return;
-        }
-        if (b.isSelfChangeMove()) {
-            this.pokemonInBattleB.takeChange(b);
-        } else {
-            liberoDisposal(pokemonInBattleB, b);
-            this.pokemonInBattleA.takeDamage(b, testMode);
-        }
-        if (pokemonInBattleA.isDead()) {
-            BattleLog.death(pokemonInBattleA);
-            this.matchEndFlag = true;
-        }
-    }
 
     /**
      * 素早さを比較する
@@ -321,10 +297,10 @@ public class PokemonStadium {
         BattleLog.change(strSide, pokemonFrom.getName(), pokemonTo.getName());
         if (side == 0) {
             pokemonInBattleA = pokemonTo;
-            attackSideB(enemyMove);
+            attack(enemyMove, this.pokemonInBattleB, this.pokemonInBattleA);
         } else {
             pokemonInBattleB = pokemonTo;
-            attackSideA(enemyMove);
+            attack(enemyMove, this.pokemonInBattleA, this.pokemonInBattleB);
         }
     }
 
