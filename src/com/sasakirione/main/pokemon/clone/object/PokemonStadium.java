@@ -17,6 +17,14 @@ public class PokemonStadium {
     private Field field;
     /** テストモード(技が必中になります) */
     private boolean testMode = false;
+    /** Aサイドのバトル場に出てるポケモンの複数ターン技状態*/
+    private Boolean isMultipleTurnMoveByA = false;
+    /** Aサイドのバトル場に出てるポケモンの複数ターン技インスタンス*/
+    private PokemonMove multipleTurnMoveByA;
+    /** Bサイドのバトル場に出てるポケモンの複数ターン技状態*/
+    private Boolean isMultipleTurnMoveByB = false;
+    /** Bサイドのバトル場に出てるポケモンの複数ターン技インスタンス*/
+    private PokemonMove multipleTurnMoveByB;
 
     /**
      * バトル場クラスのコンストラクタ
@@ -63,6 +71,54 @@ public class PokemonStadium {
     /**
      * ターンを進める
      * 1ターン分のバトル処理を行います。
+     * @param moveSideA Aサイドのポケモンのわざ
+     * @param moveSideB Bサイドのポケモンのわざ
+     */
+    public void forwardTurn(String moveSideA, String moveSideB) {
+        PokemonMove moveA = setMove(0, moveSideA);
+        PokemonMove moveB = setMove(1, moveSideB);
+        this.forwardTurn(moveA, moveB);
+    }
+
+    private PokemonMove setMove(int side, String moveName) {
+        PokemonMove move;
+        if (side == 0) {
+            if (this.isMultipleTurnMoveByA) {
+                move = this.multipleTurnMoveByA;
+                this.multipleTurnMoveByA.forwardTurn();
+                if (this.multipleTurnMoveByA.isMultipleTurnMoveEnd()) {
+                    this.isMultipleTurnMoveByA = false;
+                }
+            } else {
+                move = pokemonInBattleA.getDamage(moveName);
+                if (move.isMultipleTurnMove()) {
+                    this.isMultipleTurnMoveByA = true;
+                    this.multipleTurnMoveByA = move;
+                    move.forwardTurn();
+                }
+            }
+        } else {
+            if (this.isMultipleTurnMoveByB) {
+                move = this.multipleTurnMoveByB;
+                this.multipleTurnMoveByB.forwardTurn();
+                if (this.multipleTurnMoveByB.isMultipleTurnMoveEnd()) {
+                    this.isMultipleTurnMoveByB = false;
+                }
+            } else {
+                move = pokemonInBattleB.getDamage(moveName);
+                if (move.isMultipleTurnMove()) {
+                    this.isMultipleTurnMoveByB = true;
+                    this.multipleTurnMoveByB = move;
+                    move.forwardTurn();
+                }
+            }
+        }
+        return move;
+    }
+
+    /**
+     * ターンを進める(非推奨)
+     * 1ターン分のバトル処理を行います。
      * @param a Aサイドのポケモンのわざのインスタンス
      * @param b Bサイドのポケモンのわざのインスタンス
      */
@@ -87,11 +143,11 @@ public class PokemonStadium {
     }
 
     private void attackBAfterA(PokemonMove a, PokemonMove b) {
-        attackSideB(b);
+        attack(b, this.pokemonInBattleB, this.pokemonInBattleA);
         if (matchEndFlag) {
             return;
         }
-        attackSideA(a);
+        attack(a, this.pokemonInBattleA, this.pokemonInBattleB);
         if (matchEndFlag) {
             return;
         }
@@ -100,11 +156,11 @@ public class PokemonStadium {
     }
 
     private void attackAAfterB(PokemonMove a, PokemonMove b) {
-        attackSideA(a);
+        attack(a, this.pokemonInBattleA, this.pokemonInBattleB);
         if (matchEndFlag) {
             return;
         }
-        attackSideB(b);
+        attack(b, this.pokemonInBattleB, this.pokemonInBattleA);
         if (matchEndFlag) {
             return;
         }
@@ -137,24 +193,30 @@ public class PokemonStadium {
     }
 
     /**
-     * 攻撃を行う(Aサイド)
-     * Aサイドのポケモンの攻撃処理を行います。
-     * @param a ポケモンのわざのインスタンス
+     * 攻撃を行う
+     * ポケモンの攻撃処理を行います。
+     * @param move ポケモンのわざのインスタンス
+     * @param attackPokemon 攻撃側のポケモンのインスタンス
+     * @param defensePokemon 防御側のポケモンのインスタンス
      */
-    private void attackSideA (PokemonMove a) {
-        BattleLog.attack(pokemonInBattleA, a);
-        if (psychofieldCheck(a)) {
-            BattleLog.psychofieldPriority(pokemonInBattleB.getName());
+    private void attack(PokemonMove move, Pokemon attackPokemon, Pokemon defensePokemon) {
+        if (move.isRecoil()) {
+            BattleLog.recoil(attackPokemon.getName());
             return;
         }
-        if (a.isSelfChangeMove()) {
-           this.pokemonInBattleA.takeChange(a);
-        } else {
-            liberoDisposal(pokemonInBattleA, a);
-            this.pokemonInBattleB.takeDamage(a, testMode);
+        BattleLog.attack(attackPokemon, move);
+        if (psychofieldCheck(move)) {
+            BattleLog.psychofieldPriority(defensePokemon.getName());
+            return;
         }
-        if (pokemonInBattleB.isDead()) {
-            BattleLog.death(pokemonInBattleB);
+        if (move.isSelfChangeMove()) {
+            attackPokemon.takeChange(move);
+        } else {
+            liberoDisposal(attackPokemon, move);
+            defensePokemon.takeDamage(move, testMode);
+        }
+        if (defensePokemon.isDead()) {
+            BattleLog.death(defensePokemon);
             this.matchEndFlag = true;
         }
     }
@@ -174,28 +236,6 @@ public class PokemonStadium {
         return ((0 < move.getPriority()) && (this.field != null) && (this.field.isPsychofield()));
     }
 
-    /**
-     * 攻撃を行う(Bサイド)
-     * Bサイドのポケモンの攻撃処理を行います。
-     * @param b ポケモンのわざのインスタンス
-     */
-    private void attackSideB(PokemonMove b) {
-        BattleLog.attack(pokemonInBattleB, b);
-        if (psychofieldCheck(b)) {
-            BattleLog.psychofieldPriority(pokemonInBattleA.getName());
-            return;
-        }
-        if (b.isSelfChangeMove()) {
-            this.pokemonInBattleB.takeChange(b);
-        } else {
-            liberoDisposal(pokemonInBattleB, b);
-            this.pokemonInBattleA.takeDamage(b, testMode);
-        }
-        if (pokemonInBattleA.isDead()) {
-            BattleLog.death(pokemonInBattleA);
-            this.matchEndFlag = true;
-        }
-    }
 
     /**
      * 素早さを比較する
@@ -257,10 +297,10 @@ public class PokemonStadium {
         BattleLog.change(strSide, pokemonFrom.getName(), pokemonTo.getName());
         if (side == 0) {
             pokemonInBattleA = pokemonTo;
-            attackSideB(enemyMove);
+            attack(enemyMove, this.pokemonInBattleB, this.pokemonInBattleA);
         } else {
             pokemonInBattleB = pokemonTo;
-            attackSideA(enemyMove);
+            attack(enemyMove, this.pokemonInBattleA, this.pokemonInBattleB);
         }
     }
 

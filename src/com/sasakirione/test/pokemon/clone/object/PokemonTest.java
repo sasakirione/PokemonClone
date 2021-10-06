@@ -44,6 +44,8 @@ public class PokemonTest {
     Pokemon pyukumuku;
     /** ASハチマキ水ウーラオス */
     Pokemon urshifu;
+    /** CSドレディア*/
+    Pokemon lilligant;
     PokemonDataGetInterface pokemonDataGet;
 
     int[] cs = new int[]{0, 0, 0, 252, 0, 252};
@@ -68,6 +70,7 @@ public class PokemonTest {
         mimikyu = pokemonDataGet.getObjectByID(778, 0, this.as, 1, "いのちのたま", "ようき");
         pyukumuku = pokemonDataGet.getObjectByID(771, 0, this.hb, 3, "オボンのみ", "ずぶとい");
         urshifu = pokemonDataGet.getObjectByID(892, 1, this.as, 1, "こだわりハチマキ" , "ようき");
+        lilligant = pokemonDataGet.getObjectByID(549, 0, this.cs, 1, "いのちのたま", "ひかえめ");
     }
 
     @DisplayName("レジエレキでサンダーをなぐる、サンダープリズンで")
@@ -428,5 +431,25 @@ public class PokemonTest {
         stadium.forwardTurn(u, m);
         BattleLog.getLogAll();
         Assertions.assertTrue(mimikyu.isDead());
+    }
+
+    @Test
+    @DisplayName("はなびらのまいを実装")
+    public void test038() {
+        PokemonStadium stadium = new PokemonStadium(lilligant, mimikyu);
+        stadium.forwardTurn("はなびらのまい", "おどろかす");
+        stadium.forwardTurn("エナジーボール", "おどろかす");
+        BattleLog.getLogAll();
+        Assertions.assertEquals(2, BattleLog.moveCount("はなびらのまい"));
+    }
+
+    @Test
+    @DisplayName("はかいこうせんの実装")
+    public void test039() {
+        PokemonStadium stadium = new PokemonStadium(lilligant, regieleki);
+        stadium.forwardTurn("すいとる","はかいこうせん");
+        stadium.forwardTurn("すいとる","はかいこうせん");
+        BattleLog.getLogAll();
+        Assertions.assertEquals(1, BattleLog.moveCount("はかいこうせん"));
     }
 }

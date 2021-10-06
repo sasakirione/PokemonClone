@@ -33,13 +33,15 @@ public class PokemonMove {
     private final MoveCombo moveCombo;
     /** 技の急所ランク */
     private final int vitalRank;
+    /** 技の連続回数 */
+    private int multipleCount;
 
     /**
      * コンストラクタ(通常用)
      * 技クラスのコンストラクタです。
      * @param name わざの名前
      * @param pokemon ポケモンのインスタンス
-     * @param moveClass 技の酒類
+     * @param moveClass 技の種類
      * @param moveDamage 技の威力
      * @param moveType 技のタイプ
      * @param priority 技の優先度
@@ -56,12 +58,9 @@ public class PokemonMove {
         this.moveType = moveType;
         this.accuracy = accuracy;
         this.pokemon = pokemon;
-        if (comb == 3) {
-            this.moveCombo = MoveCombo.FIXED_THREE;
-        } else {
-            this.moveCombo = MoveCombo.NORMAL;
-        }
+        this.moveCombo = setMoveCombo(comb);
         this.vitalRank = vitalRank;
+        this.multipleCount = 0;
     }
 
     /**
@@ -119,6 +118,21 @@ public class PokemonMove {
             return;
         }
         throw new UnsupportedMoveException();
+    }
+
+    /**
+     * 連続仕様変換
+     * わざの連続仕様のコードをEnum型に変換します
+     * @return わざの連続仕様
+     */
+    private MoveCombo setMoveCombo(int code) {
+        return switch (code) {
+            case 3 -> MoveCombo.FIXED_THREE;
+            case 2 -> MoveCombo.FIXED_TWO;
+            case 30 -> MoveCombo.MAX_THREE;
+            case 50 -> MoveCombo.MAX_FIVE;
+            default -> MoveCombo.NORMAL;
+        };
     }
 
     /**
@@ -375,4 +389,60 @@ public class PokemonMove {
         return this.vitalRank;
     }
 
+    /**
+     * 複数ターン技判定
+     * 複数のターン攻撃を続ける技かを判定します。
+     * @return 条件に合致する場合はtrue
+     */
+    public boolean isMultipleTurnMove() {
+        return isThrashMove()||isRecoilMove();
+    }
+
+    /**
+     * あばれる技判定
+     * 複数のターン暴れ続ける技かを判定します。
+     * @return 条件に合致する場合はtrue
+     */
+    private boolean isThrashMove() {
+        return (this.moveName.equals(MoveConst.PETAL_DANCE) || this.moveName.equals(MoveConst.OUTRAGE) || this.moveName.equals(MoveConst.THRASH));
+    }
+
+    /**
+     * 反動技判定
+     * 反動がある技かを判定します。
+     * @return 条件に合致する場合はtrue
+     */
+    private boolean isRecoilMove() {
+        return (this.moveName.equals(MoveConst.HYPER_BEAM));
+    }
+
+    /**
+     * 反動判定
+     * 反動かを判定します。
+     * @return 反動ターンだったらtrue
+     */
+    public boolean isRecoil() {
+        return (this.isRecoilMove() && this.multipleCount == 2);
+    }
+
+    /**
+     * 複数ターン技終了判定
+     * 複数ターン技がこのターンで終了するかを返します
+     * @return 終了する場合はtrue
+     */
+    public boolean isMultipleTurnMoveEnd() {
+        if (isThrashMove() && this.multipleCount < 3) {
+            return false;
+        } else if (isThrashMove() && this.multipleCount == 3) {
+            return randomForAccuracy() < 50;
+        } else return !isRecoilMove() || this.multipleCount != 2;
+    }
+
+    /**
+     * 複数ターン技用カウンタ
+     * 複数ターン技をカウントします
+     */
+    public void forwardTurn() {
+        this.multipleCount++;
+    }
 }
