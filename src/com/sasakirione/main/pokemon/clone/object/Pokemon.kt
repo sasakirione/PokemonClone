@@ -72,7 +72,7 @@ class Pokemon(
      * @return ポケモンのわざクラスのインスタンス
      */
     fun getDamage2(name: String): PokemonMove {
-        if (good?.isChoice!!) {
+        if (good?.isChoice == true) {
             choiceCheck(name)
         }
         return PokemonMove(name, this)
@@ -86,7 +86,7 @@ class Pokemon(
      * @return ポケモンのわざクラスのインスタンス
      */
     fun getDamage(name: String): PokemonMove {
-        if (good?.isChoice!!) {
+        if (good?.isChoice == true) {
             choiceCheck(name)
         }
         return pokemonDataGet.getMoveByName(name, this)
@@ -278,7 +278,7 @@ class Pokemon(
     }
 
     fun changePokemon() {
-        if (ability.isLibero()) {
+        if (ability.isLibero) {
             type = originalType.copy()
         }
         status.rankReset()
@@ -293,11 +293,11 @@ class Pokemon(
     }
 
     fun turnEndDisposal() {
-        if (good?.isLeftOvers()!!) {
+        if (good?.isLeftOvers!!) {
             BattleLog.LeftOvers(name)
             status.recoveryOnePointSixteen()
         }
-        if (good!!.isGoodUsed()) {
+        if (good!!.isGoodUsed) {
             lostGood()
         }
     }
@@ -351,9 +351,9 @@ class Pokemon(
     init {
         type = Type(type1, type2)
         originalType = Type(type1, type2)
-        this.good = Good(good)
-        status = Status(base, Effort(effort), Nature(nature))
-        this.ability = Ability(ability)
+        this.good = good?.let { Good(it) }
+        status = Status(base, effort?.let { Effort(it) }, Nature(nature))
+        this.ability = ability?.let { Ability(it) }!!
         pokemonDataGet = PokemonDataGet()
     }
 }
