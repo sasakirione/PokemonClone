@@ -1,87 +1,68 @@
-package com.sasakirione.main.pokemon.clone.object;
+package com.sasakirione.main.pokemon.clone.`object`
 
-import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
-import com.sasakirione.main.pokemon.clone.constant.MoveConst;
-import com.sasakirione.main.pokemon.clone.data.PokemonDataGet;
-import com.sasakirione.main.pokemon.clone.data.PokemonDataGetInterface;
-import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
-import com.sasakirione.main.pokemon.clone.object.value.*;
-
-import java.util.ArrayList;
+import com.sasakirione.main.pokemon.clone.`object`.value.*
+import com.sasakirione.main.pokemon.clone.constant.CalculationConst
+import com.sasakirione.main.pokemon.clone.constant.MoveConst
+import com.sasakirione.main.pokemon.clone.data.PokemonDataGet
+import com.sasakirione.main.pokemon.clone.data.PokemonDataGetInterface
+import com.sasakirione.main.pokemon.clone.loggin.BattleLog
+import java.util.ArrayList
+import java.util.function.Consumer
+import kotlin.math.roundToInt
 
 /**
  * ポケモン自体を表すクラス
  */
-public class Pokemon {
-    /**
-     * ポケモンの名前
-     */
-    private final String name;
+class Pokemon(
+    val name: String,
+    effort: IntArray?,
+    base: IntArray?,
+    good: String?,
+    nature: String?,
+    type1: String?,
+    type2: String?,
+    ability: String?) {
+
     /**
      * ポケモンのステータス
      */
-    private final Status status;
+    val status: Status
+
     /**
      * ポケモンのタイプ
      */
-    private Type type;
+    var type: Type
+        private set
+
     /**
      * ポケモンの初期タイプ
      */
-    private final Type originalType;
+    private val originalType: Type
+
     /**
      * ポケモンの特性
      */
-    private Ability ability;
+    private val ability: Ability
+
     /**
      * ポケモンがこだわってる場合のわざ
      */
-    private String choiceMove = null;
+    private var choiceMove: String? = null
+
     /**
      * ポケモンの状態異常(状態異常がなしの場合は空文字)
      */
-    private String statusAilment = "";
+    private var statusAilment = ""
+
     /**
      * ポケモンの道具
      */
-    private Good good;
+    private var good: Good?
+
     /**
      * データ取得用インスタンス
      */
-    PokemonDataGetInterface pokemonDataGet;
-
-    /**
-     * コンストラクタ(登録されてるポケモン以外用)
-     * 登録されてるポケモン以外のポケモンやポケモンじゃないものを使うためのコンストラクタ
-     *
-     * @param name    ポケモンの名前
-     * @param effort  ポケモンの努力値
-     * @param base    ポケモンの種族値
-     * @param good    ポケモンの道具
-     * @param nature  ポケモンの性格
-     * @param type1   ポケモンのタイプ1
-     * @param type2   ポケモンのタイプ2
-     * @param ability ポケモンの特性
-     */
-    public Pokemon(String name, int[] effort, int[] base, String good, String nature, String type1, String type2, String ability) {
-        this.name = name;
-        this.type = new Type(type1, type2);
-        this.originalType = new Type(type1, type2);
-        this.good = new Good(good);
-        this.status = new Status(base, new Effort(effort), new Nature(nature));
-        this.ability = new Ability(ability);
-        this.pokemonDataGet = new PokemonDataGet();
-    }
-
-    /**
-     * ポケモンの名前を返す
-     * ポケモンの名前を返します。
-     *
-     * @return ポケモンの名前
-     */
-    public String getName() {
-        return this.name;
-    }
+    private var pokemonDataGet: PokemonDataGetInterface
 
     /**
      * ポケモンのわざを出す(データベースにない定義済みの技用)
@@ -90,11 +71,11 @@ public class Pokemon {
      * @param name わざの名前
      * @return ポケモンのわざクラスのインスタンス
      */
-    public PokemonMove getDamage2(String name) {
-        if (good.isChoice()) {
-            choiceCheck(name);
+    fun getDamage2(name: String): PokemonMove {
+        if (good?.isChoice!!) {
+            choiceCheck(name)
         }
-        return new PokemonMove(name, this);
+        return PokemonMove(name, this)
     }
 
     /**
@@ -104,11 +85,11 @@ public class Pokemon {
      * @param name わざの名前
      * @return ポケモンのわざクラスのインスタンス
      */
-    public PokemonMove getDamage(String name) {
-        if (good.isChoice()) {
-            choiceCheck(name);
+    fun getDamage(name: String): PokemonMove {
+        if (good?.isChoice!!) {
+            choiceCheck(name)
         }
-        return pokemonDataGet.getMoveByName(name, this);
+        return pokemonDataGet.getMoveByName(name, this)
     }
 
     /**
@@ -118,12 +99,10 @@ public class Pokemon {
      * @param name わざの名前
      * @throws IllegalArgumentException こだわってるわざ以外を使おうとすると投げます
      */
-    private void choiceCheck(String name) {
-        if (choiceMove != null && !name.equals(this.choiceMove)) {
-            throw new IllegalArgumentException("こだわっています！");
-        }
+    private fun choiceCheck(name: String) {
+        require(!(choiceMove != null && name != choiceMove)) { "こだわっています！" }
         if (choiceMove == null) {
-            this.choiceMove = name;
+            choiceMove = name
         }
     }
 
@@ -133,83 +112,79 @@ public class Pokemon {
      *
      * @param a 受ける技のインスタンス
      */
-    public void takeDamage(PokemonMove a, boolean isTest) {
-        if (!a.isMoveHit() && !isTest) {
-            BattleLog.moveMiss();
-            return;
+    fun takeDamage(a: PokemonMove, isTest: Boolean) {
+        if (!a.isMoveHit && !isTest) {
+            BattleLog.moveMiss()
+            return
         }
-        if (a.isEnemyChangeMove()) {
-            takeChange(a);
-            return;
+        if (a.isEnemyChangeMove) {
+            takeChange(a)
+            return
         }
-        if (a.getMoveName().equals("ちきゅうなげ")) {
-            this.status.constantDamage(50);
-            return;
+        if (a.moveName == "ちきゅうなげ") {
+            status.constantDamage(50)
+            return
         }
-
-        double power = getPower(a);
-        int defenseChoice = getDefenseChoice(a);
-        double typeMagnification = this.type.getTypeMagnification(a.getMoveType());
-        double magnification = a.getMagnification() * typeMagnification;
-
-        moveDecisionAll(a, power, defenseChoice, typeMagnification, magnification);
-        a.endDecision();
-        if (this.good.isGoodUsed()) {
-            this.lostGood();
+        val power = getPower(a)
+        val defenseChoice = getDefenseChoice(a)
+        val typeMagnification = type.getTypeMagnification(a.moveType)
+        val magnification = a.magnification * typeMagnification
+        moveDecisionAll(a, power, defenseChoice, typeMagnification, magnification)
+        a.endDecision()
+        if (good?.isGoodUsed!!) {
+            lostGood()
         }
     }
 
-    private int getDefenseChoice(PokemonMove a) {
-        int defenseChoice;
-        if (a.isPhysicsMove()) {
-            defenseChoice = 2;
+    private fun getDefenseChoice(a: PokemonMove): Int {
+        val defenseChoice: Int = if (a.isPhysicsMove) {
+            2
         } else {
-            defenseChoice = 4;
+            4
         }
-        return defenseChoice;
+        return defenseChoice
     }
 
-    private void moveDecisionAll(PokemonMove a, double power, int defenseChoice, double typeMagnification, double magnification) {
-        int count = a.getCombCount();
-        int vitalRank = a.getVitalRank();
-        for (int i = 0; i < count; i++){
-            if (ability.isBakekawa()) {
-                ability.abilityOn();
-                BattleLog.bakekawa(this.name);
-                status.damageOneEighth();
-                continue;
+    private fun moveDecisionAll(a: PokemonMove, power: Double, defenseChoice: Int, typeMagnification: Double, magnification: Double) {
+        val count = a.combCount
+        val vitalRank = a.vitalRank
+        for (i in 0 until count) {
+            if (ability.isBakekawa) {
+                ability.abilityOn()
+                BattleLog.bakekawa(name)
+                status.damageOneEighth()
+                continue
             }
-            moveDecision(power, defenseChoice, typeMagnification, magnification, vitalRank);
-            remainingDamageDecision();
+            moveDecision(power, defenseChoice, typeMagnification, magnification, vitalRank)
+            remainingDamageDecision()
         }
-        if (a.isCombAttack()) {
-            BattleLog.combAttack(count);
+        if (a.isCombAttack) {
+            BattleLog.combAttack(count)
         }
     }
 
-    private double getPower(PokemonMove a) {
-        double power;
-        if (this.ability.isUnware()) {
-            power = a.getPower2();
+    private fun getPower(a: PokemonMove): Double {
+        val power: Double = if (ability.isUnware) {
+            a.power2
         } else {
-            power = a.getPower();
+            a.power
         }
-        return power;
+        return power
     }
 
-    private void moveDecision(double power, int defenseChoice, double typeMagnification, double magnification, int vitalRank) {
-        this.status.damageCalculation(power, defenseChoice, magnification, vitalRank);
-        BattleLog.typeMagnification(typeMagnification);
-        BattleLog.hp(this);
+    private fun moveDecision(power: Double, defenseChoice: Int, typeMagnification: Double, magnification: Double, vitalRank: Int) {
+        status.damageCalculation(power, defenseChoice, magnification, vitalRank)
+        BattleLog.typeMagnification(typeMagnification)
+        BattleLog.hp(this)
     }
 
     /**
      * 残りHP処理
      * 残りHPによって発動する道具や特性に関する処理を行います。
      */
-    private void remainingDamageDecision() {
-        if (status.isOneThird()) {
-            ability.doOneThird();
+    private fun remainingDamageDecision() {
+        if (status.isOneThird) {
+            ability.doOneThird()
         }
     }
 
@@ -217,23 +192,22 @@ public class Pokemon {
      * まひ処理を行う
      * まひになった時にその処理を行います。
      */
-    private void getPAR() {
-        if (!statusAilment.equals("")) {
-            BattleLog.statusAilmentError();
-            return;
+    private val pAR: Unit
+        get() {
+            if (statusAilment != "") {
+                BattleLog.statusAilmentError()
+                return
+            }
+            if (type.isPARCheck) {
+                BattleLog.parError()
+                return
+            }
+            statusAilment = "まひ"
+            status.getPAR()
+            BattleLog.par(name)
         }
-        if (this.type.isPARCheck()) {
-            BattleLog.parError();
-            return;
-        }
-        statusAilment = "まひ";
-        status.getPAR();
-        BattleLog.par(this.name);
-    }
-
-    public boolean isDead() {
-        return status.isDead();
-    }
+    val isDead: Boolean
+        get() = status.isDead
 
     /**
      * 残りHP実数値を返す
@@ -241,9 +215,8 @@ public class Pokemon {
      *
      * @return 残りHP実数値
      */
-    public int getCurrentHP() {
-        return status.getCurrentHP();
-    }
+    val currentHP: Int
+        get() = status.currentHP
 
     /**
      * 現在のHPを返す
@@ -251,9 +224,8 @@ public class Pokemon {
      *
      * @return 現在のHP
      */
-    public String getCurrentHP2() {
-        return status.getCurrentHP2();
-    }
+    val currentHP2: String
+        get() = status.currentHP2
 
     /**
      * ランク変化を行う
@@ -262,9 +234,9 @@ public class Pokemon {
      * @param item 変化するステータス(1:攻撃、2:防御、3:特攻、4:特防、5:素早さ)
      * @param i    プラスマイナス何段階変化するか
      */
-    public void rankUp(int item, int i) {
-        status.rankUp(item, i);
-        BattleLog.rankUp(this.name, item, i);
+    private fun rankUp(item: Int, i: Int) {
+        status.rankUp(item, i)
+        BattleLog.rankUp(name, item, i)
     }
 
     /**
@@ -273,13 +245,14 @@ public class Pokemon {
      *
      * @return ポケモンの素早さ実数値
      */
-    public int getS() {
-        int realSpeed = this.status.getS();
-        if (good.isSpeedBoost()) {
-            realSpeed = (int) Math.round(realSpeed * CalculationConst.ONE_POINT_FIVE);
+    val s: Int
+        get() {
+            var realSpeed = status.s
+            if (good?.isSpeedBoost!!) {
+                realSpeed = (realSpeed * CalculationConst.ONE_POINT_FIVE).roundToInt()
+            }
+            return realSpeed
         }
-        return realSpeed;
-    }
 
     /**
      * 特性を返す
@@ -287,53 +260,45 @@ public class Pokemon {
      *
      * @return ポケモンの特性
      */
-    public Ability getAbility() {
-        return ability;
+    fun getAbility(): Ability {
+        return ability
     }
 
-    public boolean hasGood() {
-        return this.good != null;
+    fun hasGood(): Boolean {
+        return good != null
     }
 
-    private void lostGood() {
-        this.good = null;
+    private fun lostGood() {
+        good = null
     }
 
-    public Type getType() {
-        return this.type;
+    fun changeType(moveType: String?) {
+        type = Type(moveType)
+        BattleLog.changeType(name, moveType)
     }
 
-    public void changeType(String moveType) {
-        this.type = new Type(moveType);
-        BattleLog.changeType(this.name, moveType);
-    }
-
-    public void changePokemon() {
+    fun changePokemon() {
         if (ability.isLibero()) {
-           type = originalType.copy();
+            type = originalType.copy()
         }
-        status.rankReset();
+        status.rankReset()
     }
 
-    public Good getGood() {
-        return this.good;
+    fun getGood(): Good? {
+        return good
     }
 
-    public void libero(Type type) {
-        this.type = type;
+    fun libero(type: Type) {
+        this.type = type
     }
 
-    public Status getStatus() {
-        return this.status;
-    }
-
-    public void turnEndDisposal() {
-        if (good.isLeftOvers()) {
-            BattleLog.LeftOvers(this.name);
-            this.status.recoveryOnePointSixteen();
+    fun turnEndDisposal() {
+        if (good?.isLeftOvers()!!) {
+            BattleLog.LeftOvers(name)
+            status.recoveryOnePointSixteen()
         }
-        if (good.isGoodUsed()) {
-            lostGood();
+        if (good!!.isGoodUsed()) {
+            lostGood()
         }
     }
 
@@ -343,39 +308,52 @@ public class Pokemon {
      *
      * @param a 自分に向けられた変化技のインスタンス
      */
-    public void takeChange(PokemonMove a) {
-        ArrayList<Integer> whiteHerb = new ArrayList<>();
+    fun takeChange(a: PokemonMove) {
+        val whiteHerb = ArrayList<Int>()
         if (a.isMoveNameCheck(MoveConst.SHELL_SMASH)) {
-            rankUp(2, -1);
-            whiteHerb.add(2);
-            rankUp(4, -1);
-            whiteHerb.add(4);
-            rankUp(1, 2);
-            rankUp(3, 2);
-            rankUp(5, 2);
+            rankUp(2, -1)
+            whiteHerb.add(2)
+            rankUp(4, -1)
+            whiteHerb.add(4)
+            rankUp(1, 2)
+            rankUp(3, 2)
+            rankUp(5, 2)
         }
         if (a.isMoveNameCheck(MoveConst.EERIE_IMPULSE)) {
-            rankUp(3, -2);
-            whiteHerb.add(3);
+            rankUp(3, -2)
+            whiteHerb.add(3)
         }
         if (a.isMoveNameCheck(MoveConst.THUNDER_WAVE)) {
-            getPAR();
+            pAR
         }
         if (a.isMoveNameCheck(MoveConst.CALM_MIND)) {
-            rankUp(3, 1);
-            rankUp(4, 1);
+            rankUp(3, 1)
+            rankUp(4, 1)
         }
         if (a.isMoveNameCheck(MoveConst.HARDEN)) {
-            rankUp(2, 1);
+            rankUp(2, 1)
         }
         if (a.isMoveNameCheck(MoveConst.SOAK)) {
-            this.type = new Type("みず");
-            BattleLog.changeType(this.name, "みず");
+            type = Type("みず")
+            BattleLog.changeType(name, "みず")
         }
-        if (this.good.isWhiteHerb() && !whiteHerb.isEmpty()) {
-            whiteHerb.forEach(i -> getStatus().rankReset(i));
-            BattleLog.whiteHerb(this.name);
-            this.good.goodUsed();
+        if (good?.isWhiteHerb!! && whiteHerb.isNotEmpty()) {
+            whiteHerb.forEach(Consumer { i: Int? -> status.rankReset(i) })
+            BattleLog.whiteHerb(name)
+            good!!.goodUsed()
         }
+    }
+
+    /**
+     * コンストラクタ(登録されてるポケモン以外用)
+     * 登録されてるポケモン以外のポケモンやポケモンじゃないものを使うためのコンストラクタ
+     */
+    init {
+        type = Type(type1, type2)
+        originalType = Type(type1, type2)
+        this.good = Good(good)
+        status = Status(base, Effort(effort), Nature(nature))
+        this.ability = Ability(ability)
+        pokemonDataGet = PokemonDataGet()
     }
 }
