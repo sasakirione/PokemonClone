@@ -15,13 +15,13 @@ import kotlin.math.roundToInt
  */
 class Pokemon(
     val name: String,
-    effort: IntArray?,
-    base: IntArray?,
+    effort: IntArray,
+    base: IntArray,
     good: String?,
-    nature: String?,
+    nature: String,
     type1: String?,
     type2: String?,
-    ability: String?) {
+    ability: String) {
 
     /**
      * ポケモンのステータス
@@ -97,7 +97,6 @@ class Pokemon(
      * こだわりアイテムを持ってる場合にこだわっているわざ以外のわざを使えないようにチェックします
      *
      * @param name わざの名前
-     * @throws IllegalArgumentException こだわってるわざ以外を使おうとすると投げます
      */
     private fun choiceCheck(name: String) {
         require(!(choiceMove != null && name != choiceMove)) { "こだわっています！" }
@@ -264,19 +263,38 @@ class Pokemon(
         return ability
     }
 
+    /**
+     * 道具所持判定
+     * ポケモンが道具を持っているかを返します
+     * @return ポケモンが道具を持っていたらtrue
+     */
     fun hasGood(): Boolean {
         return good != null
     }
 
+    /**
+     * 道具消失処理
+     * 道具をなくす処理を行います
+     */
     private fun lostGood() {
         good = null
     }
 
-    fun changeType(moveType: String?) {
+    /**
+     * タイプ変換処理
+     * タイプを変換する処理を行います
+     *
+     * @param moveType 変更するタイプ
+     */
+    fun changeType(moveType: String) {
         type = Type(moveType)
         BattleLog.changeType(name, moveType)
     }
 
+    /**
+     * ポケモン交代処理
+     * ポケモンを交代する際に交代されるポケモンのリセットを行います
+     */
     fun changePokemon() {
         if (ability.isLibero) {
             type = originalType.copy()
@@ -352,8 +370,8 @@ class Pokemon(
         type = Type(type1, type2)
         originalType = Type(type1, type2)
         this.good = good?.let { Good(it) }
-        status = Status(base, effort?.let { Effort(it) }, Nature(nature))
-        this.ability = ability?.let { Ability(it) }!!
+        status = Status(base, Effort(effort), Nature(nature))
+        this.ability = Ability(ability)
         pokemonDataGet = PokemonDataGet()
     }
 }

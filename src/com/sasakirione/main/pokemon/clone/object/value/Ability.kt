@@ -33,7 +33,7 @@ class Ability(private val name: String) {
      * @return 対象の特性と技の組み合わせだったらtrue
      */
     private fun checkTypeBoost(type: String): Boolean {
-        return name == AbilityConst.TRANSISTOR && type == "でんき" || name == AbilityConst.DRAGONS_MAW && type == "ドラゴン"
+        return (name == AbilityConst.TRANSISTOR && type == "でんき" || name == AbilityConst.DRAGONS_MAW && type == "ドラゴン")
     }
 
     /**
@@ -43,7 +43,7 @@ class Ability(private val name: String) {
      * @return 合致する特性だったらtrue
      */
     val isPsychoMaker: Boolean
-        get() = name == AbilityConst.PSYCHO_MAKER
+        get() = (name == AbilityConst.PSYCHO_MAKER)
 
     /**
      * リベロ判定
@@ -52,7 +52,7 @@ class Ability(private val name: String) {
      * @return 合致する特性だったらtrue
      */
     val isLibero: Boolean
-        get() = name == AbilityConst.LIBERO || name == AbilityConst.PROTEAN
+        get() = (name == AbilityConst.LIBERO || name == AbilityConst.PROTEAN)
 
     /**
      * げきりゅう判定

@@ -58,7 +58,7 @@ class Good(private val goodName: String) {
      * @return 道具がいのちのたまだった場合にtrue
      */
     val isLeftOvers: Boolean
-        get() = goodName == GoodConst.LEFT_OVERS
+        get() = (goodName == GoodConst.LEFT_OVERS)
 
     /**
      * 道具の消費
@@ -74,5 +74,5 @@ class Good(private val goodName: String) {
      * @return 道具がしろいハーブだった場合にtrue
      */
     val isWhiteHerb: Boolean
-        get() = goodName == GoodConst.WHITE_HERB
+        get() = (goodName == GoodConst.WHITE_HERB)
 }

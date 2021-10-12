@@ -1,64 +1,47 @@
-package com.sasakirione.main.pokemon.clone.object.value;
+package com.sasakirione.main.pokemon.clone.`object`.value
 
-import com.sasakirione.main.pokemon.clone.object.PokemonTypeCompatibility;
-
-import java.util.Arrays;
+import com.sasakirione.main.pokemon.clone.`object`.PokemonTypeCompatibility.typeCompatibility
 
 /**
  * ポケモンのタイプを担当するクラス
  */
-public class Type {
-    /** ポケモンが持ってるタイプ */
-    private final String[] types;
-    /** ポケモンのタイプ一覧 */
-    private static final String[] TYPE = {"ノーマル","ほのお","みず","でんき","くさ","こおり","かくとう","どく","じめん",
-            "ひこう","エスパー","むし","いわ","ゴースト","ドラゴン","あく","はがね","フェアリー"};
+class Type {
+    /** ポケモンが持ってるタイプ  */
+    private val types: Array<String>
 
     /**
      * コンストラクタ(複合タイプ)
      */
-    public Type(String type1, String type2) {
-        if (type2.equals("") && !isTypeErrorCheck(type1)) {
-            types = new String[]{type1};
-            return;
+    constructor(type1: String, type2: String) {
+        if (type2 == "" && !isTypeErrorCheck(type1)) {
+            types = arrayOf(type1)
+            return
         }
-        if (isTypeErrorCheck(type1)) {
-            throw new IllegalArgumentException("存在しないタイプが含まれています");
-        }
-        if (isTypeErrorCheck(type2)) {
-            throw new IllegalArgumentException("存在しないタイプが含まれています");
-        }
-        types = new String[]{type1, type2};
+        require(!isTypeErrorCheck(type1)) { "存在しないタイプが含まれています" }
+        require(!isTypeErrorCheck(type2)) { "存在しないタイプが含まれています" }
+        types = arrayOf(type1, type2)
     }
 
     /**
      * コンストラクタ(単一タイプ)
      */
-    public Type(String type1) {
-        if (isTypeErrorCheck(type1)) {
-            throw new IllegalArgumentException("存在しないタイプが含まれています");
-        }
-        types = new String[]{type1};
+    constructor(type1: String) {
+        require(!isTypeErrorCheck(type1)) { "存在しないタイプが含まれています" }
+        types = arrayOf(type1)
     }
 
     /**
      * コンストラクタ(ハロウィンorもりののろい+複合タイプ)
      */
-    public Type(String type1, String type2, String type3) {
-        if (isTypeErrorCheck(type1)) {
-            throw new IllegalArgumentException("存在しないタイプが含まれています");
-        }
-        if (isTypeErrorCheck(type2)) {
-            throw new IllegalArgumentException("存在しないタイプが含まれています");
-        }
-        if (isTypeErrorCheck(type3)) {
-            throw new IllegalArgumentException("存在しないタイプが含まれています");
-        }
-        types = new String[]{type1, type2, type3};
+    constructor(type1: String, type2: String, type3: String) {
+        require(!isTypeErrorCheck(type1)) { "存在しないタイプが含まれています" }
+        require(!isTypeErrorCheck(type2)) { "存在しないタイプが含まれています" }
+        require(!isTypeErrorCheck(type3)) { "存在しないタイプが含まれています" }
+        types = arrayOf(type1, type2, type3)
     }
 
-    private Type(String[] types) {
-        this.types = types;
+    private constructor(types: Array<String>) {
+        this.types = types
     }
 
     /**
@@ -67,8 +50,8 @@ public class Type {
      * @param type タイプの文字列
      * @return タイプが存在するならtrue
      */
-    public boolean isTypeErrorCheck(String type) {
-        return !isContemporaryTypeCheck(TYPE, type);
+    private fun isTypeErrorCheck(type: String): Boolean {
+        return !isContemporaryTypeCheck(TYPE, type)
     }
 
     /**
@@ -77,12 +60,12 @@ public class Type {
      * @param attackType 攻撃技のタイプ
      * @return double型の相性倍率
      */
-    public double getTypeMagnification(String attackType) {
-        double magnification = 1.0;
-        for (String type : types) {
-            magnification *= PokemonTypeCompatibility.typeCompatibility(attackType, type);
+    fun getTypeMagnification(attackType: String): Double {
+        var magnification = 1.0
+        for (type in types) {
+            magnification *= typeCompatibility(attackType, type)
         }
-        return magnification;
+        return magnification
     }
 
     /**
@@ -91,8 +74,8 @@ public class Type {
      * @param type 攻撃技のタイプ
      * @return 攻撃技のタイプが設定されたタイプに含まれるならtrue
      */
-    public boolean isTypeMatch(String type) {
-        return isContemporaryTypeCheck(this.types, type);
+    fun isTypeMatch(type: String): Boolean {
+        return isContemporaryTypeCheck(types, type)
     }
 
     /**
@@ -100,9 +83,8 @@ public class Type {
      * まひになるタイプかチェックします。
      * @return まひにならないタイプ(でんきタイプ)ならtrue
      */
-    public boolean isPARCheck() {
-        return isContemporaryTypeCheck(this.types, "でんき");
-    }
+    val isPARCheck: Boolean
+        get() = isContemporaryTypeCheck(types, "でんき")
 
     /**
      * タイプの判定
@@ -111,8 +93,8 @@ public class Type {
      * @param type2 判定されるタイプ
      * @return type1の中にtype2が含まれていたらtrue
      */
-    private boolean isContemporaryTypeCheck(String[] type1, String type2) {
-        return Arrays.asList(type1).contains(type2);
+    private fun isContemporaryTypeCheck(type1: Array<String>, type2: String): Boolean {
+        return listOf(*type1).contains(type2)
     }
 
     /**
@@ -120,19 +102,24 @@ public class Type {
      * タイプをディープコピーします
      * @return タイプのディープコピー
      */
-    public Type copy() {
-        return new Type(this.types.clone());
+    fun copy(): Type {
+        return Type(types.clone())
     }
 
-    @Override
-    public String toString() {
-        String type1 = types[0];
-        String type2;
-        if (types.length == 1) {
-            type2 = "";
-        } else {
-            type2 = types[1];
-        }
-        return type1 + type2;
+    override fun toString(): String {
+        val type1 = types[0]
+        val type2: String =
+            if (types.size == 1) {
+                ""
+            } else {
+                types[1]
+            }
+        return type1 + type2
+    }
+
+    companion object {
+        /** ポケモンのタイプ一覧  */
+        private val TYPE = arrayOf("ノーマル", "ほのお", "みず", "でんき", "くさ", "こおり", "かくとう", "どく", "じめん",
+                "ひこう", "エスパー", "むし", "いわ", "ゴースト", "ドラゴン", "あく", "はがね", "フェアリー")
     }
 }
