@@ -135,6 +135,12 @@ class Pokemon(
         }
     }
 
+    /**
+     * 防御を特殊か物理どちらで計算するかを返します
+     *
+     * @param a 受ける技
+     * @return 2だったら物理、4だったら特殊
+     */
     private fun getDefenseChoice(a: PokemonMove): Int {
         val defenseChoice: Int = if (a.isPhysicsMove) {
             2
@@ -144,6 +150,15 @@ class Pokemon(
         return defenseChoice
     }
 
+    /**
+     *  技を受ける処理
+     *
+     *  @param a 受ける技のインスタンス
+     *  @param power 受ける技の計算済み威力
+     *  @param defenseChoice 物理で計算するか特殊で計算するか
+     *  @param typeMagnification タイプ相性による倍率
+     *  @param magnification タイプ相性以外の倍率
+     */
     private fun moveDecisionAll(a: PokemonMove, power: Double, defenseChoice: Int, typeMagnification: Double, magnification: Double) {
         val count = a.combCount
         val vitalRank = a.vitalRank
@@ -162,6 +177,12 @@ class Pokemon(
         }
     }
 
+    /**
+     * 技の計算済み威力を取得する
+     *
+     * @param a 受ける技のインスタンス
+     * @return 技の計算済み威力
+     */
     private fun getPower(a: PokemonMove): Double {
         val power: Double = if (ability.isUnware) {
             a.power2
@@ -171,6 +192,15 @@ class Pokemon(
         return power
     }
 
+    /**
+     * 実際の技の処理
+     *
+     *  @param power 受ける技の計算済み威力
+     *  @param defenseChoice 物理で計算するか特殊で計算するか
+     *  @param typeMagnification タイプ相性による倍率
+     *  @param magnification タイプ相性以外の倍率
+     *  @param vitalRank 急所ランク
+     */
     private fun moveDecision(power: Double, defenseChoice: Int, typeMagnification: Double, magnification: Double, vitalRank: Int) {
         status.damageCalculation(power, defenseChoice, magnification, vitalRank)
         BattleLog.typeMagnification(typeMagnification)
@@ -178,7 +208,6 @@ class Pokemon(
     }
 
     /**
-     * 残りHP処理
      * 残りHPによって発動する道具や特性に関する処理を行います。
      */
     private fun remainingDamageDecision() {
@@ -188,7 +217,6 @@ class Pokemon(
     }
 
     /**
-     * まひ処理を行う
      * まひになった時にその処理を行います。
      */
     private val pAR: Unit
@@ -208,6 +236,9 @@ class Pokemon(
     val isDead: Boolean
         get() = status.isDead
 
+    /**
+     * やけど処理を行います
+     */
     private fun brn() {
         if (statusAilment != "") {
             BattleLog.statusAilmentError()
@@ -221,7 +252,6 @@ class Pokemon(
         status.getBAR()
         BattleLog.brn(name)
     }
-
 
     /**
      * 残りHP実数値を返す
@@ -262,7 +292,7 @@ class Pokemon(
     val s: Int
         get() {
             var realSpeed = status.s
-            if (good?.isSpeedBoost!!) {
+            if (good?.isSpeedBoost == true) {
                 realSpeed = (realSpeed * CalculationConst.ONE_POINT_FIVE).roundToInt()
             }
             return realSpeed
@@ -317,14 +347,26 @@ class Pokemon(
         status.rankReset()
     }
 
+    /**
+     * グッズ所持を返します
+     * @return グッズインスタンス
+     */
     fun getGood(): Good? {
         return good
     }
 
+    /**
+     * リベロやへんげんじざいによるタイプ変化を行う(出した技のタイプに変わる)
+     *
+     * @param type 出す技のタイプ
+     */
     fun libero(type: Type) {
         this.type = type
     }
 
+    /**
+     * ターン終了時の処理を行う
+     */
     fun turnEndDisposal() {
         if (good?.isLeftOvers == true) {
             BattleLog.LeftOvers(name)
