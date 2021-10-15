@@ -1,57 +1,49 @@
-package com.sasakirione.main.pokemon.clone.object.value;
+package com.sasakirione.main.pokemon.clone.`object`.value
 
-import com.sasakirione.main.pokemon.clone.constant.CalculationConst;
-import com.sasakirione.main.pokemon.clone.loggin.BattleLog;
+import com.sasakirione.main.pokemon.clone.constant.CalculationConst
+import kotlin.math.floor
 
-public class HP {
-    private final int maxHP;
-    private int currentHP;
+class HP(private val maxHP: Int) {
+    var currentHP: Int
+        private set
 
-    public HP (int hp) {
-        this.maxHP = hp;
-        this.currentHP = hp;
+    val isDeath: Boolean
+        get() = (currentHP == 0)
+
+    val isOneThird: Boolean
+        get() = if (currentHP == 0) {
+                false
+            } else (3 < (maxHP / currentHP))
+
+    init {
+        currentHP = maxHP
     }
 
-    public void pruneHP(int damage) {
-        int hp = currentHP - damage;
-        this.currentHP = Math.max(hp, 0);
+    fun pruneHP(damage: Int) {
+        val hp = currentHP - damage
+        currentHP = hp.coerceAtLeast(0)
     }
 
-    public boolean isDeath() {
-        return this.currentHP == 0;
+    fun damageOneEighth() {
+        val oneEighth = floor(maxHP * CalculationConst.ONE_EIGHTH).toInt()
+        pruneHP(oneEighth)
     }
 
-    public String toString() {
-        int half = maxHP / 2;
-        int quarter = maxHP / 4;
-        String now = "緑";
+    fun recoveryOnePointSixteen() {
+        val calculationHP = floor(maxHP * CalculationConst.ONE_POINT_SIXTEEN + currentHP).toInt()
+        currentHP = calculationHP.coerceAtMost(maxHP)
+    }
+
+    override fun toString(): String {
+        val half = maxHP / 2
+        val quarter = maxHP / 4
+        var now = "緑"
         if (currentHP <= half) {
-            now = "黄色";
+            now = "黄色"
             if (currentHP <= quarter) {
-                now = "赤色";
+                now = "赤色"
             }
         }
-        return this.currentHP+"/"+this.maxHP + " " + now;
-    }
-
-    public int getCurrentHP() {
-        return currentHP;
-    }
-
-    public boolean isOneThird() {
-        if(currentHP == 0) {
-            return false;
-        }
-        return (3 < (maxHP / currentHP));
-    }
-
-    public void damageOneEighth() {
-        int oneEighth = (int) Math.floor(maxHP * CalculationConst.ONE_EIGHTH);
-        pruneHP(oneEighth);
-    }
-
-    public void recoveryOnePointSixteen() {
-        int calculationHP = (int) Math.floor(maxHP * CalculationConst.ONE_POINT_SIXTEEN + currentHP);
-        this.currentHP = Math.min(calculationHP , maxHP);
+        return "$currentHP/$maxHP $now"
     }
 }

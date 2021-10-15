@@ -1,46 +1,35 @@
-package com.sasakirione.main.pokemon.clone.object.value;
+package com.sasakirione.main.pokemon.clone.`object`.value
 
-import java.util.Arrays;
+import java.util.Arrays
+import java.lang.IllegalArgumentException
 
-public class Field {
-    private static final String[] fieldList = {"エレキフィールド", "グラスフィールド", "サイコフィールド", "ミストフィールド"};
-    private final String field;
-    private int remainingTurn;
+class Field(fieldName: String) {
+    private val field: String
+    private var remainingTurn: Int
+    val isDisablingPriority: Boolean
+        get() = this.field == "サイコフィールド"
+    val isEndField: Boolean
+        get() = remainingTurn == 0
+    val isPsychofield: Boolean
+        get() = this.field == "サイコフィールド"
 
-    public Field(String fieldName) {
-        fieldCheck(fieldName);
-        this.field = fieldName;
-        remainingTurn = 5;
+    companion object {
+        private val fieldList = arrayOf("エレキフィールド", "グラスフィールド", "サイコフィールド", "ミストフィールド")
     }
 
-    private void fieldCheck(String fieldName) {
-        if (!Arrays.asList(fieldList).contains(fieldName)) {
-            throw new IllegalArgumentException("存在しないフィールドです");
-        }
+    init {
+        fieldCheck(fieldName)
+        field = fieldName
+        remainingTurn = 5
     }
 
-    public String getField() {
-        return field;
+    private fun fieldCheck(fieldName: String) {
+        require(
+            listOf(*fieldList).contains(fieldName)
+        ) { "存在しないフィールドです" }
     }
 
-    public int getRemainingTurn() {
-        return remainingTurn;
+    fun forwardTurn() {
+        remainingTurn -= 1
     }
-
-    public void forwardTurn() {
-        remainingTurn = remainingTurn - 1;
-    }
-
-    public boolean isDisablingPriority() {
-        return this.field.equals("サイコフィールド");
-    }
-
-    public boolean isEndField() {
-        return remainingTurn == 0;
-    }
-
-    public boolean isPsychofield() {
-        return this.field.equals("サイコフィールド");
-    }
-
 }
