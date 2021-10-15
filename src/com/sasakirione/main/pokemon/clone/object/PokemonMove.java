@@ -117,6 +117,11 @@ public class PokemonMove {
             this.moveType = "みず";
             return;
         }
+        if (name.equals(MoveConst.WILL_O_WISP)) {
+            this.moveClass = MoveClass.ENEMY_CHANGE;
+            this.moveType = "ゴースト";
+            return;
+        }
         throw new UnsupportedMoveException();
     }
 

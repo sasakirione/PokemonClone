@@ -163,4 +163,8 @@ public class BattleLog {
     public static void recoil(String name) {
         add("攻撃の 反動で " + name+ "は 動けない！");
     }
+
+    public static void brn(String name) {
+        add(name + "は やけどを 負った！");
+    }
 }
