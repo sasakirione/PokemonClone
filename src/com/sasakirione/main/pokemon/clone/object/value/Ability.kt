@@ -11,7 +11,7 @@ class Ability(private val name: String) {
     /** 特性が発動条件を満たしてるか、もしかくは一度だけの特性なら使用済みか  */
     private var abilityBool = false
     /** 化学変化ガス用の特性有効判定*/
-    private var isAbilityInvalidation = true;
+    private var isAbilityInvalidation = true
 
     /**
      * 技の攻撃力をあげる特性か判定
