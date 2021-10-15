@@ -8,10 +8,11 @@ public class MoveConst {
     public static final String CALM_MIND = "めいそう";
     public static final String HARDEN = "かたくなる";
     public static final String SOAK = "みずびたし";
-    public static final String WATER_SHURIKEN = "みずしゅりけん";
-    public static final String SURGING_STRIKES = "すいりゅうれんだ";
+    // public static final String WATER_SHURIKEN = "みずしゅりけん";
+    // public static final String SURGING_STRIKES = "すいりゅうれんだ";
     public static final String PETAL_DANCE = "はなびらのまい";
     public static final String THRASH = "あばれる";
     public static final String OUTRAGE = "げきりん";
     public static final String HYPER_BEAM = "はかいこうせん";
+    public static final String WILL_O_WISP = "おにび";
 }

@@ -166,7 +166,6 @@ public class Status {
 
     public void getPAR() {
         parCheck = true;
-        real[5] = (int) Math.round(this.real[5] * 0.5);
     }
 
     public boolean isParCheck() {
@@ -214,5 +213,9 @@ public class Status {
 
     public double getC2() {
         return this.realSource[3];
+    }
+
+    public void getBAR() {
+        brnCheck = true;
     }
 }

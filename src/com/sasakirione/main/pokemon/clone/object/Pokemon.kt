@@ -19,8 +19,8 @@ class Pokemon(
     base: IntArray,
     good: String?,
     nature: String,
-    type1: String?,
-    type2: String?,
+    type1: String,
+    type2: String,
     ability: String) {
 
     /**
@@ -130,7 +130,7 @@ class Pokemon(
         val magnification = a.magnification * typeMagnification
         moveDecisionAll(a, power, defenseChoice, typeMagnification, magnification)
         a.endDecision()
-        if (good?.isGoodUsed!!) {
+        if (good?.isGoodUsed == true) {
             lostGood()
         }
     }
@@ -207,6 +207,21 @@ class Pokemon(
         }
     val isDead: Boolean
         get() = status.isDead
+
+    private fun brn() {
+        if (statusAilment != "") {
+            BattleLog.statusAilmentError()
+            return
+        }
+        if (type.isPARCheck) {
+            BattleLog.parError()
+            return
+        }
+        statusAilment = "やけど"
+        status.getBAR()
+        BattleLog.brn(name)
+    }
+
 
     /**
      * 残りHP実数値を返す
@@ -311,11 +326,11 @@ class Pokemon(
     }
 
     fun turnEndDisposal() {
-        if (good?.isLeftOvers!!) {
+        if (good?.isLeftOvers == true) {
             BattleLog.LeftOvers(name)
             status.recoveryOnePointSixteen()
         }
-        if (good!!.isGoodUsed) {
+        if (good?.isGoodUsed == true) {
             lostGood()
         }
     }
@@ -355,12 +370,16 @@ class Pokemon(
             type = Type("みず")
             BattleLog.changeType(name, "みず")
         }
-        if (good?.isWhiteHerb!! && whiteHerb.isNotEmpty()) {
+        if (a.isMoveNameCheck(MoveConst.WILL_O_WISP)) {
+            brn()
+        }
+        if (good?.isWhiteHerb == true && whiteHerb.isNotEmpty()) {
             whiteHerb.forEach(Consumer { i: Int? -> status.rankReset(i) })
             BattleLog.whiteHerb(name)
             good!!.goodUsed()
         }
     }
+
 
     /**
      * コンストラクタ(登録されてるポケモン以外用)

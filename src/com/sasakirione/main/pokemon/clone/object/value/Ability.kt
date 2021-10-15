@@ -10,6 +10,8 @@ import com.sasakirione.main.pokemon.clone.constant.CalculationConst
 class Ability(private val name: String) {
     /** 特性が発動条件を満たしてるか、もしかくは一度だけの特性なら使用済みか  */
     private var abilityBool = false
+    /** 化学変化ガス用の特性有効判定*/
+    private var isAbilityInvalidation = true;
 
     /**
      * 技の攻撃力をあげる特性か判定
@@ -18,6 +20,9 @@ class Ability(private val name: String) {
      * @return 攻撃力に対する倍率(通常は1)
      */
     fun powerBoost(move: PokemonMove): Double {
+        if (!isAbilityInvalidation) {
+            return CalculationConst.ONE
+        }
         if (checkTypeBoost(move.moveType)) {
             return CalculationConst.ONE_POINT_FIVE
         }
@@ -33,7 +38,7 @@ class Ability(private val name: String) {
      * @return 対象の特性と技の組み合わせだったらtrue
      */
     private fun checkTypeBoost(type: String): Boolean {
-        return (name == AbilityConst.TRANSISTOR && type == "でんき" || name == AbilityConst.DRAGONS_MAW && type == "ドラゴン")
+        return (name == AbilityConst.TRANSISTOR && type == "でんき" || name == AbilityConst.DRAGONS_MAW && type == "ドラゴン") && isAbilityInvalidation
     }
 
     /**
@@ -43,7 +48,7 @@ class Ability(private val name: String) {
      * @return 合致する特性だったらtrue
      */
     val isPsychoMaker: Boolean
-        get() = (name == AbilityConst.PSYCHO_MAKER)
+        get() = (name == AbilityConst.PSYCHO_MAKER) && isAbilityInvalidation
 
     /**
      * リベロ判定
@@ -52,7 +57,7 @@ class Ability(private val name: String) {
      * @return 合致する特性だったらtrue
      */
     val isLibero: Boolean
-        get() = (name == AbilityConst.LIBERO || name == AbilityConst.PROTEAN)
+        get() = (name == AbilityConst.LIBERO || name == AbilityConst.PROTEAN) && isAbilityInvalidation
 
     /**
      * げきりゅう判定
@@ -103,7 +108,7 @@ class Ability(private val name: String) {
      * @return 条件に合致した場合にtrue
      */
     val isBakekawa: Boolean
-        get() = name == AbilityConst.DISGUISE && !abilityBool
+        get() = (name == AbilityConst.DISGUISE && !abilityBool) && isAbilityInvalidation
 
     /**
      * てんねん判定
@@ -111,5 +116,5 @@ class Ability(private val name: String) {
      * @return 条件に合致した場合にtrue
      */
     val isUnware: Boolean
-        get() = name == AbilityConst.UNWARE
+        get() = (name == AbilityConst.UNWARE) && isAbilityInvalidation
 }

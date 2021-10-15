@@ -452,4 +452,15 @@ public class PokemonTest {
         BattleLog.getLogAll();
         Assertions.assertEquals(1, BattleLog.moveCount("はかいこうせん"));
     }
+
+    @Test
+    @DisplayName("やけどを実装")
+    public void test040() {
+        PokemonStadium stadium = new PokemonStadium(polteageist, mimikyu);
+        PokemonMove a = polteageist.getDamage2("おにび");
+        PokemonMove b = mimikyu.getDamage("シャドークロー");
+        stadium.forwardTurn(a, b);
+        BattleLog.getLogAll();
+        Assertions.assertFalse(polteageist.isDead());
+    }
 }
