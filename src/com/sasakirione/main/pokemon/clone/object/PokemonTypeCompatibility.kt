@@ -5,7 +5,6 @@ package com.sasakirione.main.pokemon.clone.`object`
  */
 object PokemonTypeCompatibility {
     /**
-     * タイプ相性を判定する
      * 攻撃側のタイプと防御側のタイプをいれた時にタイプ相性の倍率を返します。
      * @param attack 攻撃側のタイプ
      * @param defense 防御側のタイプ
